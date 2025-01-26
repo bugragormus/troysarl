@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 export default function Contact() {
+    const [darkMode, setDarkMode] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -26,21 +27,20 @@ export default function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
             <Head>
                 <title>İletişim - Troysarl</title>
             </Head>
 
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">İletişim</h1>
-                    <p className="text-xl text-gray-600">Bize ulaşmak için formu doldurun veya aşağıdaki bilgileri kullanın.</p>
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">İletişim</h1>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-12">
                     {/* İletişim Bilgileri */}
-                    <div className="bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-6">İletişim Bilgilerimiz</h2>
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-bold mb-6 dark:text-white">İletişim Bilgilerimiz</h2>
 
                         <div className="space-y-4">
                             <div>
@@ -73,10 +73,10 @@ export default function Contact() {
                     </div>
 
                     {/* İletişim Formu */}
-                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="name" className="block text-sm font-medium">
                                     Adınız
                                 </label>
                                 <input
@@ -84,13 +84,13 @@ export default function Contact() {
                                     id="name"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="email" className="block text-sm font-medium">
                                     E-posta Adresiniz
                                 </label>
                                 <input
@@ -98,13 +98,13 @@ export default function Contact() {
                                     id="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="message" className="block text-sm font-medium">
                                     Mesajınız
                                 </label>
                                 <textarea
@@ -112,7 +112,7 @@ export default function Contact() {
                                     rows={4}
                                     value={formData.message}
                                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     required
                                 ></textarea>
                             </div>

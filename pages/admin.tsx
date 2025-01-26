@@ -15,6 +15,7 @@ interface Car {
 export default function AdminPanel() {
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
 
     // Araba Listesi ve Form State
     const [cars, setCars] = useState<Car[]>([]);
@@ -164,9 +165,9 @@ export default function AdminPanel() {
     // Giriş Sayfası
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
                 <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-md w-80">
-                    <h1 className="text-2xl font-bold mb-4 text-center">Admin Girişi</h1>
+                    <h1 className="text-2xl font-bold mb-4 dark:text-black text-center">Admin Girişi</h1>
                     <input
                         type="password"
                         value={password}
@@ -187,17 +188,17 @@ export default function AdminPanel() {
 
     // Admin Paneli
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-6">Admin Paneli</h1>
+        <div className="container mx-auto p-4 dark:bg-gray-900">
+            <h1 className="text-3xl font-bold mb-6 dark:text-white">Admin Paneli</h1>
 
             {/* Araba Ekleme Formu */}
-            <form onSubmit={handleAddCar} className="space-y-4 mb-8 bg-white p-6 rounded-lg shadow-md">
+            <form onSubmit={handleAddCar} className="space-y-4 mb-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <input
                     type="text"
                     placeholder="Marka"
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
-                    className="block w-full p-2 border rounded"
+                    className="block w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     required
                 />
                 <input
@@ -294,21 +295,21 @@ export default function AdminPanel() {
             </form>
 
             {/* Araba Listesi */}
-            <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+            <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <table className="min-w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
                         <tr>
-                            <th className="py-3 px-4 text-left border-b">Marka</th>
-                            <th className="py-3 px-4 text-left border-b">Model</th>
-                            <th className="py-3 px-4 text-left border-b">İşlem</th>
+                            <th className="py-3 px-4 text-left border-b dark:border-gray-600 dark:text-white">Marka</th>
+                            <th className="py-3 px-4 text-left border-b dark:border-gray-600 dark:text-white">Model</th>
+                            <th className="py-3 px-4 text-left border-b dark:border-gray-600 dark:text-white">İşlem</th>
                         </tr>
                     </thead>
                     <tbody>
                         {cars.map((car) => (
-                            <tr key={car.id} className="hover:bg-gray-50">
-                                <td className="py-3 px-4 border-b">{car.brand}</td>
-                                <td className="py-3 px-4 border-b">{car.model}</td>
-                                <td className="py-3 px-4 border-b">
+                            <tr key={car.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td className="py-3 px-4 border-b dark:border-gray-600 dark:text-white">{car.brand}</td>
+                                <td className="py-3 px-4 border-b dark:border-gray-600 dark:text-white">{car.model}</td>
+                                <td className="py-3 px-4 border-b dark:border-gray-600 dark:text-white">
                                     <button
                                         onClick={() => handleDeleteCar(car.id)}
                                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"

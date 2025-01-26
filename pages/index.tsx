@@ -35,43 +35,48 @@ export default function Home() {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Satılık Arabalar</h1>
-      
-      <input
-        type="text"
-        placeholder="Araba ara..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full p-2 border rounded mb-6"
-      />
+    <div className="min-h-screen bg-white dark:bg-gray-900"> {/* Ana arkaplan fix */}
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6 dark:text-white">Satılık Arabalar</h1>
+        
+        <input
+          type="text"
+          placeholder="Araba ara..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 border rounded mb-6 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+        />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCars.map((car) => (
-          <div key={car.id} className="border rounded-lg p-4 shadow-md">
-            <div className="flex overflow-x-auto gap-2 mb-4">
-              {car.photos?.map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`${car.brand} ${car.model} - Fotoğraf ${index + 1}`}
-                  className="w-32 h-32 object-cover rounded-lg"
-                />
-              ))}
-            </div>
-            <h2 className="text-xl font-semibold">{car.brand} {car.model}</h2>
-            <p>Yıl: {car.year}</p>
-            <p>Yakıt Tipi: {car.fuel_type}</p>
-            <p className="text-blue-600 mt-2">{car.price.toLocaleString()} €</p>
-
-            <Link
-              href={`/cars/${car.id}`}
-              className="mt-4 inline-block text-blue-500 hover:underline"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCars.map((car) => (
+            <div 
+              key={car.id}
+              className="border rounded-lg p-4 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >
-              Detayları Gör
-            </Link>
-          </div>
-        ))}
+              <div className="flex overflow-x-auto gap-2 mb-4">
+                {car.photos?.map((photo, index) => (
+                  <img
+                    key={index}
+                    src={photo}
+                    alt={`${car.brand} ${car.model} - Fotoğraf ${index + 1}`}
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                ))}
+              </div>
+              <h2 className="text-xl font-semibold dark:text-white">{car.brand} {car.model}</h2>
+              <p className="dark:text-gray-300">Yıl: {car.year}</p>
+              <p className="dark:text-gray-300">Yakıt Tipi: {car.fuel_type}</p>
+              <p className="text-blue-600 dark:text-blue-400 mt-2">{car.price.toLocaleString()} €</p>
+
+              <Link
+                href={`/cars/${car.id}`}
+                className="mt-4 inline-block text-blue-500 hover:underline dark:text-blue-400"
+              >
+                Detayları Gör
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

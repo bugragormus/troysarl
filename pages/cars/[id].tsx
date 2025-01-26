@@ -38,7 +38,7 @@ export default function CarDetail() {
   if (!car) return <div className="container mx-auto p-4">Yükleniyor...</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 dark:bg-gray-900">
       <Head>
         <title>{car.brand} {car.model} - Satılık</title>
         <meta name="description" content={`${car.year} model ${car.brand} ${car.model}, ${car.price} €`} />
@@ -60,12 +60,12 @@ export default function CarDetail() {
             </div>
           </div>
           <div>
-            <p>Yıl: {car.year}</p>
-            <p>Yakıt Tipi: {car.fuel_type}</p>
+            <p className="dark:text-gray-300">Yıl: {car.year}</p>
+            <p className="dark:text-gray-300">Yakıt Tipi: {car.fuel_type}</p>
             <p className="text-2xl font-bold my-4">{car.price.toLocaleString()} €</p>
-            <button 
+            <button
               onClick={() => setShowPhone(!showPhone)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
             >
               {showPhone ? car.contact_phone : 'Telefonu Göster'}
             </button>
