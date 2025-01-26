@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
+import Head from 'next/head';
 
 interface Car {
   id: string;
@@ -13,6 +14,12 @@ interface Car {
 }
 
 export default function Home() {
+
+  <Head>
+    <title>Troysarl - Premium Araçlar</title>
+    <meta name="description" content="Lüks ve ikinci el araçlar için en iyi destinasyon" />
+  </Head>
+  
   const [cars, setCars] = useState<Car[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -20,7 +27,8 @@ export default function Home() {
     const fetchCars = async () => {
       const { data, error } = await supabase
         .from('cars')
-        .select('id, brand, model, year, price, fuel_type, photos');
+        .select('id, brand, model, year, price, fuel_type, photos')
+        .eq('is_hidden', false);
 
       if (error) console.error('Hata:', error);
       else setCars(data || []);
@@ -38,7 +46,7 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-900"> {/* Ana arkaplan fix */}
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-6 dark:text-white">Satılık Arabalar</h1>
-        
+
         <input
           type="text"
           placeholder="Araba ara..."
@@ -49,7 +57,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
-            <div 
+            <div
               key={car.id}
               className="border rounded-lg p-4 shadow-md dark:bg-gray-800 dark:border-gray-700"
             >

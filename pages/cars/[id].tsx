@@ -26,9 +26,13 @@ export default function CarDetail() {
         .from('cars')
         .select('*')
         .eq('id', id)
+        .eq('is_hidden', false)
         .single();
 
-      if (error) console.error('Hata:', error);
+      if (error) {
+        console.error('Hata:', error);
+        router.push('/404');
+      }
       else setCar(data);
     };
 
