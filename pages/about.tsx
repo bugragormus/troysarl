@@ -1,4 +1,3 @@
-// pages/about.tsx
 import Head from 'next/head';
 import Image from 'next/image';
 import { BuildingOfficeIcon, UserGroupIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline';
@@ -29,7 +28,7 @@ export default function AboutPage() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16">
             <div className="mb-8 lg:mb-0">
               <Image
-                src="/showroom.jpg"
+                src="/troysarl_logos.png"
                 alt="Troysarl Showroom"
                 width={800}
                 height={600}
@@ -97,12 +96,12 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
             Uzman Ekibimiz
           </h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            {['Marc Schmit', 'Emma Müller', 'Luc Dubois', 'Sophie Weber'].map((name, index) => (
+          <div className="grid md:grid-cols-2 gap-8">
+            {['Marc Schmit', 'Sophie Weber'].map((name, index) => (
               <div key={index} className="text-center">
                 <div className="relative w-48 h-48 mx-auto mb-4">
                   <Image
-                    src={`/team/team-${index + 1}.jpg`}
+                    src={`/troysarl_logos.png`}
                     alt={name}
                     fill
                     className="rounded-full object-cover border-4 border-blue-500"

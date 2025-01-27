@@ -364,8 +364,8 @@ export default function AdminPanel() {
                                             <button
                                                 onClick={() => toggleVisibility(car.id, car.is_hidden)}
                                                 className={`px-3 py-1 rounded ${car.is_hidden
-                                                        ? 'bg-green-500 hover:bg-green-600'
-                                                        : 'bg-yellow-500 hover:bg-yellow-600'
+                                                    ? 'bg-green-500 hover:bg-green-600'
+                                                    : 'bg-yellow-500 hover:bg-yellow-600'
                                                     } text-white transition-colors`}
                                             >
                                                 {car.is_hidden ? 'Göster' : 'Gizle'}

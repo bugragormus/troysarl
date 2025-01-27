@@ -109,7 +109,7 @@ export default function Contact() {
                                 </label>
                                 <textarea
                                     id="message"
-                                    rows={4}
+                                    rows={6}
                                     value={formData.message}
                                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"

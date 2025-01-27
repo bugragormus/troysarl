@@ -42,10 +42,10 @@ export default function Layout({ children }: LayoutProps) {
                             <div className="flex-shrink-0 flex items-center">
                                 <Link href="/" className="flex items-center space-x-2">
                                     <Image
-                                        src="/troysarllogo.png"
+                                        src="/troysarl_logos.png"
                                         alt="Troysarl Logo"
-                                        width={150}
-                                        height={150}
+                                        width={105}
+                                        height={105}
                                         className="rounded"
                                     />
                                 </Link>
@@ -144,7 +144,7 @@ export default function Layout({ children }: LayoutProps) {
                 <main className="flex-grow">{children}</main>
 
                 {/* Footer */}
-                <footer className="bg-gray-800 dark:bg-gray-900 text-white">
+                <footer className="bg-gray-800 dark:bg-gray-800 text-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Hakkımızda */}
