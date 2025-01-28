@@ -97,7 +97,7 @@ export default function AboutPage() {
             Uzman Ekibimiz
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {['Marc Schmit', 'Sophie Weber'].map((name, index) => (
+            {['Marc Schmit', 'Holeyloshko Aydınişko'].map((name, index) => (
               <div key={index} className="text-center">
                 <div className="relative w-48 h-48 mx-auto mb-4">
                   <Image

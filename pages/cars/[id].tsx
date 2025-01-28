@@ -12,6 +12,7 @@ interface Car {
   fuel_type: string;
   photos: string[];
   contact_phone: string;
+  listing_type: string;
 }
 
 export default function CarDetail() {
@@ -64,6 +65,11 @@ export default function CarDetail() {
             </div>
           </div>
           <div>
+            <p className="dark:text-gray-300">
+              Durum: {car.listing_type === 'satilik' && 'Satılık'}
+              {car.listing_type === 'kiralik' && 'Kiralık'}
+              {car.listing_type === 'her_ikisi' && 'Satılık ve Kiralık'}
+            </p>
             <p className="dark:text-gray-300">Yıl: {car.year}</p>
             <p className="dark:text-gray-300">Yakıt Tipi: {car.fuel_type}</p>
             <p className="text-2xl font-bold my-4">{car.price.toLocaleString()} €</p>

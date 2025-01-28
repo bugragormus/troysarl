@@ -11,12 +11,14 @@ interface Car {
     photos: string[];
     contact_phone: string;
     is_hidden: boolean;
+    listing_type: string;
 }
 
 export default function AdminPanel() {
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
+    const [listingType, setListingType] = useState<'satilik' | 'kiralik' | 'her_ikisi'>('satilik');
 
     // Araba Listesi ve Form State
     const [cars, setCars] = useState<Car[]>([]);
@@ -126,7 +128,8 @@ export default function AdminPanel() {
                 price: Number(price),
                 fuel_type: fuelType,
                 photos: uploadedUrls,
-                contact_phone: contactPhone
+                contact_phone: contactPhone,
+                listing_type: listingType
             }])
             .select();
 
@@ -211,6 +214,27 @@ export default function AdminPanel() {
         }
     };
 
+    // Araba Durumunu Güncelle
+    const updateListingType = async (carId: string, newType: 'satilik' | 'kiralik' | 'her_ikisi') => {
+        try {
+            const { error } = await supabase
+                .from('cars')
+                .update({ listing_type: newType })
+                .eq('id', carId);
+
+            if (error) throw error;
+
+            setCars(prev => prev.map(car =>
+                car.id === carId ? { ...car, listing_type: newType } : car
+            ));
+
+            alert('Durum başarıyla güncellendi!');
+        } catch (error) {
+            console.error('Güncelleme hatası:', error);
+            alert('Durum güncellenemedi!');
+        }
+    };
+
     // Giriş Sayfası
     if (!isAuthenticated) {
         return (
@@ -243,6 +267,16 @@ export default function AdminPanel() {
 
                 {/* Araba Ekleme Formu */}
                 <form onSubmit={handleAddCar} className="space-y-4 mb-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <select
+                        value={listingType}
+                        onChange={(e) => setListingType(e.target.value as 'satilik' | 'kiralik' | 'her_ikisi')}
+                        className="block w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        required
+                    >
+                        <option value="satilik">Sadece Satılık</option>
+                        <option value="kiralik">Sadece Kiralık</option>
+                        <option value="her_ikisi">Hem Satılık Hem Kiralık</option>
+                    </select>
                     <input
                         type="text"
                         placeholder="Marka"
@@ -376,6 +410,15 @@ export default function AdminPanel() {
                                             >
                                                 Sil
                                             </button>
+                                            <select
+                                                value={car.listing_type}
+                                                onChange={(e) => updateListingType(car.id, e.target.value as 'satilik' | 'kiralik' | 'her_ikisi')}
+                                                className="bg-gray-200 dark:bg-gray-700 p-1 rounded text-sm"
+                                            >
+                                                <option value="satilik">Satılık</option>
+                                                <option value="kiralik">Kiralık</option>
+                                                <option value="her_ikisi">Her İkisi</option>
+                                            </select>
                                         </div>
                                     </td>
                                 </tr>
