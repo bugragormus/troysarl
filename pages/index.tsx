@@ -39,10 +39,13 @@ export default function Home() {
     fetchCars();
   }, []);
 
-  const filteredCars = cars.filter(car => {
-    if (filter === 'all') return true;
-    return car.listing_type === filter || car.listing_type === 'her_ikisi';
-  });
+  const filteredCars = cars.filter((car) => {
+    const matchesFilter = filter === "all" || car.listing_type === filter || car.listing_type === "her_ikisi"
+    const matchesSearch =
+      car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      car.model.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesFilter && matchesSearch
+  })
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900"> {/* Ana arkaplan fix */}
