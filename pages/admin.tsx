@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface Car {
     id: string;
@@ -12,6 +14,18 @@ interface Car {
     contact_phone: string;
     is_hidden: boolean;
     listing_type: string;
+    description: string;
+    mileage: number;
+    body_type: string;
+    color: string;
+    horsepower: number;
+    transmission: string;
+    doors: number;
+    features: {
+        safety: string[];
+        comfort: string[];
+        entertainment: string[];
+    };
 }
 
 export default function AdminPanel() {

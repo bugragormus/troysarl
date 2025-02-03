@@ -6,11 +6,22 @@ export default function Contact() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         message: ''
+    });
+    const [consents, setConsents] = useState({
+        financing: false,
+        privacy: false,
+        contact: false
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!consents.privacy) {
+            alert('You must accept the privacy policy');
+            return;
+        }
 
         const response = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}`, {
             method: 'POST',
@@ -20,41 +31,43 @@ export default function Contact() {
 
         if (response.ok) {
             alert('Mesajınız başarıyla gönderildi!');
-            setFormData({ name: '', email: '', message: '' });
+            setFormData({ name: '', email: '', phone: '', message: '' });
         } else {
             alert('Bir hata oluştu. Lütfen tekrar deneyin.');
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-b from-premium-light to-white dark:from-premium-dark dark:to-gray-900">
             <Head>
-                <title>İletişim - Troysarl</title>
+                <title>Contact Us - Troysarl</title>
             </Head>
 
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-4xl mx-auto py-16 px-4">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">İletişim</h1>
+                    <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-premium to-luxury">
+                        Get in Touch
+                    </h1>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-12">
-                    {/* İletişim Bilgileri */}
+                <div className="space-y-8">
+                    {/* Contact Info */}
                     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold mb-6 dark:text-white">İletişim Bilgilerimiz</h2>
+                        <h2 className="text-2xl font-bold mb-6 dark:text-white">Contact Information</h2>
 
                         <div className="space-y-4">
                             <div>
-                                <h3 className="text-lg font-semibold">Adres</h3>
+                                <h3 className="text-lg font-semibold">Address</h3>
                                 <p className="text-gray-600">{process.env.NEXT_PUBLIC_ADRESS}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold">Telefon</h3>
+                                <h3 className="text-lg font-semibold">Phone</h3>
                                 <p className="text-gray-600">{process.env.NEXT_PUBLIC_PHONE_NUMBER}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold">E-posta</h3>
+                                <h3 className="text-lg font-semibold">E-Mail</h3>
                                 <p className="text-gray-600">{process.env.NEXT_PUBLIC_EMAIL}</p>
                             </div>
                         </div>
@@ -72,56 +85,77 @@ export default function Contact() {
                         </div>
                     </div>
 
-                    {/* İletişim Formu */}
-                    <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium">
-                                    Adınız
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    required
-                                />
+                    <div className="space-y-8">
+                        {/* Contact Form */}
+                        <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Full Name</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-premium focus:ring-premium dark:bg-gray-700"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium dark:text-gray-300">Email</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-premium focus:ring-premium dark:bg-gray-700"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium dark:text-gray-300">Phone</label>
+                                        <input
+                                            type="tel"
+                                            required
+                                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-premium focus:ring-premium dark:bg-gray-700"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Message</label>
+                                    <textarea
+                                        rows={4}
+                                        required
+                                        className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-premium focus:ring-premium dark:bg-gray-700"
+                                    ></textarea>
+                                </div>
                             </div>
 
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium">
-                                    E-posta Adresiniz
+                            {/* Consents */}
+                            <div className="space-y-3">
+                                <label className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={consents.financing}
+                                        onChange={(e) => setConsents({ ...consents, financing: e.target.checked })}
+                                        className="rounded text-premium focus:ring-premium"
+                                    />
+                                    <span className="text-sm dark:text-gray-300">I would like to be contacted for a financing offer</span>
                                 </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    required
-                                />
-                            </div>
 
-                            <div>
-                                <label htmlFor="message" className="block text-sm font-medium">
-                                    Mesajınız
+                                <label className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        required
+                                        checked={consents.privacy}
+                                        onChange={(e) => setConsents({ ...consents, privacy: e.target.checked })}
+                                        className="rounded text-premium focus:ring-premium"
+                                    />
+                                    <span className="text-sm dark:text-gray-300">I accept the privacy policy</span>
                                 </label>
-                                <textarea
-                                    id="message"
-                                    rows={6}
-                                    value={formData.message}
-                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    required
-                                ></textarea>
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                className="w-full bg-premium text-white py-3 rounded-lg hover:bg-premium-dark transition-colors"
                             >
-                                Gönder
+                                Send Message
                             </button>
                         </form>
                     </div>
