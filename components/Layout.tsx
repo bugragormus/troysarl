@@ -60,6 +60,12 @@ export default function Layout({ children }: LayoutProps) {
                                     Ana Sayfa
                                 </Link>
                                 <Link
+                                    href="/cars"
+                                    className={`${isActive('/cars') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'} px-3 py-2 text-sm hover:text-blue-500 transition-colors`}
+                                >
+                                    Araçlar
+                                </Link>
+                                <Link
                                     href="/admin"
                                     className={`${isActive('/admin') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
                                 >
