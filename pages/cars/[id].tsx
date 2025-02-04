@@ -13,7 +13,7 @@ interface Car {
   price: number;
   fuel_type: string;
   photos: string[];
-  listing_type: 'sale' | 'rental' | 'both';
+  listing_type: 'Sale' | 'Rental' | 'Sale/Rental';
   mileage: number;
   body_type: string;
   color: string;
@@ -129,7 +129,7 @@ export default function CarDetail() {
           <div className="space-y-6 md:order-2">
             {/* Pricing & Contact */}
             <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-xl">
-              {car.listing_type === 'rental' ? (
+              {car.listing_type === 'Rental' ? (
                 <div className="text-center space-y-4">
                   <p className="text-xl font-semibold dark:text-white">
                     Custom Rental Plans Available
@@ -263,6 +263,22 @@ export default function CarDetail() {
               <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
                 <p className="text-gray-600 dark:text-gray-400">Transmission</p>
                 <p className="font-semibold dark:text-white">{car.transmission}</p>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                <p className="text-gray-600 dark:text-gray-400">Doors</p>
+                <p className="font-semibold dark:text-white">{car.doors}</p>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                <p className="text-gray-600 dark:text-gray-400">Color</p>
+                <p className="font-semibold dark:text-white">{car.color}</p>
+              </div>
+            </div>
+
+            {/* Detailed Description */}
+            <div className="space-y-6">
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-xl">
+                <h3 className="text-xl font-semibold mb-4 dark:text-white">Detailed Information</h3>
+                <p className="dark:text-gray-300">{car.description}</p>
               </div>
             </div>
 

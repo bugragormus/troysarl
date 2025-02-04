@@ -301,6 +301,25 @@ export default function AdminPanel() {
                                 className="w-full p-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 required
                             />
+                            <input
+                                type="text"
+                                placeholder="Color*"
+                                value={color}
+                                onChange={(e) => setColor(e.target.value)}
+                                className="w-full p-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                required
+                            />
+                            <select
+                                value={doors}
+                                onChange={(e) => setDoors(Number(e.target.value))}
+                                className="w-full p-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                required
+                            >
+                                <option value={2}>2 Doors</option>
+                                <option value={3}>3 Doors</option>
+                                <option value={4}>4 Doors</option>
+                                <option value={5}>5 Doors</option>
+                            </select>
                             <select
                                 value={listingType}
                                 onChange={(e) => setListingType(e.target.value as any)}
@@ -419,7 +438,7 @@ export default function AdminPanel() {
                                 type="button"
                                 onClick={handleFileUpload}
                                 disabled={uploading || !selectedFiles.length}
-                                className="w-full bg-gray-200 dark:bg-gray-700 p-2 rounded hover:bg-gray-300 disabled:opacity-50"
+                                className="w-full bg-premium text-white p-2 rounded hover:bg-premium-dark disabled:opacity-50"
                             >
                                 {uploading ? 'Uploading...' : `Upload ${selectedFiles.length} Photos`}
                             </button>
@@ -455,6 +474,8 @@ export default function AdminPanel() {
                             <tr>
                                 <th className="px-6 py-4 text-left dark:text-white">Brand</th>
                                 <th className="px-6 py-4 text-left dark:text-white">Model</th>
+                                <th className="px-6 py-4 text-left dark:text-white">Color</th>
+                                <th className="px-6 py-4 text-left dark:text-white">Doors</th>
                                 <th className="px-6 py-4 text-left dark:text-white">Body Type</th>
                                 <th className="px-6 py-4 text-left dark:text-white">Price</th>
                                 <th className="px-6 py-4 text-left dark:text-white">Listing Type</th>
@@ -466,6 +487,8 @@ export default function AdminPanel() {
                                 <tr key={car.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                                     <td className="px-6 py-4 dark:text-white">{car.brand}</td>
                                     <td className="px-6 py-4 dark:text-white">{car.model}</td>
+                                    <td className="px-6 py-4 dark:text-white">{car.color}</td>
+                                    <td className="px-6 py-4 dark:text-white">{car.doors}</td>
                                     <td className="px-6 py-4 dark:text-white">{car.body_type}</td>
                                     <td className="px-6 py-4 dark:text-white">€{car.price?.toLocaleString()}</td>
                                     <td className="px-6 py-4 dark:text-white">

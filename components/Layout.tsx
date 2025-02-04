@@ -57,13 +57,13 @@ export default function Layout({ children }: LayoutProps) {
                                     href="/"
                                     className={`${isActive('/') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
                                 >
-                                    Ana Sayfa
+                                    Home
                                 </Link>
                                 <Link
                                     href="/cars"
                                     className={`${isActive('/cars') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'} px-3 py-2 text-sm hover:text-blue-500 transition-colors`}
                                 >
-                                    Araçlar
+                                    Cars
                                 </Link>
                                 <Link
                                     href="/admin"
@@ -75,13 +75,13 @@ export default function Layout({ children }: LayoutProps) {
                                     href="/contact"
                                     className={`${isActive('/contact') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
                                 >
-                                    İletişim
+                                    Contact
                                 </Link>
                                 <Link
                                     href="/about"
                                     className={`${isActive('/about') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
                                 >
-                                    Hakkımızda
+                                    About Us
                                 </Link>
 
                                 {/* Dark Mode Toggle */}
@@ -119,7 +119,7 @@ export default function Layout({ children }: LayoutProps) {
                                     href="/"
                                     className={`${isActive('/') ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700`}
                                 >
-                                    Ana Sayfa
+                                    Home
                                 </Link>
                                 <Link
                                     href="/admin"
@@ -131,7 +131,7 @@ export default function Layout({ children }: LayoutProps) {
                                     href="/contact"
                                     className={`${isActive('/contact') ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700`}
                                 >
-                                    İletişim
+                                    Contact
                                 </Link>
 
                                 {/* Dark Mode Toggle (Mobil) */}
@@ -155,37 +155,37 @@ export default function Layout({ children }: LayoutProps) {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Hakkımızda */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Troysarl</h3>
+                                <h3 className="text-lg font-semibold mb-4">Troy Cars LUX SARL</h3>
                                 <p className="text-gray-400 text-sm">
-                                    Lüks ve ikinci el araçlarda en kaliteli hizmet.
+                                    All rights reserved.
                                 </p>
                             </div>
 
                             {/* Hızlı Linkler */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Hızlı Linkler</h3>
+                                <h3 className="text-lg font-semibold mb-4">Fast Links</h3>
                                 <ul className="space-y-2 text-sm">
-                                    <li><Link href="/" className="text-gray-400 hover:text-white">Ana Sayfa</Link></li>
-                                    <li><Link href="/cars" className="text-gray-400 hover:text-white">Arabalar</Link></li>
-                                    <li><Link href="/contact" className="text-gray-400 hover:text-white">İletişim</Link></li>
-                                    <li><Link href="/about" className="text-gray-400 hover:text-white">Hakkımızda</Link></li>
+                                    <li><Link href="/" className="text-gray-400 hover:text-white">Home</Link></li>
+                                    <li><Link href="/cars" className="text-gray-400 hover:text-white">Cars</Link></li>
+                                    <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
+                                    <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
                                 </ul>
                             </div>
 
                             {/* İletişim */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">İletişim</h3>
+                                <h3 className="text-lg font-semibold mb-4">Get In Touch</h3>
                                 <ul className="space-y-2 text-sm text-gray-400">
-                                    <li>Adres: {process.env.NEXT_PUBLIC_ADRESS}</li>
-                                    <li>Tel: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
-                                    <li>E-posta: {process.env.NEXT_PUBLIC_EMAIL}</li>
+                                    <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
+                                    <li>Phone: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
+                                    <li>E-Mail: {process.env.NEXT_PUBLIC_EMAIL}</li>
                                 </ul>
                             </div>
                         </div>
 
                         {/* Alt Bilgi */}
                         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-                            <p>&copy; {new Date().getFullYear()} Troysarl. Tüm hakları saklıdır.</p>
+                            <p>&copy; {new Date().getFullYear()} Troy Cars LUX SARL. All Rights Reserved.</p>
                         </div>
                     </div>
                 </footer>

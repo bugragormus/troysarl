@@ -134,7 +134,7 @@ export default function Home() {
                       car.listing_type === 'rental' ? 'bg-blue-100 text-blue-800' :
                       'bg-purple-100 text-purple-800'
                     }`}>
-                      {car.listing_type === 'both' ? 'Sale/Rental' : car.listing_type}
+                      {car.listing_type === 'Sale/Rental' ? 'Sale/Rental' : car.listing_type}
                     </span>
                   </div>
 
