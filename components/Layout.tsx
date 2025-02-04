@@ -194,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Marka & Hakkında */}
                             <div>
-                                <h3 className="text-2xl font-bold mb-4">Troysarl</h3>
+                                <h3 className="text-2xl font-bold mb-4">Troy Cars LUX SARL</h3>
                                 <p className="text-sm text-gray-200">
                                     Premium vehicle experience with an exclusive collection of luxury and second-hand vehicles.
                                 </p>
@@ -267,7 +267,7 @@ export default function Layout({ children }: LayoutProps) {
 
                         {/* Alt Bilgi */}
                         <div className="mt-8 border-t border-indigo-500 pt-4 text-center text-xs text-gray-200">
-                            &copy; {new Date().getFullYear()} Troysarl. All rights reserved.
+                            &copy; {new Date().getFullYear()} Troy Cars LUX SARL. All Rights Reserved.
                         </div>
                     </div>
                 </footer>

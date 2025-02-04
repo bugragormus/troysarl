@@ -16,7 +16,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           {/* Arka plan görseli, hafif opaklıkla */}
           <Image
-            src="/troysarl_logos.png"
+            src="/about-bg.jpg"
             alt="Troysarl Logo"
             fill
             objectFit="cover"
@@ -25,11 +25,8 @@ export default function AboutPage() {
         </div>
         <div className="relative z-10 text-center px-4">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
-            Lüks Araç Deneyiminde Öncü
+            Leading Luxury Vehicle Experience
           </h1>
-          <p className="text-xl text-white/90">
-            2010'dan beri sektörde liderlik
-          </p>
         </div>
       </header>
 
@@ -48,11 +45,10 @@ export default function AboutPage() {
           </div>
           <div>
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
-              Bizim Hikayemiz
+              Our Story
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-              Lüksemburg'un kalbinde küçük bir aile şirketi olarak başlayan yolculuğumuz,
-              bugün Avrupa'nın önde gelen premium araç tedarikçilerinden biri olmamızla taçlandı.
+              Our journey started as a small family business in the heart of Luxembourg and today we are one of Europe's leading premium vehicle suppliers.
             </p>
             <div className="flex items-center space-x-4 mb-4">
               <BuildingOfficeIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -63,7 +59,7 @@ export default function AboutPage() {
             <div className="flex items-center space-x-4">
               <GlobeEuropeAfricaIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               <span className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                12 Ülkede Hizmet
+                Service in 12 Countries
               </span>
             </div>
           </div>
@@ -74,24 +70,24 @@ export default function AboutPage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-12">
-            Temel Değerlerimiz
+            Core Values
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Şeffaflık',
+                title: 'Transparency',
                 icon: UserGroupIcon,
-                description: 'Tüm iş süreçlerimizde açık ve anlaşılır iletişim',
+                description: 'Clear and understandable communication in all our business processes',
               },
               {
-                title: 'Kalite',
+                title: 'Quality',
                 icon: UserGroupIcon,
-                description: 'Sadece sertifikalı ve titiz kontrolden geçmiş araçlar',
+                description: 'Only certified and rigorously inspected vehicles',
               },
               {
-                title: 'Müşteri Odaklılık',
+                title: 'Customer Orientation',
                 icon: UserGroupIcon,
-                description: '7/24 destek ve kişiye özel çözümler',
+                description: '24/7 support and customized solutions',
               },
             ].map((item, index) => (
               <div
@@ -112,7 +108,7 @@ export default function AboutPage() {
       {/* Ekip Bölümü */}
       <section className="py-16 bg-gradient-to-r from-green-500 to-blue-500 text-white">
         <div className="max-w-7xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-6">Uzman Ekibimiz</h2>
+          <h2 className="text-3xl font-bold mb-6">Expert Team</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {['Buğra GÖRMÜŞ', 'Ufuk DEMİR'].map((name, index) => (
               <div key={index} className="text-center">
@@ -125,7 +121,7 @@ export default function AboutPage() {
                   />
                 </div>
                 <h3 className="text-xl font-bold">{name}</h3>
-                <p className="text-gray-200">Uzman Danışman</p>
+                <p className="text-gray-200">Expert Consultant</p>
               </div>
             ))}
           </div>
