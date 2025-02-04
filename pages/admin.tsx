@@ -1,29 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-
-interface Car {
-    id: string;
-    brand: string;
-    model: string;
-    year: number;
-    price: number;
-    fuel_type: string;
-    photos: string[];
-    is_hidden: boolean;
-    listing_type: 'sale' | 'rental' | 'both';
-    mileage: number;
-    body_type: string;
-    color: string;
-    horsepower: number;
-    transmission: string;
-    doors: number;
-    features: {
-        safety: string[];
-        comfort: string[];
-        entertainment: string[];
-    };
-    description: string;
-}
+import Car from '@/types/car';
 
 const bodyTypeOptions = [
     'Sedan', 'Coupe', 'Hatchback', 'Pickup', 'Off-Road', 'Sport',

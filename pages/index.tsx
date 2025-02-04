@@ -3,19 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
-
-interface Car {
-  id: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  fuel_type: string;
-  photos: string[];
-  listing_type: string;
-  mileage: number;
-  body_type: string;
-}
+import Car from '@/types/car';
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
@@ -105,10 +93,10 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12 dark:text-white">
             Curated Selection
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredCars.map((car) => (
-              <div 
+              <div
                 key={car.id}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-shadow"
               >
@@ -120,7 +108,7 @@ export default function Home() {
                     className="object-cover rounded-t-xl"
                   />
                 </div>
-                
+
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -129,12 +117,11 @@ export default function Home() {
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">{car.year}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      car.listing_type === 'sale' ? 'bg-green-100 text-green-800' :
-                      car.listing_type === 'rental' ? 'bg-blue-100 text-blue-800' :
-                      'bg-purple-100 text-purple-800'
-                    }`}>
-                      {car.listing_type === 'Sale/Rental' ? 'Sale/Rental' : car.listing_type}
+                    <span className={`px-2 py-1 text-xs rounded-full ${car.listing_type === 'sale' ? 'bg-green-100 text-green-800' :
+                        car.listing_type === 'rental' ? 'bg-blue-100 text-blue-800' :
+                          'bg-purple-100 text-purple-800'
+                      }`}>
+                      {car.listing_type === 'both' ? 'Sale/Rental' : car.listing_type}
                     </span>
                   </div>
 

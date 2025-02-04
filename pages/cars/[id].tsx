@@ -3,33 +3,35 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import Head from 'next/head';
 import { Carousel } from 'react-responsive-carousel';
+import Modal from 'react-modal';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Car from '@/types/car';
 
-interface Car {
-  id: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  fuel_type: string;
-  photos: string[];
-  listing_type: 'Sale' | 'Rental' | 'Sale/Rental';
-  mileage: number;
-  body_type: string;
-  color: string;
-  horsepower: number;
-  transmission: string;
-  doors: number;
-  features: {
-    safety: string[];
-    comfort: string[];
-    entertainment: string[];
-  };
-  description: string;
-}
+// Modal stil ayarları
+Modal.setAppElement('#__next');
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: 0,
+    border: 'none',
+    background: 'none',
+    maxWidth: '90vw',
+    maxHeight: '90vh',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    zIndex: 1000,
+  },
+};
 
 export default function CarDetail() {
   const router = useRouter();
+  const [showPhone, setShowPhone] = useState(false);
   const { id } = router.query;
   const [car, setCar] = useState<Car | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -43,6 +45,13 @@ export default function CarDetail() {
     financing: false,
     privacy: false,
   });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const openImageModal = (index: number) => {
+    setSelectedImageIndex(index);
+    setModalIsOpen(true);
+  };
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -111,25 +120,59 @@ export default function CarDetail() {
             <Carousel
               showThumbs={true}
               infiniteLoop={true}
+              selectedItem={selectedImageIndex}
               className="rounded-xl overflow-hidden shadow-lg"
+              renderThumbs={(children) =>
+                children.map((thumb, index) => (
+                  <div key={index} className="h-20 w-20 relative">
+                    <img
+                      src={car.photos[index]}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                ))
+              }
             >
               {car.photos.map((photo, index) => (
-                <div key={index} className="h-96">
+                <div key={index} className="h-[500px] relative">
                   <img
                     src={photo}
                     alt={`${car.brand} ${car.model} - Photo ${index + 1}`}
-                    className="object-cover w-full h-full"
+                    className="object-contain w-full h-full cursor-zoom-in"
+                    onClick={() => openImageModal(index)}
                   />
                 </div>
               ))}
             </Carousel>
           </div>
 
+          {/* Full Screen Modal */}
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            style={customStyles}
+          >
+            <div className="relative">
+              <button
+                onClick={() => setModalIsOpen(false)}
+                className="absolute -top-8 right-0 text-white text-3xl z-50 hover:text-gray-300 transition-colors"
+              >
+                ×
+              </button>
+              <img
+                src={car.photos[selectedImageIndex]}
+                alt={`Fullscreen - ${car.brand} ${car.model}`}
+                className="max-h-[80vh] max-w-[90vw] object-contain"
+              />
+            </div>
+          </Modal>
+
           {/* Details Section */}
           <div className="space-y-6 md:order-2">
             {/* Pricing & Contact */}
             <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-xl">
-              {car.listing_type === 'Rental' ? (
+              {car.listing_type === 'rental' ? (
                 <div className="text-center space-y-4">
                   <p className="text-xl font-semibold dark:text-white">
                     Custom Rental Plans Available
@@ -139,6 +182,15 @@ export default function CarDetail() {
                     className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full"
                   >
                     {showContactForm ? 'Close Form' : 'Request Rental Information'}
+                  </button>
+                  <p className="text-xl font-semibold dark:text-white">
+                    Or You Can Call Us Directly
+                  </p>
+                  <button
+                    onClick={() => setShowPhone(!showPhone)}
+                    className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full"
+                  >
+                    {showPhone ? process.env.NEXT_PUBLIC_PHONE_NUMBER : 'Show Contact'}
                   </button>
                 </div>
               ) : (
