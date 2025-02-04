@@ -292,7 +292,7 @@ export default function CarsPage() {
                         {filteredCars.map((car) => (
                             <div
                                 key={car.id}
-                                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-shadow"
+                                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-shadow flex flex-col h-full"
                             >
                                 <div className="relative h-48 w-full">
                                     <img
@@ -301,48 +301,44 @@ export default function CarsPage() {
                                         className="w-full h-full object-cover rounded-t-xl"
                                     />
                                 </div>
-                                <div className="p-4">
-                                    {/* Üst Bilgiler: Marka, Model */}
-                                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                                        {car.brand} {car.model}
+                                <div className="p-4 flex flex-col flex-grow">
+                                    <h3 className="text-xl text-gray-800 dark:text-gray-100 truncate">
+                                        <span className="font-bold">{car.brand}</span> {car.model}
                                     </h3>
 
-                                    {/* Yıl • Body Type (Body Type için truncate uygulanıyor) */}
-                                    <p className="text-gray-600 dark:text-gray-300 truncate">
-                                        {car.year} • {car.body_type}
-                                    </p>
+                                    <div className="flex-grow">
+                                        <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
+                                            {car.year} • {car.body_type}
+                                        </p>
 
-                                    {/* Listing Type Badge ve Fiyat / Placeholder */}
-                                    <div className="flex justify-between items-center mt-4">
-                                        {/* Listing Type Badge */}
-                                        <div>
-                                            {car.listing_type === 'rental' ? (
-                                                <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
-                                                    Rental
-                                                </span>
-                                            ) : car.listing_type === 'sale' ? (
-                                                <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
-                                                    Sale
-                                                </span>
-                                            ) : (
-                                                <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
-                                                    Sale/Rental
-                                                </span>
-                                            )}
-                                        </div>
-                                        {/* Fiyat: Eğer kiralık ise fiyat gösterilmez, boş placeholder kullanılır */}
-                                        <div className="min-h-[2.5rem] flex items-center">
-                                            {car.listing_type !== 'rental' && car.price ? (
-                                                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                                                    €{car.price.toLocaleString()}
-                                                </p>
-                                            ) : (
-                                                <div className="h-8"></div>
-                                            )}
+                                        <div className="flex justify-between items-center mt-4">
+                                            <div>
+                                                {car.listing_type === 'rental' ? (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                                                        Rental
+                                                    </span>
+                                                ) : car.listing_type === 'sale' ? (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
+                                                        Sale
+                                                    </span>
+                                                ) : (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
+                                                        Sale/Rental
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="min-h-[2.5rem] flex items-center">
+                                                {car.listing_type !== 'rental' && car.price ? (
+                                                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                                                        €{car.price.toLocaleString()}
+                                                    </p>
+                                                ) : (
+                                                    <div className="h-8"></div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* View Details Butonu */}
                                     <Link
                                         href={`/cars/${car.id}`}
                                         className="block mt-4 text-center bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition-colors"

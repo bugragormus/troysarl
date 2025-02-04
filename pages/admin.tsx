@@ -172,14 +172,47 @@ export default function AdminPanel() {
         try {
             const car = cars.find((c) => c.id === id);
             if (!car) throw new Error('Car not found');
-            if (car.photos.length) {
-                const fileNames = car.photos.map((url) => new URL(url).pathname.split('/').pop());
-                await supabase.storage.from('car-photos').remove(fileNames.filter(Boolean) as string[]);
+
+            if (car.photos?.length) {
+                // Geliştirilmiş URL parse işlemi
+                const filePaths = car.photos.map((url) => {
+                    try {
+                        const parsedUrl = new URL(url);
+                        const fullPath = decodeURIComponent(parsedUrl.pathname);
+                        const pathSegments = fullPath.split('/car-photos/');
+                        return pathSegments[1] || null;
+                    } catch (error) {
+                        console.error('URL parse error:', url, error);
+                        return null;
+                    }
+                }).filter(Boolean) as string[];
+
+                if (filePaths.length > 0) {
+                    const { error } = await supabase.storage
+                        .from('car-photos')
+                        .remove(filePaths);
+
+                    if (error) {
+                        console.error('Supabase storage remove error:', {
+                            filePaths,
+                            error
+                        });
+                        throw new Error(`Photo deletion failed: ${error.message}`);
+                    }
+                }
             }
-            await supabase.from('cars').delete().eq('id', id);
+
+            const { error: deleteError } = await supabase
+                .from('cars')
+                .delete()
+                .eq('id', id);
+
+            if (deleteError) throw deleteError;
+
             setCars((prev) => prev.filter((c) => c.id !== id));
             alert('Car deleted successfully!');
         } catch (error: any) {
+            console.error('Full error details:', error);
             alert(`Error: ${error.message}`);
         }
     };
