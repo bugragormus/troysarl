@@ -1,65 +1,79 @@
+// pages/about.tsx
 import Head from 'next/head';
 import Image from 'next/image';
 import { BuildingOfficeIcon, UserGroupIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Head>
         <title>Hakkımızda - Troysarl</title>
         <meta name="description" content="Troysarl hakkında detaylı bilgi ve şirket profili" />
       </Head>
 
-      {/* Hero Section */}
-      <div className="relative bg-gray-100 dark:bg-gray-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      {/* Hero Bölümü */}
+      <header className="relative bg-gradient-to-r from-green-500 to-blue-500 py-20">
+        <div className="absolute inset-0">
+          {/* Arka plan görseli, hafif opaklıkla */}
+          <Image
+            src="/troysarl_logos.png"
+            alt="Troysarl Logo"
+            fill
+            objectFit="cover"
+            className="opacity-20"
+          />
+        </div>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
             Lüks Araç Deneyiminde Öncü
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-xl text-white/90">
             2010'dan beri sektörde liderlik
           </p>
         </div>
-      </div>
+      </header>
 
-      {/* Tarihçe */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-            <div className="mb-8 lg:mb-0">
+      {/* Hikayemiz Bölümü */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+          <div className="mb-8 lg:mb-0">
+            <div className="relative h-80 w-full rounded-lg shadow-xl overflow-hidden">
               <Image
                 src="/troysarl_logos.png"
                 alt="Troysarl Showroom"
-                width={800}
-                height={600}
-                className="rounded-lg shadow-xl"
+                fill
+                objectFit="cover"
               />
             </div>
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                Bizim Hikayemiz
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                Lüksemburg'un kalbinde küçük bir aile şirketi olarak başlayan yolculuğumuz,
-                bugün Avrupa'nın önde gelen premium araç tedarikçilerinden biri olmamızla taçlandı.
-              </p>
-              <div className="flex items-center space-x-4 mb-4">
-                <BuildingOfficeIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                <span className="text-xl font-semibold dark:text-white">3000+ m² Showroom</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <GlobeEuropeAfricaIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                <span className="text-xl font-semibold dark:text-white">12 Ülkede Hizmet</span>
-              </div>
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+              Bizim Hikayemiz
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Lüksemburg'un kalbinde küçük bir aile şirketi olarak başlayan yolculuğumuz,
+              bugün Avrupa'nın önde gelen premium araç tedarikçilerinden biri olmamızla taçlandı.
+            </p>
+            <div className="flex items-center space-x-4 mb-4">
+              <BuildingOfficeIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                3000+ m² Showroom
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <GlobeEuropeAfricaIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                12 Ülkede Hizmet
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Değerlerimiz */}
-      <section className="bg-gray-50 dark:bg-gray-800 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+      {/* Temel Değerler Bölümü */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-12">
             Temel Değerlerimiz
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -67,48 +81,51 @@ export default function AboutPage() {
               {
                 title: 'Şeffaflık',
                 icon: UserGroupIcon,
-                description: 'Tüm iş süreçlerimizde açık ve anlaşılır iletişim'
+                description: 'Tüm iş süreçlerimizde açık ve anlaşılır iletişim',
               },
               {
                 title: 'Kalite',
                 icon: UserGroupIcon,
-                description: 'Sadece sertifikalı ve titiz kontrolden geçmiş araçlar'
+                description: 'Sadece sertifikalı ve titiz kontrolden geçmiş araçlar',
               },
               {
                 title: 'Müşteri Odaklılık',
                 icon: UserGroupIcon,
-                description: '7/24 destek ve kişiye özel çözümler'
-              }
-            ].map((value, index) => (
-              <div key={index} className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg">
-                <value.icon className="h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" />
-                <h3 className="text-xl font-semibold dark:text-white mb-2">{value.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">{value.description}</p>
+                description: '7/24 destek ve kişiye özel çözümler',
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300"
+              >
+                <item.icon className="h-12 w-12 text-blue-600 dark:text-blue-400 mb-4" />
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Ekip */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-            Uzman Ekibimiz
-          </h2>
+      {/* Ekip Bölümü */}
+      <section className="py-16 bg-gradient-to-r from-green-500 to-blue-500 text-white">
+        <div className="max-w-7xl mx-auto text-center px-4">
+          <h2 className="text-3xl font-bold mb-6">Uzman Ekibimiz</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {['Marc Schmit', 'Holeyloshko Aydınişko'].map((name, index) => (
+            {['Buğra GÖRMÜŞ', 'Ufuk DEMİR'].map((name, index) => (
               <div key={index} className="text-center">
-                <div className="relative w-48 h-48 mx-auto mb-4">
+                <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
                   <Image
-                    src={`/troysarl_logos.png`}
+                    src="/troysarl_logos.png"
                     alt={name}
                     fill
-                    className="rounded-full object-cover border-4 border-blue-500"
+                    objectFit="cover"
                   />
                 </div>
-                <h3 className="text-xl font-semibold dark:text-white">{name}</h3>
-                <p className="text-gray-600 dark:text-gray-300">Uzman Danışman</p>
+                <h3 className="text-xl font-bold">{name}</h3>
+                <p className="text-gray-200">Uzman Danışman</p>
               </div>
             ))}
           </div>

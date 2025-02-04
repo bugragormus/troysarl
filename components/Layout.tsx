@@ -189,70 +189,88 @@ export default function Layout({ children }: LayoutProps) {
                 <main className="flex-grow">{children}</main>
 
                 {/* Footer */}
-                <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-10">
+                    <div className="max-w-7xl mx-auto px-4">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {/* Hakkımızda */}
+                            {/* Marka & Hakkında */}
                             <div>
-                                <h3 className="text-xl font-semibold mb-4">Troy Cars LUX SARL</h3>
-                                <p className="text-gray-400 text-sm">
-                                    All rights reserved.
+                                <h3 className="text-2xl font-bold mb-4">Troysarl</h3>
+                                <p className="text-sm text-gray-200">
+                                    Premium vehicle experience with an exclusive collection of luxury and second-hand vehicles.
                                 </p>
                             </div>
 
                             {/* Hızlı Linkler */}
                             <div>
-                                <h3 className="text-xl font-semibold mb-4">Fast Links</h3>
+                                <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
                                 <ul className="space-y-2 text-sm">
                                     <li>
-                                        <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+                                        <Link href="/" className="hover:underline">
                                             Home
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/cars" className="text-gray-400 hover:text-white transition-colors">
+                                        <Link href="/cars" className="hover:underline">
                                             Cars
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                                            Contact
+                                        <Link href="/about" className="hover:underline">
+                                            About Us
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                                            About Us
+                                        <Link href="/contact" className="hover:underline">
+                                            Contact
                                         </Link>
                                     </li>
                                 </ul>
                             </div>
 
-                            {/* İletişim */}
+                            {/* İletişim Bilgileri */}
                             <div>
-                                <h3 className="text-xl font-semibold mb-4">Get In Touch</h3>
-                                <ul className="space-y-2 text-sm text-gray-400">
-                                    <li>
-                                        <span className="block font-medium">Address:</span> {process.env.NEXT_PUBLIC_ADRESS}
-                                    </li>
-                                    <li>
-                                        <span className="block font-medium">Phone:</span> {process.env.NEXT_PUBLIC_PHONE_NUMBER}
-                                    </li>
-                                    <li>
-                                        <span className="block font-medium">E-Mail:</span> {process.env.NEXT_PUBLIC_EMAIL}
-                                    </li>
+                                <h4 className="text-lg font-semibold mb-3">Contact</h4>
+                                <ul className="space-y-2 text-sm">
+                                    <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
+                                    <li>Phone: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
+                                    <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>
                                 </ul>
+                                {/* Sosyal Medya İkonları (Opsiyonel) */}
+                                <div className="flex space-x-4 mt-4">
+                                    <a href="#" className="hover:text-gray-300" aria-label="Facebook">
+                                        <svg
+                                            className="w-6 h-6 fill-current"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54v1.85h2.74l-.44 2.89h-2.3v6.99C18.34 21.12 22 16.99 22 12z" />
+                                        </svg>
+                                    </a>
+                                    <a href="#" className="hover:text-gray-300" aria-label="Twitter">
+                                        <svg
+                                            className="w-6 h-6 fill-current"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M22.46 6c-.77.35-1.6.59-2.46.69a4.26 4.26 0 001.88-2.35 8.48 8.48 0 01-2.7 1.03 4.24 4.24 0 00-7.24 3.87 12.04 12.04 0 01-8.74-4.43 4.23 4.23 0 001.31 5.65 4.18 4.18 0 01-1.92-.53v.05a4.25 4.25 0 003.4 4.16 4.3 4.3 0 01-1.91.07 4.25 4.25 0 003.96 2.95A8.5 8.5 0 012 18.57a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.35-.02-.53A8.36 8.36 0 0022.46 6z" />
+                                        </svg>
+                                    </a>
+                                    <a href="#" className="hover:text-gray-300" aria-label="Instagram">
+                                        <svg
+                                            className="w-6 h-6 fill-current"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z" />
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
                         {/* Alt Bilgi */}
-                        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-                            <p className="text-gray-400 text-sm">
-                                &copy; {new Date().getFullYear()} Troy Cars LUX SARL. All rights reserved.
-                            </p>
+                        <div className="mt-8 border-t border-indigo-500 pt-4 text-center text-xs text-gray-200">
+                            &copy; {new Date().getFullYear()} Troysarl. All rights reserved.
                         </div>
                     </div>
                 </footer>
-
             </div>
         </div>
     );
