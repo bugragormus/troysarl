@@ -34,113 +34,152 @@ export default function Layout({ children }: LayoutProps) {
     return (
         <div className={`min-h-screen flex flex-col ${darkMode ? 'dark' : ''}`}>
             <div className="dark:bg-gray-900 dark:text-gray-100">
-                {/* Header */}
-                <header className="bg-gray-800 dark:bg-gray-800 shadow-sm">
+                {/* Modern Header */}
+                <header className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
                     <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between h-16 items-center">
+                        <div className="flex items-center justify-between h-16">
                             {/* Logo */}
-                            <div className="flex-shrink-0 flex items-center">
-                                <Link href="/" className="flex items-center space-x-2">
+                            <div className="flex-shrink-0">
+                                <Link href="/" className="flex items-center">
                                     <Image
                                         src="/troysarl_logos.png"
                                         alt="Troysarl Logo"
-                                        width={105}
-                                        height={105}
-                                        className="rounded"
+                                        width={80}
+                                        height={80}
+                                        className="rounded-full"
                                     />
                                 </Link>
                             </div>
 
-                            {/* Desktop Navigasyon */}
+                            {/* Desktop Menü */}
                             <div className="hidden md:flex items-center space-x-8">
                                 <Link
                                     href="/"
-                                    className={`${isActive('/') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
+                                    className={`text-white hover:text-gray-300 transition-colors font-medium ${isActive('/') ? 'underline' : ''
+                                        }`}
                                 >
                                     Home
                                 </Link>
                                 <Link
                                     href="/cars"
-                                    className={`${isActive('/cars') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'} px-3 py-2 text-sm hover:text-blue-500 transition-colors`}
+                                    className={`text-white hover:text-gray-300 transition-colors font-medium ${isActive('/cars') ? 'underline' : ''
+                                        }`}
                                 >
                                     Cars
                                 </Link>
                                 <Link
                                     href="/admin"
-                                    className={`${isActive('/admin') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
+                                    className={`text-white hover:text-gray-300 transition-colors font-medium ${isActive('/admin') ? 'underline' : ''
+                                        }`}
                                 >
                                     Admin
                                 </Link>
                                 <Link
                                     href="/contact"
-                                    className={`${isActive('/contact') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
+                                    className={`text-white hover:text-gray-300 transition-colors font-medium ${isActive('/contact') ? 'underline' : ''
+                                        }`}
                                 >
                                     Contact
                                 </Link>
                                 <Link
                                     href="/about"
-                                    className={`${isActive('/about') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'} px-1 py-2 text-sm hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
+                                    className={`text-white hover:text-gray-300 transition-colors font-medium ${isActive('/about') ? 'underline' : ''
+                                        }`}
                                 >
                                     About Us
                                 </Link>
+                            </div>
 
+                            {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
+                            <div className="flex items-center">
                                 {/* Dark Mode Toggle */}
                                 <button
-                                    onClick={() => setDarkMode(!darkMode)}
-                                    className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                                    onClick={toggleDarkMode}
+                                    className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors mr-4"
+                                    aria-label="Toggle Dark Mode"
                                 >
                                     {darkMode ? '🌙' : '🌞'}
                                 </button>
-                            </div>
 
-                            {/* Mobil Menü Butonu */}
-                            <div className="md:hidden flex items-center">
-                                <button
-                                    onClick={toggleMenu}
-                                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none"
-                                >
-                                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        {isMenuOpen ? (
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        ) : (
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                        )}
-                                    </svg>
-                                </button>
+                                {/* Mobil Menü Butonu */}
+                                <div className="md:hidden">
+                                    <button
+                                        onClick={toggleMenu}
+                                        className="p-2 rounded-md focus:outline-none bg-white/20 hover:bg-white/30 transition-colors"
+                                        aria-label="Toggle Menu"
+                                    >
+                                        <svg
+                                            className="w-6 h-6 text-white"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            {isMenuOpen ? (
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            ) : (
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M4 6h16M4 12h16M4 18h16"
+                                                />
+                                            )}
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </nav>
 
-                    {/* Mobil Menü */}
+                    {/* Mobil Menü (Açılır Menü) */}
                     {isMenuOpen && (
-                        <div className="md:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out transform">
+                        <div className="md:hidden bg-indigo-700">
                             <div className="px-2 pt-2 pb-3 space-y-1">
                                 <Link
                                     href="/"
-                                    className={`${isActive('/') ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${isActive('/') ? 'underline' : ''
+                                        }`}
                                 >
                                     Home
                                 </Link>
                                 <Link
+                                    href="/cars"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${isActive('/cars') ? 'underline' : ''
+                                        }`}
+                                >
+                                    Cars
+                                </Link>
+                                <Link
                                     href="/admin"
-                                    className={`${isActive('/admin') ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${isActive('/admin') ? 'underline' : ''
+                                        }`}
                                 >
                                     Admin
                                 </Link>
                                 <Link
                                     href="/contact"
-                                    className={`${isActive('/contact') ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'} block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${isActive('/contact') ? 'underline' : ''
+                                        }`}
                                 >
                                     Contact
                                 </Link>
-
-                                {/* Dark Mode Toggle (Mobil) */}
-                                <button
-                                    onClick={() => setDarkMode(!darkMode)}
-                                    className="w-full text-left px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                <Link
+                                    href="/about"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${isActive('/about') ? 'underline' : ''
+                                        }`}
                                 >
-                                    Tema: {darkMode ? 'Koyu' : 'Açık'}
-                                </button>
+                                    About Us
+                                </Link>
                             </div>
                         </div>
                     )}
@@ -150,12 +189,12 @@ export default function Layout({ children }: LayoutProps) {
                 <main className="flex-grow">{children}</main>
 
                 {/* Footer */}
-                <footer className="bg-gray-800 dark:bg-gray-800 text-white">
+                <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Hakkımızda */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Troy Cars LUX SARL</h3>
+                                <h3 className="text-xl font-semibold mb-4">Troy Cars LUX SARL</h3>
                                 <p className="text-gray-400 text-sm">
                                     All rights reserved.
                                 </p>
@@ -163,32 +202,57 @@ export default function Layout({ children }: LayoutProps) {
 
                             {/* Hızlı Linkler */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Fast Links</h3>
+                                <h3 className="text-xl font-semibold mb-4">Fast Links</h3>
                                 <ul className="space-y-2 text-sm">
-                                    <li><Link href="/" className="text-gray-400 hover:text-white">Home</Link></li>
-                                    <li><Link href="/cars" className="text-gray-400 hover:text-white">Cars</Link></li>
-                                    <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
-                                    <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
+                                    <li>
+                                        <Link href="/" className="text-gray-400 hover:text-white transition-colors">
+                                            Home
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/cars" className="text-gray-400 hover:text-white transition-colors">
+                                            Cars
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+                                            Contact
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
+                                            About Us
+                                        </Link>
+                                    </li>
                                 </ul>
                             </div>
 
                             {/* İletişim */}
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Get In Touch</h3>
+                                <h3 className="text-xl font-semibold mb-4">Get In Touch</h3>
                                 <ul className="space-y-2 text-sm text-gray-400">
-                                    <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
-                                    <li>Phone: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
-                                    <li>E-Mail: {process.env.NEXT_PUBLIC_EMAIL}</li>
+                                    <li>
+                                        <span className="block font-medium">Address:</span> {process.env.NEXT_PUBLIC_ADRESS}
+                                    </li>
+                                    <li>
+                                        <span className="block font-medium">Phone:</span> {process.env.NEXT_PUBLIC_PHONE_NUMBER}
+                                    </li>
+                                    <li>
+                                        <span className="block font-medium">E-Mail:</span> {process.env.NEXT_PUBLIC_EMAIL}
+                                    </li>
                                 </ul>
                             </div>
                         </div>
 
                         {/* Alt Bilgi */}
-                        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-                            <p>&copy; {new Date().getFullYear()} Troy Cars LUX SARL. All Rights Reserved.</p>
+                        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+                            <p className="text-gray-400 text-sm">
+                                &copy; {new Date().getFullYear()} Troy Cars LUX SARL. All rights reserved.
+                            </p>
                         </div>
                     </div>
                 </footer>
+
             </div>
         </div>
     );

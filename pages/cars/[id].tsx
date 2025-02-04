@@ -179,16 +179,18 @@ export default function CarDetail() {
                   </p>
                   <button
                     onClick={() => setShowContactForm(!showContactForm)}
-                    className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full"
+                    className="w-full px-8 py-3 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none"
                   >
                     {showContactForm ? 'Close Form' : 'Request Rental Information'}
                   </button>
-                  <p className="text-xl font-semibold dark:text-white">
+
+                  <p className="text-xl font-semibold dark:text-white my-4">
                     Or You Can Call Us Directly
                   </p>
+
                   <button
                     onClick={() => setShowPhone(!showPhone)}
-                    className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full"
+                    className="w-full px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none"
                   >
                     {showPhone ? process.env.NEXT_PUBLIC_PHONE_NUMBER : 'Show Contact'}
                   </button>
