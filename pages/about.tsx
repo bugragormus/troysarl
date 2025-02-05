@@ -1,14 +1,21 @@
 // pages/about.tsx
-import Head from 'next/head';
-import Image from 'next/image';
-import { BuildingOfficeIcon, UserGroupIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline';
+import Head from "next/head";
+import Image from "next/image";
+import {
+  BuildingOfficeIcon,
+  UserGroupIcon,
+  GlobeEuropeAfricaIcon,
+} from "@heroicons/react/24/outline";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Head>
         <title>Hakkımızda - Troysarl</title>
-        <meta name="description" content="Troysarl hakkında detaylı bilgi ve şirket profili" />
+        <meta
+          name="description"
+          content="Troysarl hakkında detaylı bilgi ve şirket profili"
+        />
       </Head>
 
       {/* Hero Bölümü */}
@@ -48,9 +55,14 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-              Our journey started as a small business in the heart of Luxembourg and today we are one of Europe's leading premium vehicle suppliers.
+              As a Luxembourg-based second-hand vehicle trading company, we
+              operate with a commitment to reliability and high-quality service.
+              Prioritizing customer satisfaction, we strive to offer the best
+              options to help you find your dream car. With our extensive
+              vehicle portfolio and transparent trading approach, we continue to
+              grow every day, aiming to provide you with the best possible
+              experience.
             </p>
-            
           </div>
         </div>
       </section>
@@ -64,19 +76,20 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Transparency',
+                title: "Transparency",
                 icon: UserGroupIcon,
-                description: 'Clear and understandable communication in all our business processes',
+                description:
+                  "Clear and understandable communication in all our business processes",
               },
               {
-                title: 'Quality',
+                title: "Quality",
                 icon: UserGroupIcon,
-                description: 'Only certified and rigorously inspected vehicles',
+                description: "Only certified and rigorously inspected vehicles",
               },
               {
-                title: 'Customer Orientation',
+                title: "Customer Orientation",
                 icon: UserGroupIcon,
-                description: '24/7 support and customized solutions',
+                description: "24/7 support and customized solutions",
               },
             ].map((item, index) => (
               <div
@@ -87,7 +100,9 @@ export default function AboutPage() {
                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>

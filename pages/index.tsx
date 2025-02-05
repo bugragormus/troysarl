@@ -1,11 +1,11 @@
 // pages/index.tsx
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-import Link from 'next/link';
-import Head from 'next/head';
-import Image from 'next/image';
-import Car from '@/types/car';
-import { format } from 'date-fns';
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
+import Link from "next/link";
+import Head from "next/head";
+import Image from "next/image";
+import Car from "@/types/car";
+import { format } from "date-fns";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
@@ -13,13 +13,13 @@ export default function Home() {
   useEffect(() => {
     const fetchFeaturedCars = async () => {
       const { data, error } = await supabase
-        .from('cars')
-        .select('*')
-        .eq('is_hidden', false)
-        .order('created_at', { ascending: false })
+        .from("cars")
+        .select("*")
+        .eq("is_hidden", false)
+        .order("created_at", { ascending: false })
         .limit(3);
 
-      if (error) console.error('Error:', error);
+      if (error) console.error("Error:", error);
       else setFeaturedCars(data || []);
     };
 
@@ -30,7 +30,10 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Head>
         <title>Troysarl - Premium Vehicle Experience</title>
-        <meta name="description" content="Luxury and second-hand vehicles at their finest" />
+        <meta
+          name="description"
+          content="Luxury and second-hand vehicles at their finest"
+        />
       </Head>
 
       {/* Hero Section */}
@@ -65,19 +68,20 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: '🔒',
-                title: 'Certified Vehicles',
-                description: '200-point inspection process for guaranteed quality',
+                icon: "🔒",
+                title: "Certified Vehicles",
+                description:
+                  "200-point inspection process for guaranteed quality",
               },
               {
-                icon: '🌍',
-                title: 'Global Delivery',
-                description: 'Seamless worldwide shipping solutions',
+                icon: "🌍",
+                title: "Global Delivery",
+                description: "Seamless worldwide shipping solutions",
               },
               {
-                icon: '💎',
-                title: 'Premium Service',
-                description: '24/7 personalized customer support',
+                icon: "💎",
+                title: "Premium Service",
+                description: "24/7 personalized customer support",
               },
             ].map((item, index) => (
               <div
@@ -88,7 +92,9 @@ export default function Home() {
                 <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -121,27 +127,32 @@ export default function Home() {
 
                   <div className="flex-grow">
                     <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-                      {format(new Date(car.year), 'dd.MM.yyyy')} • {car.body_type}
+                      {format(new Date(car.year), "dd.MM.yyyy")} •{" "}
+                      {car.body_type}
                     </p>
 
                     <div className="flex justify-between items-center mt-4">
                       <div>
-                        {car.listing_type === 'rental' ? (
+                        {car.listing_type === "rental" ? (
                           <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
                             Rental
                           </span>
-                        ) : car.listing_type === 'sale' ? (
+                        ) : car.listing_type === "sale" ? (
                           <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
                             Sale
                           </span>
-                        ) : (
+                        ) : car.listing_type === "both" ? (
                           <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
                             Sale/Rental
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">
+                            Sold
                           </span>
                         )}
                       </div>
                       <div className="min-h-[2.5rem] flex items-center">
-                        {car.listing_type !== 'rental' && car.price ? (
+                        {car.listing_type !== "rental" && car.price ? (
                           <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                             €{car.price.toLocaleString()}
                           </p>
@@ -168,7 +179,9 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-green-500 to-blue-500 text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-6">Ready for Your Next Adventure?</h2>
+          <h2 className="text-3xl font-bold mb-6">
+            Ready for Your Next Adventure?
+          </h2>
           <p className="text-xl mb-8">
             Experience luxury mobility with our exclusive collection
           </p>
