@@ -48,20 +48,9 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-              Our journey started as a small family business in the heart of Luxembourg and today we are one of Europe's leading premium vehicle suppliers.
+              Our journey started as a small business in the heart of Luxembourg and today we are one of Europe's leading premium vehicle suppliers.
             </p>
-            <div className="flex items-center space-x-4 mb-4">
-              <BuildingOfficeIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-              <span className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                3000+ m² Showroom
-              </span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <GlobeEuropeAfricaIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-              <span className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                Service in 12 Countries
-              </span>
-            </div>
+            
           </div>
         </div>
       </section>
@@ -105,7 +94,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Ekip Bölümü */}
+      {/*
+       Ekip Bölümü
       <section className="py-16 bg-gradient-to-r from-green-500 to-blue-500 text-white">
         <div className="max-w-7xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-6">Expert Team</h2>
@@ -126,7 +116,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>  */}
     </div>
   );
 }

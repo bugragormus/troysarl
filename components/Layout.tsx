@@ -40,15 +40,10 @@ export default function Layout({ children }: LayoutProps) {
                         <div className="flex items-center justify-between h-16">
                             {/* Logo */}
                             <div className="flex-shrink-0">
-                                <Link href="/" className="flex items-center">
-                                    <Image
-                                        src="/troysarl_logos.png"
-                                        alt="Troysarl Logo"
-                                        width={80}
-                                        height={80}
-                                        className="rounded-full"
-                                    />
-                                </Link>
+                                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
+                                    Troy Cars
+                                </span>
+
                             </div>
 
                             {/* Desktop Menü */}
@@ -194,7 +189,7 @@ export default function Layout({ children }: LayoutProps) {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Marka & Hakkında */}
                             <div>
-                                <h3 className="text-2xl font-bold mb-4">Troy Cars LUX SARL</h3>
+                                <h3 className="text-2xl font-bold mb-4">Troy Cars Lux SARL</h3>
                                 <p className="text-sm text-gray-200">
                                     Premium vehicle experience with an exclusive collection of luxury and second-hand vehicles.
                                 </p>
@@ -232,7 +227,6 @@ export default function Layout({ children }: LayoutProps) {
                                 <h4 className="text-lg font-semibold mb-3">Contact</h4>
                                 <ul className="space-y-2 text-sm">
                                     <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
-                                    <li>Phone: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
                                     <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>
                                 </ul>
                                 {/* Sosyal Medya İkonları (Opsiyonel) */}
@@ -267,7 +261,7 @@ export default function Layout({ children }: LayoutProps) {
 
                         {/* Alt Bilgi */}
                         <div className="mt-8 border-t border-indigo-500 pt-4 text-center text-xs text-gray-200">
-                            &copy; {new Date().getFullYear()} Troy Cars LUX SARL. All Rights Reserved.
+                            &copy; {new Date().getFullYear()} Troy Cars Lux SARL. All Rights Reserved.
                         </div>
                     </div>
                 </footer>

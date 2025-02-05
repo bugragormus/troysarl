@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 import Head from 'next/head';
 import Car from '@/types/car';
+import { format } from 'date-fns';
 
 const bodyTypeOptions = [
     'Sedan', 'Coupe', 'Hatchback', 'Pickup', 'Off-Road', 'Sport',
@@ -115,7 +116,7 @@ export default function CarsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
             <Head>
                 <title>Vehicle Catalog - Troysarl</title>
                 <meta name="description" content="Browse our premium selection of vehicles" />
@@ -308,7 +309,7 @@ export default function CarsPage() {
 
                                     <div className="flex-grow">
                                         <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-                                            {car.year} • {car.body_type}
+                                            {format(new Date(car.year), 'dd.MM.yyyy')} • {car.body_type}
                                         </p>
 
                                         <div className="flex justify-between items-center mt-4">

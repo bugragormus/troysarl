@@ -23,14 +23,15 @@ export default function AdminPanel() {
     const [cars, setCars] = useState<Car[]>([]);
     const [brand, setBrand] = useState('');
     const [model, setModel] = useState('');
-    const [year, setYear] = useState<number | undefined>(undefined);
+    // Eski "year" state yerine manufactureDate adında string state kullanıyoruz
+    const [manufactureDate, setManufactureDate] = useState<string>('');
     const [price, setPrice] = useState<number | undefined>(undefined);
     const [mileage, setMileage] = useState<number | undefined>(undefined);
     const [bodyType, setBodyType] = useState('');
     const [color, setColor] = useState('');
     const [horsepower, setHorsepower] = useState<number | undefined>(undefined);
     const [transmission, setTransmission] = useState('Automatic');
-    const [doors, setDoors] = useState<number>(4);
+    const [doors, setDoors] = useState<number>(5);
     const [fuelType, setFuelType] = useState('Petrol');
     const [listingType, setListingType] = useState<'sale' | 'rental' | 'both'>('sale');
     const [description, setDescription] = useState('');
@@ -110,7 +111,8 @@ export default function AdminPanel() {
     // Submit Car
     const handleAddCar = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!brand || !model || !year || !price || uploadedUrls.length === 0) {
+        // manufactureDate (tarih) zorunlu, price de zorunlu
+        if (!brand || !model || !manufactureDate || !price || uploadedUrls.length === 0) {
             alert('Please fill all required fields!');
             return;
         }
@@ -133,7 +135,7 @@ export default function AdminPanel() {
                     {
                         brand,
                         model,
-                        year,
+                        year: manufactureDate, // ISO format (YYYY-MM-DD) olarak gönderilecek
                         price,
                         mileage,
                         body_type: bodyType,
@@ -155,7 +157,7 @@ export default function AdminPanel() {
                 // Reset form
                 setBrand('');
                 setModel('');
-                setYear(undefined);
+                setManufactureDate('');
                 setPrice(undefined);
                 setUploadedUrls([]);
                 setSelectedFeatures({});
@@ -166,7 +168,7 @@ export default function AdminPanel() {
         }
     };
 
-    // Delete Car
+    // Delete Car (Fotoğraflar da silinecek)
     const handleDeleteCar = async (id: string) => {
         if (!confirm('Delete this car and all photos?')) return;
         try {
@@ -174,29 +176,26 @@ export default function AdminPanel() {
             if (!car) throw new Error('Car not found');
 
             if (car.photos?.length) {
-                // Geliştirilmiş URL parse işlemi
-                const filePaths = car.photos.map((url) => {
-                    try {
-                        const parsedUrl = new URL(url);
-                        const fullPath = decodeURIComponent(parsedUrl.pathname);
-                        const pathSegments = fullPath.split('/car-photos/');
-                        return pathSegments[1] || null;
-                    } catch (error) {
-                        console.error('URL parse error:', url, error);
-                        return null;
-                    }
-                }).filter(Boolean) as string[];
+                const filePaths = car.photos
+                    .map((url) => {
+                        try {
+                            const parsedUrl = new URL(url);
+                            const fullPath = decodeURIComponent(parsedUrl.pathname);
+                            const pathSegments = fullPath.split('/car-photos/');
+                            return pathSegments[1] || null;
+                        } catch (error) {
+                            console.error('URL parse error:', url, error);
+                            return null;
+                        }
+                    })
+                    .filter(Boolean) as string[];
 
                 if (filePaths.length > 0) {
                     const { error } = await supabase.storage
                         .from('car-photos')
                         .remove(filePaths);
-
                     if (error) {
-                        console.error('Supabase storage remove error:', {
-                            filePaths,
-                            error
-                        });
+                        console.error('Supabase storage remove error:', { filePaths, error });
                         throw new Error(`Photo deletion failed: ${error.message}`);
                     }
                 }
@@ -353,6 +352,15 @@ export default function AdminPanel() {
                                     </option>
                                 ))}
                             </select>
+                            {/* Üretim Tarihi: input type date */}
+                            <input
+                                type="date"
+                                placeholder="Manufacture Date*"
+                                value={manufactureDate}
+                                onChange={(e) => setManufactureDate(e.target.value)}
+                                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                required
+                            />
                             <textarea
                                 placeholder="Detailed Description*"
                                 value={description}
@@ -366,14 +374,7 @@ export default function AdminPanel() {
                         <div className="space-y-4">
                             <h2 className="text-xl font-bold dark:text-white">Technical Details</h2>
                             <div className="grid grid-cols-2 gap-4">
-                                <input
-                                    type="number"
-                                    placeholder="Year*"
-                                    value={year || ''}
-                                    onChange={(e) => setYear(Number(e.target.value))}
-                                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                    required
-                                />
+                                {/* Artık üretim tarihi ayrı eleman olarak değil, formun üst kısmındaki input'tan alınıyor */}
                                 <input
                                     type="number"
                                     placeholder="Price (€)*"

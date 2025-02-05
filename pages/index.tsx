@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
 import Car from '@/types/car';
+import { format } from 'date-fns';
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
@@ -36,7 +37,7 @@ export default function Home() {
       <section className="relative h-[70vh] flex items-center justify-center">
         <div className="absolute inset-0">
           <Image
-            src="/showroomhero.jpg"
+            src="/showroom-hero.png"
             alt="Troysarl Showroom"
             fill
             className="object-cover"
@@ -120,7 +121,7 @@ export default function Home() {
 
                   <div className="flex-grow">
                     <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-                      {car.year} • {car.body_type}
+                      {format(new Date(car.year), 'dd.MM.yyyy')} • {car.body_type}
                     </p>
 
                     <div className="flex justify-between items-center mt-4">

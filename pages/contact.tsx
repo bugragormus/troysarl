@@ -40,7 +40,7 @@ export default function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
             <Head>
                 <title>Contact Us - Troysarl</title>
                 <meta name="description" content="Get in touch with us" />
@@ -71,15 +71,6 @@ export default function Contact() {
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400">
                                     {process.env.NEXT_PUBLIC_ADRESS}
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                    Phone
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                    {process.env.NEXT_PUBLIC_PHONE_NUMBER}
                                 </p>
                             </div>
 
