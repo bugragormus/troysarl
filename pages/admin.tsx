@@ -9,7 +9,7 @@ const bodyTypeOptions = [
     'Muscle', 'Roadster', 'Cabriolet', 'Compact'
 ];
 
-const featureOptions = {
+const featureOptions: { [key: string]: string[] } = {
     safety: ['ABS', 'Airbags', 'Parking Sensors', 'Lane Assist', 'Blind Spot Detection'],
     comfort: ['Climate Control', 'Heated Seats', 'Keyless Entry', 'Sunroof', 'Power Windows'],
     entertainment: ['Navigation', 'Bluetooth', 'Apple CarPlay', 'Premium Sound', 'Rear Camera']
@@ -18,6 +18,9 @@ const featureOptions = {
 export default function AdminPanel() {
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingCar, setEditingCar] = useState<Car | null>(null);
 
     // Car Form State
     const [cars, setCars] = useState<Car[]>([]);
@@ -98,6 +101,51 @@ export default function AdminPanel() {
         const { error } = await supabase.storage.from('car-photos').remove([fileName || '']);
         if (error) alert(`Delete failed: ${error.message}`);
         else setUploadedUrls((prev) => prev.filter((u) => u !== url));
+    };
+
+    // Updating features
+    const handleEditFeatureToggle = (category: string, feature: string) => {
+        if (!editingCar) return;
+
+        const updatedFeatures = { ...editingCar.features };
+        const currentFeatures = updatedFeatures[category] || [];
+
+        if (currentFeatures.includes(feature)) {
+            updatedFeatures[category] = currentFeatures.filter(f => f !== feature);
+        } else {
+            updatedFeatures[category] = [...currentFeatures, feature];
+        }
+
+        setEditingCar({ ...editingCar, features: updatedFeatures });
+    };
+
+    // Updating car details
+    const handleUpdateCar = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingCar) return;
+
+        try {
+            const { data, error } = await supabase
+                .from('cars')
+                .update({
+                    ...editingCar,
+                    year: manufactureDate, // Veya manufactureDate kullanılıyorsa
+                    price: Number(editingCar.price),
+                    mileage: editingCar.mileage ? Number(editingCar.mileage) : null,
+                    doors: Number(editingCar.doors),
+                })
+                .eq('id', editingCar.id)
+                .select();
+
+            if (error) throw error;
+            if (data?.[0]) {
+                setCars(prev => prev.map(c => c.id === data[0].id ? data[0] : c));
+                setIsEditModalOpen(false);
+                alert('Araç başarıyla güncellendi!');
+            }
+        } catch (error: any) {
+            alert(`Güncelleme hatası: ${error.message}`);
+        }
     };
 
     // Feature Selection
@@ -352,7 +400,6 @@ export default function AdminPanel() {
                                     </option>
                                 ))}
                             </select>
-                            {/* Üretim Tarihi: input type date */}
                             <input
                                 type="date"
                                 placeholder="Manufacture Date*"
@@ -482,6 +529,155 @@ export default function AdminPanel() {
                     </button>
                 </form>
 
+                {isEditModalOpen && editingCar && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                            <h2 className="text-2xl font-bold mb-6 dark:text-white">Aracı Düzenle</h2>
+                            <form onSubmit={handleUpdateCar}>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {/* Sol Sütun */}
+                                    <div className="space-y-4">
+                                        <input
+                                            type="text"
+                                            placeholder="Brand*"
+                                            value={editingCar.brand}
+                                            onChange={(e) => setEditingCar({ ...editingCar, brand: e.target.value })}
+                                            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Model*"
+                                            value={editingCar.model}
+                                            onChange={(e) => setEditingCar({ ...editingCar, model: e.target.value })}
+                                            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            required
+                                        />
+                                        <input
+                                            type="date"
+                                            value={editingCar.manufactureDate}
+                                            onChange={(e) => setManufactureDate(e.target.value)}
+                                            className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            required
+                                        />
+                                        <select
+                                            value={editingCar.doors}
+                                            onChange={(e) => setEditingCar({ ...editingCar, doors: Number(e.target.value) })}
+                                            className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                            required
+                                        >
+                                            <option value={2}>2 Doors</option>
+                                            <option value={3}>3 Doors</option>
+                                            <option value={4}>4 Doors</option>
+                                            <option value={5}>5 Doors</option>
+                                        </select>
+                                        <select
+                                            value={editingCar.body_type}
+                                            onChange={(e) => setEditingCar({ ...editingCar, body_type: e.target.value })}
+                                            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            required
+                                        >
+                                            {bodyTypeOptions.map(option => (
+                                                <option key={option} value={option}>{option}</option>
+                                            ))}
+                                        </select>
+                                        <textarea
+                                            placeholder="Detailed Description*"
+                                            value={editingCar.description}
+                                            onChange={(e) => setEditingCar({ ...editingCar, description: e.target.value })}
+                                            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 h-32"
+                                        />
+                                    </div>
+
+                                    {/* Sağ Sütun */}
+                                    <div className="space-y-4">
+                                        <input
+                                            type="number"
+                                            placeholder="Price (€)*"
+                                            value={editingCar.price || ''}
+                                            onChange={(e) => setEditingCar({ ...editingCar, price: Number(e.target.value) })}
+                                            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            required
+                                        />
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <input
+                                                type="number"
+                                                placeholder="Mileage (km)"
+                                                value={editingCar.mileage || ''}
+                                                onChange={(e) => setEditingCar({ ...editingCar, mileage: Number(e.target.value) })}
+                                                className="p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            />
+                                            <select
+                                                value={editingCar.transmission}
+                                                onChange={(e) => setEditingCar({ ...editingCar, transmission: e.target.value })}
+                                                className="p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            >
+                                                <option>Automatic</option>
+                                                <option>Manual</option>
+                                            </select>
+                                            <select
+                                                value={editingCar.fuel_type}
+                                                onChange={(e) => setEditingCar({ ...editingCar, fuel_type: e.target.value })}
+                                                className="p-3 rounded-lg border focus:ring-2 focus:ring-green-500"
+                                            >
+                                                <option>Petrol</option>
+                                                <option>Diesel</option>
+                                                <option>Electric</option>
+                                                <option>Hybrid</option>
+                                            </select>
+                                            <input
+                                                type="text"
+                                                placeholder="Color*"
+                                                value={editingCar.color}
+                                                onChange={(e) => setEditingCar({ ...editingCar, color: e.target.value })}
+                                                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                                required
+                                            />
+                                        </div>
+
+                                        {/* Özellikler */}
+                                        <div className="space-y-4">
+                                            {Object.entries(featureOptions).map(([category, features]) => (
+                                                <div key={category} className="mb-4">
+                                                    <h3 className="font-semibold mb-2 capitalize">{category}</h3>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {features.map(feature => (
+                                                            <label key={feature} className="flex items-center space-x-2">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={editingCar.features?.[category]?.includes(feature) || false}
+                                                                    onChange={() => handleEditFeatureToggle(category, feature)}
+                                                                    className="rounded text-blue-600"
+                                                                />
+                                                                <span>{feature}</span>
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-6 flex gap-4 justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsEditModalOpen(false)}
+                                        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                                    >
+                                        İptal
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                    >
+                                        Değişiklikleri Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 {/* Car List */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-x-auto border border-gray-200 dark:border-gray-700">
                     <table className="min-w-full">
@@ -518,6 +714,15 @@ export default function AdminPanel() {
                                         </select>
                                     </td>
                                     <td className="px-6 py-4 space-x-2">
+                                        <button
+                                            onClick={() => {
+                                                setEditingCar(car);
+                                                setIsEditModalOpen(true);
+                                            }}
+                                            className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                                        >
+                                            Düzenle
+                                        </button>
                                         <button
                                             onClick={() => toggleVisibility(car.id, car.is_hidden)}
                                             className="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"

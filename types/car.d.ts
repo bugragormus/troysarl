@@ -3,6 +3,7 @@ interface Car {
     id: string;
     brand: string;
     model: string;
+    manufactureDate: number;
     year: number;
     price: number;
     fuel_type: string;
@@ -15,9 +16,15 @@ interface Car {
     transmission: string;
     doors: number;
     features: {
+
+        [key: string]: string[];
+
         safety: string[];
+
         comfort: string[];
+
         entertainment: string[];
+
     };
     description: string;
     is_hidden: boolean;

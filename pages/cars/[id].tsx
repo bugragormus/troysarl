@@ -82,6 +82,9 @@ export default function CarDetail() {
         car_id: id,
         car_model: `${car?.brand} ${car?.model}`,
         listing_type: car?.listing_type,
+        car_year: car?.year,
+        car_km: car?.mileage,
+        car_color: car?.color,
       }),
     });
     if (response.ok) {
@@ -196,13 +199,6 @@ export default function CarDetail() {
                   >
                     {showContactForm ? 'Close Form' : 'Request Rental Information'}
                   </button>
-                  <p className="text-xl font-semibold text-gray-800 dark:text-white">Or Call Us Directly</p>
-                  <button
-                    onClick={() => setShowPhone((prev) => !prev)}
-                    className="w-full py-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold shadow-lg transform transition-all duration-300 hover:scale-105"
-                  >
-                    {showPhone ? process.env.NEXT_PUBLIC_PHONE_NUMBER : 'Show Contact'}
-                  </button>
                 </div>
               ) : (
                 <div className="flex justify-center items-center">
@@ -255,6 +251,104 @@ export default function CarDetail() {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
                       placeholder="Your rental details, preferred dates, etc."
+                    ></textarea>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={consents.financing}
+                        onChange={(e) => setConsents({ ...consents, financing: e.target.checked })}
+                        className="rounded text-blue-600 dark:bg-gray-700"
+                      />
+                      <span className="text-sm">I would like to be contacted for a financing offer</span>
+                    </label>
+                    <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={consents.privacy}
+                        onChange={(e) => setConsents({ ...consents, privacy: e.target.checked })}
+                        className="rounded text-blue-600 dark:bg-gray-700"
+                      />
+                      <span className="text-sm">
+                        I accept the{' '}
+                        <a href="/privacy-policy" className="text-green-500 hover:underline" target="_blank" rel="noopener noreferrer">
+                          privacy policy
+                        </a>
+                      </span>
+                    </label>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full py-4 rounded-full bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition-colors"
+                  >
+                    Submit Request
+                  </button>
+                </form>
+              </div>
+            )}
+            <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+              {car.listing_type === 'sale' ? (
+                <div className="space-y-6 text-center">
+                  <button
+                    onClick={() => setShowContactForm((prev) => !prev)}
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold shadow-lg transform transition-all duration-300 hover:scale-105"
+                  >
+                    {showContactForm ? 'Close Form' : 'Make an Appointment'}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center">
+                  <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">€{car.price.toLocaleString()}</p>
+                </div>
+              )}
+            </div>
+            {/* İletişim Formu (Sadece Satılık İlanları İçin) */}
+            {showContactForm && car.listing_type === 'sale' && (
+              <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name*</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email*</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone*</label>
+                      <input
+                        type="tel"
+                        required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Message*</label>
+                    <textarea
+                      rows={4}
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
+                      placeholder="Your preferred dates, etc."
                     ></textarea>
                   </div>
                   <div className="space-y-3">
