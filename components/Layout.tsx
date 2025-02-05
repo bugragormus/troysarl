@@ -2,6 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import CookieConsentBanner from "./CookieConsentBanner";
 
 interface LayoutProps {
   children: ReactNode;
@@ -234,6 +235,11 @@ export default function Layout({ children }: LayoutProps) {
                       Careers
                     </Link>
                   </li>
+                  <li>
+                    <Link href="/privacy-policy" className="hover:underline">
+                      Privacy Policy
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -284,6 +290,8 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
         </footer>
+        {/* Çerez Bildirimi */}
+        <CookieConsentBanner />
       </div>
     </div>
   );

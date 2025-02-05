@@ -192,7 +192,17 @@ export default function Contact() {
                     }
                     className="rounded text-blue-600 dark:bg-gray-700"
                   />
-                  <span className="text-sm">I accept the privacy policy</span>
+                  <span className="text-sm">
+                    I accept the{" "}
+                    <a
+                      href="/privacy-policy"
+                      className="text-green-500 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      privacy policy
+                    </a>
+                  </span>
                 </label>
               </div>
 
