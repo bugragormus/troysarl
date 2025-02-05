@@ -229,6 +229,11 @@ export default function Layout({ children }: LayoutProps) {
                       Contact
                     </Link>
                   </li>
+                  <li>
+                    <Link href="/careers" className="hover:underline">
+                      Careers
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
