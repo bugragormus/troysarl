@@ -290,7 +290,11 @@ export default function CarDetail() {
             {/* İletişim Formu (Sadece Rental İlanları İçin) */}
             {showContactForm && car.listing_type === "rental" && (
               <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                  data-captcha="true"
+                >
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Full Name*
@@ -397,7 +401,7 @@ export default function CarDetail() {
                     type="submit"
                     className="w-full py-4 rounded-full bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition-colors"
                   >
-                    Submit Request
+                    Request Rental Information
                   </button>
                 </form>
               </div>
@@ -416,7 +420,11 @@ export default function CarDetail() {
             {showContactForm &&
               (car.listing_type === "sale" || car.listing_type === "both") && (
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-6"
+                    data-captcha="true"
+                  >
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Full Name*
@@ -523,7 +531,7 @@ export default function CarDetail() {
                       type="submit"
                       className="w-full py-4 rounded-full bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition-colors"
                     >
-                      Submit Request
+                      Send Appointment Request
                     </button>
                   </form>
                 </div>

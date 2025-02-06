@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
               {/* Logo */}
               <div className="flex-shrink-0">
                 <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
-                  Troy Cars
+                  <a href="/">Troy Cars</a>
                 </span>
               </div>
 
@@ -213,7 +213,7 @@ export default function Layout({ children }: LayoutProps) {
         {/* Footer */}
         <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-10">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Marka & Hakkında */}
               <div>
                 <h3 className="text-2xl font-bold mb-4">Troy Cars Lux SARL</h3>
@@ -252,9 +252,21 @@ export default function Layout({ children }: LayoutProps) {
                       Careers
                     </Link>
                   </li>
+                </ul>
+              </div>
+
+              {/* Cookie & Privacy Policy */}
+              <div>
+                <h4 className="text-lg font-semibold mb-3">Legal & Privacy</h4>
+                <ul className="space-y-2 text-sm">
                   <li>
                     <Link href="/privacy-policy" className="hover:underline">
                       Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/settings" className="hover:underline">
+                      Cookie Settings
                     </Link>
                   </li>
                 </ul>
