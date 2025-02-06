@@ -5,10 +5,13 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import Car from "@/types/car";
+import { Heart } from "lucide-react";
 import { format } from "date-fns";
+import favorites from "./favorites";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchFeaturedCars = async () => {
@@ -24,7 +27,25 @@ export default function Home() {
     };
 
     fetchFeaturedCars();
+
+    const savedFavorites = JSON.parse(
+      localStorage.getItem("favoriteCars") || "[]"
+    );
+    setFavorites(savedFavorites);
   }, []);
+
+  const toggleFavorite = (carId: string) => {
+    let updatedFavorites = [...favorites];
+
+    if (updatedFavorites.includes(carId)) {
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+    } else {
+      updatedFavorites.push(carId); // Favorilere ekle
+    }
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
@@ -119,6 +140,21 @@ export default function Home() {
                     alt={`${car.brand} ${car.model}`}
                     className="w-full h-full object-cover rounded-t-xl"
                   />
+                  {/* Favori Butonu */}
+                  <button
+                    onClick={() => toggleFavorite(car.id)}
+                    className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-300 ${
+                      favorites.includes(car.id)
+                        ? "bg-red-500 text-white hover:bg-red-600 scale-110"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    <Heart
+                      size={20}
+                      fill={favorites.includes(car.id) ? "white" : "none"}
+                      strokeWidth={2}
+                    />
+                  </button>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <h3 className="text-xl text-gray-800 dark:text-gray-100 truncate">

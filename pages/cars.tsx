@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 import Link from "next/link";
 import Head from "next/head";
 import Car from "@/types/car";
+import { Heart } from "lucide-react";
 import { format } from "date-fns";
 
 const bodyTypeOptions = [
@@ -43,6 +44,7 @@ const featureOptions = [
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     listingType: "all",
@@ -69,7 +71,25 @@ export default function CarsPage() {
     };
 
     fetchCars();
+
+    const savedFavorites = JSON.parse(
+      localStorage.getItem("favoriteCars") || "[]"
+    );
+    setFavorites(savedFavorites);
   }, []);
+
+  const toggleFavorite = (carId: string) => {
+    let updatedFavorites = [...favorites];
+
+    if (updatedFavorites.includes(carId)) {
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+    } else {
+      updatedFavorites.push(carId); // Favorilere ekle
+    }
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
+  };
 
   const filteredCars = cars.filter((car) => {
     const matchesSearch =
@@ -372,6 +392,21 @@ export default function CarsPage() {
                     alt={`${car.brand} ${car.model}`}
                     className="w-full h-full object-cover rounded-t-xl"
                   />
+                  {/* Favori Butonu */}
+                  <button
+                    onClick={() => toggleFavorite(car.id)}
+                    className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-300 ${
+                      favorites.includes(car.id)
+                        ? "bg-red-500 text-white hover:bg-red-600 scale-110"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    <Heart
+                      size={20}
+                      fill={favorites.includes(car.id) ? "white" : "none"}
+                      strokeWidth={2}
+                    />
+                  </button>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <h3 className="text-xl text-gray-800 dark:text-gray-100 truncate">

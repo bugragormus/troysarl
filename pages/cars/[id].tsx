@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Carousel } from "react-responsive-carousel";
 import Modal from "react-modal";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Heart } from "lucide-react";
 import Car from "@/types/car";
 import { format } from "date-fns";
 
@@ -29,6 +30,7 @@ const modalStyles = {
   },
 };
 export default function CarDetail() {
+  const [favorites, setFavorites] = useState<string[]>([]);
   const router = useRouter();
   const { id } = router.query;
   const [car, setCar] = useState<Car | null>(null);
@@ -77,8 +79,26 @@ export default function CarDetail() {
         }
       };
       fetchCar();
+
+      const savedFavorites = JSON.parse(
+        localStorage.getItem("favoriteCars") || "[]"
+      );
+      setFavorites(savedFavorites);
     }
   }, [id]);
+  const toggleFavorite = (carId: string) => {
+    let updatedFavorites = [...favorites];
+
+    if (updatedFavorites.includes(carId)) {
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+    } else {
+      updatedFavorites.push(carId); // Favorilere ekle
+    }
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!consents.privacy) {
@@ -123,7 +143,28 @@ export default function CarDetail() {
       </Head>
       <div className="max-w-6xl mx-auto p-6">
         {/* Başlık Alanı */}
-        <header className="mb-10">
+        <header className="mb-10 relative">
+          {/* Favori Butonu */}
+          <button
+            onClick={() => toggleFavorite(car.id)}
+            className={`absolute top-3 right-3 p-4 rounded-full shadow-md transition-all duration-300 ${
+              favorites.includes(car.id)
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
+            }`}
+            title={
+              favorites.includes(car.id)
+                ? "Remove from Favorites"
+                : "Add to Favorites"
+            }
+          >
+            <Heart
+              size={20}
+              fill={favorites.includes(car.id) ? "white" : "none"}
+              strokeWidth={2}
+            />
+          </button>
+
           <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white">
             {car.brand} {car.model}
           </h1>
@@ -131,6 +172,7 @@ export default function CarDetail() {
             {format(new Date(car.year), "dd.MM.yyyy")} • {car.body_type}
           </p>
         </header>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Sol Sütun: Resim Galerisi */}
           <section>

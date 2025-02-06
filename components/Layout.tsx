@@ -88,6 +88,14 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   About Us
                 </Link>
+                <Link
+                  href="/favorites"
+                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
+                    isActive("/favorites") ? "underline" : ""
+                  }`}
+                >
+                  Favorites
+                </Link>
               </div>
 
               {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
@@ -184,6 +192,15 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   About Us
+                </Link>
+                <Link
+                  href="/favorites"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
+                    isActive("/favorites") ? "underline" : ""
+                  }`}
+                >
+                  Favorites
                 </Link>
               </div>
             </div>
