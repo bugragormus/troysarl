@@ -60,6 +60,42 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
+        <Head>
+          {/* Temel SEO Etiketleri */}
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaDescription} />
+          <link rel="canonical" href={canonicalUrl} />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:title" content={metaTitle} />
+          <meta property="og:description" content={metaDescription} />
+          <meta property="og:image" content={ogImageUrl} />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={metaTitle} />
+          <meta name="twitter:description" content={metaDescription} />
+          <meta name="twitter:image" content={ogImageUrl} />
+
+          {/* Google Tag Manager */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-099SZW867E');
+    `,
+            }}
+          />
+        </Head>
+
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />

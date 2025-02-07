@@ -7,6 +7,22 @@ export default function PrivacyPolicy() {
       <div className="container mx-auto p-6 max-w-4xl ">
         <Head>
           <title>Privacy Policy - Troysarl</title>
+
+          {/* Google Tag Manager */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-099SZW867E');
+    `,
+            }}
+          />
         </Head>
         <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 mb-6">

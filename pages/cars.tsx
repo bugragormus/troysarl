@@ -193,6 +193,22 @@ export default function CarsPage() {
             })),
           })}
         </script>
+
+        {/* Google Tag Manager */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-099SZW867E');
+    `,
+          }}
+        />
       </Head>
 
       <div className="container mx-auto p-4 lg:flex lg:gap-8" aria-label="Cars">
