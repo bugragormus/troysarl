@@ -103,7 +103,6 @@ export default function AdminPanel() {
   const [mileage, setMileage] = useState<number | undefined>(undefined);
   const [bodyType, setBodyType] = useState("");
   const [color, setColor] = useState("");
-  const [horsepower, setHorsepower] = useState<number | undefined>(undefined);
   const [transmission, setTransmission] = useState("Automatic");
   const [doors, setDoors] = useState<number>(5);
   const [fuelType, setFuelType] = useState("Petrol");
@@ -198,9 +197,14 @@ export default function AdminPanel() {
       } else {
         setUploadedUrls((prev) => [...prev, ...urls]);
       }
-    } catch (error: any) {
-      toast.error(`Upload error: ${error.message}`);
-      Sentry.captureException(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Upload error: ${error.message}`);
+        Sentry.captureException(error);
+      } else {
+        toast.error("Upload error occurred");
+        Sentry.captureException(new Error("An unknown error occurred"));
+      }
     } finally {
       setUploading(false);
       setSelectedFiles([]);
@@ -295,9 +299,14 @@ export default function AdminPanel() {
         setIsEditModalOpen(false);
         toast.success("Araç başarıyla güncellendi!");
       }
-    } catch (error: any) {
-      toast.error(`Güncelleme hatası: ${error.message}`);
-      Sentry.captureException(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Güncelleme hatası: ${error.message}`);
+        Sentry.captureException(error);
+      } else {
+        toast.error("Güncelleme hatası oluştu");
+        Sentry.captureException(new Error("Bilinmeyen hata"));
+      }
     }
   };
 
@@ -349,7 +358,6 @@ export default function AdminPanel() {
             mileage,
             body_type: bodyType,
             color,
-            horsepower,
             transmission,
             doors,
             fuel_type: fuelType,
@@ -372,9 +380,14 @@ export default function AdminPanel() {
         setSelectedFeatures({});
         toast.success("Car added successfully!");
       }
-    } catch (error: any) {
-      toast.error(`Error: ${error.message}`);
-      Sentry.captureException(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Error: ${error.message}`);
+        Sentry.captureException(error);
+      } else {
+        toast.error("An unknown error occurred");
+        Sentry.captureException(new Error("An unknown error occurred"));
+      }
     }
   };
 
@@ -424,10 +437,14 @@ export default function AdminPanel() {
 
       setCars((prev) => prev.filter((c) => c.id !== id));
       toast.success("Car deleted successfully!");
-    } catch (error: any) {
-      console.error("Full error details:", error);
-      Sentry.captureException(error);
-      toast.error(`Error: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(`Error: ${error.message}`);
+        Sentry.captureException(error);
+      } else {
+        toast.error("An unknown error occurred");
+        Sentry.captureException(new Error("An unknown error occurred"));
+      }
     }
   };
 
@@ -554,7 +571,11 @@ export default function AdminPanel() {
                 </select>
                 <select
                   value={listingType}
-                  onChange={(e) => setListingType(e.target.value as any)}
+                  onChange={(e) =>
+                    setListingType(
+                      e.target.value as "sale" | "rental" | "both" | "sold"
+                    )
+                  }
                   className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                   required
                 >
@@ -1066,7 +1087,10 @@ export default function AdminPanel() {
                     <select
                       value={car.listing_type}
                       onChange={(e) =>
-                        updateListingType(car.id, e.target.value as any)
+                        updateListingType(
+                          car.id,
+                          e.target.value as "sale" | "rental" | "both" | "sold"
+                        )
                       }
                       className="bg-gray-100 dark:bg-gray-700 p-2 rounded"
                     >
