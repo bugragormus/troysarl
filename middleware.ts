@@ -38,5 +38,5 @@ export function middleware(req: any) {
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: "/super-secret-dashboard-98765/:path*",
 };
