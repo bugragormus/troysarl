@@ -114,7 +114,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow-lg">
             Redefining Automotive Excellence
           </h1>
           <Link

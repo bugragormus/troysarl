@@ -92,13 +92,12 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-              As a Luxembourg-based second-hand vehicle trading company, we
-              operate with a commitment to reliability and high-quality service.
-              Prioritizing customer satisfaction, we strive to offer the best
-              options to help you find your dream car. With our extensive
-              vehicle portfolio and transparent trading approach, we continue to
-              grow every day, aiming to provide you with the best possible
-              experience.
+              As a Luxembourg-based used car trading company, we operate with a
+              commitment to reliability and high-quality service. Prioritizing
+              customer satisfaction, we strive to offer the best options to help
+              you find your dream car. With our extensive vehicle portfolio and
+              transparent trading approach, we continue to grow every day,
+              aiming to provide you with the best possible experience.
             </p>
           </div>
         </div>

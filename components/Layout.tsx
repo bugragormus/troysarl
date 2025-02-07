@@ -158,15 +158,6 @@ export default function Layout({ children }: LayoutProps) {
                   Cars
                 </Link>
                 <Link
-                  href="/admin"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/admin") ? "underline" : ""
-                  }`}
-                >
-                  Admin
-                </Link>
-                <Link
                   href="/contact"
                   onClick={() => setIsMenuOpen(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
@@ -210,7 +201,7 @@ export default function Layout({ children }: LayoutProps) {
                 <h3 className="text-2xl font-bold mb-4">Troy Cars Lux SARL</h3>
                 <p className="text-sm text-gray-200">
                   Premium vehicle experience with an exclusive collection of
-                  luxury and second-hand vehicles.
+                  luxury and used cars.
                 </p>
               </div>
 

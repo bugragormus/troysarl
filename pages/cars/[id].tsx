@@ -182,11 +182,26 @@ export default function CarDetail() {
 
       <div className="max-w-6xl mx-auto p-6">
         {/* Başlık Alanı */}
-        <header className="mb-10 relative" aria-label="Car Details">
+        <header
+          className="mb-10 flex items-center justify-between relative"
+          aria-label="Car Details"
+        >
+          <div>
+            <h1
+              className="text-4xl font-extrabold text-gray-800 dark:text-white"
+              aria-label="Car Title"
+            >
+              {car.brand} {car.model}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
+              {format(new Date(car.year), "dd.MM.yyyy")} • {car.body_type}
+            </p>
+          </div>
+
           {/* Favori Butonu */}
           <button
             onClick={() => toggleFavorite(car.id)}
-            className={`absolute top-3 right-3 p-4 rounded-full shadow-md transition-all duration-300 ${
+            className={`p-3 rounded-full shadow-md transition-all duration-300 ${
               favorites.includes(car.id)
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -203,16 +218,6 @@ export default function CarDetail() {
               strokeWidth={2}
             />
           </button>
-
-          <h1
-            className="text-4xl font-extrabold text-gray-800 dark:text-white"
-            aria-label="Car Title"
-          >
-            {car.brand} {car.model}
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-            {format(new Date(car.year), "dd.MM.yyyy")} • {car.body_type}
-          </p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
