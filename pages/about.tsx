@@ -2,6 +2,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
+import Script from "next/script";
 
 // SEO Meta Verileri
 const metaTitle =
@@ -47,23 +48,21 @@ export default function AboutPage() {
             image: ogImageUrl,
           })}
         </script>
-
-        {/* Google Tag Manager */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-099SZW867E');
-    `,
-          }}
-        />
       </Head>
+
+      {/* Google Tag Manager */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-099SZW867E');
+        `}
+      </Script>
 
       {/* Hero Bölümü */}
       <header

@@ -5,7 +5,6 @@ import Car from "@/types/car";
 import toast, { Toaster } from "react-hot-toast";
 import * as Sentry from "@sentry/react";
 import Image from "next/image";
-import heic2any from "heic2any";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -222,21 +221,25 @@ export default function AdminPanel() {
         selectedFiles.map(async (file) => {
           if (
             file.type === "image/heic" ||
-            file.name.endsWith(".HEIC") ||
-            file.name.endsWith(".heic")
+            file.name.toLowerCase().endsWith(".heic")
           ) {
-            // HEIC dosyasını JPEG'e çevir
-            const blob = await heic2any({ blob: file, toType: "image/jpeg" });
-            const convertedFile = new File(
-              [blob as Blob],
-              file.name.replace(/\.heic$/i, ".jpg"),
-              {
-                type: "image/jpeg",
-              }
-            );
-            return convertedFile;
+            // Tarayıcı ortamında olduğumuzu kontrol ediyoruz
+            if (typeof window !== "undefined") {
+              // Dinamik olarak heic2any'yi içe aktar
+              const heic2anyModule = await import("heic2any");
+              const heic2any = heic2anyModule.default;
+              // HEIC dosyasını JPEG'e dönüştür
+              const blob = await heic2any({ blob: file, toType: "image/jpeg" });
+              return new File(
+                [blob as Blob],
+                file.name.replace(/\.heic$/i, ".jpg"),
+                { type: "image/jpeg" }
+              );
+            }
+            // Eğer window undefined ise (sunucu tarafı) dosyayı olduğu gibi döndür
+            return file;
           }
-          return file; // Diğer formatları olduğu gibi bırak
+          return file; // Diğer dosya türleri için dönüştürme yapma
         })
       );
 

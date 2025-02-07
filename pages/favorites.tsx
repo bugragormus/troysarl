@@ -5,6 +5,7 @@ import Car from "@/types/car";
 import CarCard from "@/components/CarCard";
 import { Trash2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 export default function FavoritesPage() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -110,23 +111,21 @@ export default function FavoritesPage() {
             image: ogImageUrl,
           })}
         </script>
-
-        {/* Google Tag Manager */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-099SZW867E');
-    `,
-          }}
-        />
       </Head>
+
+      {/* Google Tag Manager */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-099SZW867E');
+        `}
+      </Script>
 
       <div className="container mx-auto p-6">
         <div className="flex justify-between items-center mb-6">

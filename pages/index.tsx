@@ -8,6 +8,7 @@ import Car from "@/types/car";
 import { Heart } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
@@ -78,22 +79,6 @@ export default function Home() {
           <meta name="twitter:title" content={metaTitle} />
           <meta name="twitter:description" content={metaDescription} />
           <meta name="twitter:image" content={ogImageUrl} />
-
-          {/* Google Tag Manager */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
-          ></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-099SZW867E');
-    `,
-            }}
-          />
         </Head>
 
         {/* Temel SEO Etiketleri */}
@@ -131,6 +116,20 @@ export default function Home() {
           })}
         </script>
       </Head>
+
+      {/* Google Analytics Scriptleri */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-099SZW867E');
+        `}
+      </Script>
 
       {/* Hero Section */}
       <section

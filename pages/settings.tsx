@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import toast, { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 export default function SettingsPage() {
   const [preferences, setPreferences] = useState({
@@ -47,23 +48,21 @@ export default function SettingsPage() {
       <div className="container mx-auto p-6 max-w-4xl">
         <Head>
           <title>Cookie Settings - Troysarl</title>
-
-          {/* Google Tag Manager */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
-          ></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-099SZW867E');
-    `,
-            }}
-          />
         </Head>
+
+        {/* Google Analytics Scriptleri */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-099SZW867E');
+        `}
+        </Script>
 
         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 mb-6">
           Cookie Preferences

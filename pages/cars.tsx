@@ -8,6 +8,7 @@ import Car from "@/types/car";
 import { Heart } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -193,23 +194,21 @@ export default function CarsPage() {
             })),
           })}
         </script>
-
-        {/* Google Tag Manager */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-099SZW867E');
-    `,
-          }}
-        />
       </Head>
+
+      {/* Google Tag Manager */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-099SZW867E');
+        `}
+      </Script>
 
       <div className="container mx-auto p-4 lg:flex lg:gap-8" aria-label="Cars">
         {/* Mobil Filtre Toggle Butonu */}
