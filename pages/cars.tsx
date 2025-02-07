@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import Link from "next/link";
 import Head from "next/head";
 import Car from "@/types/car";
-import { Heart } from "lucide-react";
-import { format } from "date-fns";
 import CarCard from "@/components/CarCard";
 
 const bodyTypeOptions = [
@@ -27,21 +24,6 @@ const bodyTypeOptions = [
 
 const fuelTypeOptions = ["Petrol", "Diesel", "Electric", "Hybrid"];
 
-{
-  /* 
-const featureOptions = [
-  "ABS",
-  "Airbags",
-  "Parking Sensors",
-  "Climate Control",
-  "Heated Seats",
-  "Navigation",
-  "Bluetooth",
-  "Sunroof",
-];
-*/
-}
-
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -59,6 +41,9 @@ export default function CarsPage() {
     maxMileage: "",
     features: [] as string[],
   });
+  const [visibleCars, setVisibleCars] = useState<Car[]>([]);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -68,7 +53,10 @@ export default function CarsPage() {
         .eq("is_hidden", false);
 
       if (error) console.error("Error:", error);
-      else setCars(data || []);
+      else {
+        setCars(data || []);
+        setVisibleCars(data?.slice(0, itemsPerPage) || []);
+      }
     };
 
     fetchCars();
@@ -79,13 +67,22 @@ export default function CarsPage() {
     setFavorites(savedFavorites);
   }, []);
 
+  useEffect(() => {
+    const sortedCars = filteredCars.sort((a, b) => {
+      const order = { sale: 1, both: 2, rental: 3, sold: 4 };
+      return order[a.listing_type] - order[b.listing_type];
+    });
+
+    setVisibleCars(sortedCars.slice(0, page * itemsPerPage));
+  }, [cars, filters, searchTerm, page]);
+
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
 
     if (updatedFavorites.includes(carId)) {
-      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId);
     } else {
-      updatedFavorites.push(carId); // Favorilere ekle
+      updatedFavorites.push(carId);
     }
 
     setFavorites(updatedFavorites);
@@ -137,13 +134,8 @@ export default function CarsPage() {
     );
   });
 
-  const handleFeatureToggle = (feature: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      features: prev.features.includes(feature)
-        ? prev.features.filter((f) => f !== feature)
-        : [...prev.features, feature],
-    }));
+  const loadMoreCars = () => {
+    setPage((prev) => prev + 1);
   };
 
   const resetFilters = () => {
@@ -296,29 +288,6 @@ export default function CarsPage() {
               </div>
             </div>
 
-            {/* Features 
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Features
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {featureOptions.map((feature) => (
-                  <label
-                    key={feature}
-                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 text-sm"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={filters.features.includes(feature)}
-                      onChange={() => handleFeatureToggle(feature)}
-                      className="rounded text-blue-600 dark:bg-gray-700"
-                    />
-                    <span>{feature}</span>
-                  </label>
-                ))}
-              </div>
-            </div> */}
-
             {/* Fuel Type */}
             <div>
               <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
@@ -382,7 +351,7 @@ export default function CarsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {filteredCars.map((car) => (
+            {visibleCars.map((car) => (
               <CarCard
                 key={car.id}
                 car={car}
@@ -391,6 +360,18 @@ export default function CarsPage() {
               />
             ))}
           </div>
+
+          {/* Load More Button */}
+          {visibleCars.length < filteredCars.length && (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={loadMoreCars}
+                className="px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full hover:scale-105 transition-transform font-semibold"
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>

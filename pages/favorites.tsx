@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import Link from "next/link";
 import Head from "next/head";
 import Car from "@/types/car";
-import { format } from "date-fns";
 import CarCard from "@/components/CarCard";
-import { Trash2, Trash } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 export default function FavoritesPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [visibleCars, setVisibleCars] = useState<Car[]>([]);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6; // Sayfa başına gösterilecek araba sayısı
 
   useEffect(() => {
     // Favorileri localStorage'dan al
@@ -25,7 +26,10 @@ export default function FavoritesPage() {
           .select("*")
           .in("id", savedFavorites);
         if (error) console.error("Error:", error);
-        else setCars(data || []);
+        else {
+          setCars(data || []);
+          setVisibleCars(data?.slice(0, itemsPerPage) || []); // İlk sayfayı yükle
+        }
       };
 
       fetchFavoriteCars();
@@ -38,13 +42,25 @@ export default function FavoritesPage() {
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
     setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
+    setVisibleCars((prevVisibleCars) =>
+      prevVisibleCars.filter((car) => car.id !== carId)
+    );
   };
 
   // Tüm favorileri temizle
   const clearFavorites = () => {
     setFavorites([]);
     setCars([]);
+    setVisibleCars([]);
     localStorage.removeItem("favoriteCars");
+  };
+
+  // Daha fazla araba yükle
+  const loadMoreCars = () => {
+    const nextPage = page + 1;
+    const nextCars = cars.slice(0, nextPage * itemsPerPage);
+    setVisibleCars(nextCars);
+    setPage(nextPage);
   };
 
   return (
@@ -74,15 +90,29 @@ export default function FavoritesPage() {
             You haven't added any favorite cars yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cars.map((car) => (
-              <CarCard
-                key={car.id}
-                car={car}
-                onRemove={removeFavorite} // Bu sayfada favori ikonu yerine çöp (remove) ikonu görünsün
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visibleCars.map((car) => (
+                <CarCard
+                  key={car.id}
+                  car={car}
+                  onRemove={removeFavorite} // Bu sayfada favori ikonu yerine çöp (remove) ikonu görünsün
+                />
+              ))}
+            </div>
+
+            {/* Load More Butonu */}
+            {visibleCars.length < cars.length && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={loadMoreCars}
+                  className="px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full hover:scale-105 transition-transform font-semibold"
+                >
+                  Load More
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
