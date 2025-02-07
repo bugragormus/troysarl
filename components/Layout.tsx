@@ -64,14 +64,6 @@ export default function Layout({ children }: LayoutProps) {
                   Cars
                 </Link>
                 <Link
-                  href="/admin"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/admin") ? "underline" : ""
-                  }`}
-                >
-                  Admin
-                </Link>
-                <Link
                   href="/contact"
                   className={`text-white hover:text-gray-300 transition-colors font-medium ${
                     isActive("/contact") ? "underline" : ""
