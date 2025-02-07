@@ -1,4 +1,4 @@
-// pages/admin.tsx
+// pages/super-secret-dashboard-98765.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Car from "@/types/car";
@@ -134,7 +134,7 @@ export default function AdminPanel() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch("/api/admin-login", {
+    const response = await fetch("/api/super-secret-dashboard-98765-login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
