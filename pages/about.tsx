@@ -7,7 +7,7 @@ import { UserGroupIcon } from "@heroicons/react/24/outline";
 const metaTitle =
   "About Us - Troy Cars | About Us Page | Troy Cars SARL | Troysarl | Luxembourg";
 const metaDescription =
-  "As a Luxembourg-based second-hand vehicle trading company, weoperate with a commitment to reliability and high-quality service.Prioritizing customer satisfaction, we strive to offer the bestoptions to help you find your dream car. With our extensivevehicle portfolio and transparent trading approach, we continue togrow every day, aiming to provide you with the best possibleexperience.";
+  "As a Luxembourg-based used car trading company, weoperate with a commitment to reliability and high-quality service.Prioritizing customer satisfaction, we strive to offer the bestoptions to help you find your dream car. With our extensivevehicle portfolio and transparent trading approach, we continue togrow every day, aiming to provide you with the best possibleexperience.";
 const canonicalUrl = "https://troysarl.com/about";
 const ogImageUrl = "https://troysarl.com/og-about.jpg";
 

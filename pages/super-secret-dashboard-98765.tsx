@@ -134,7 +134,7 @@ export default function AdminPanel() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch("/api/super-secret-dashboard-98765-login", {
+    const response = await fetch("/api/admin-login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),

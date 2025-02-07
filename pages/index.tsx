@@ -50,9 +50,9 @@ export default function Home() {
 
   // SEO Meta Verileri
   const metaTitle =
-    "Troy Cars - Premium Luxury & Second-Hand Vehicles in Luxembourg | Troy Cars SARL | Troysarl Luxembourg";
+    "Troy Cars - Premium Luxury & Used Cars in Luxembourg | Troy Cars SARL | Troysarl Luxembourg";
   const metaDescription =
-    "Explore certified luxury vehicles and premium second-hand cars at Troysarl. Luxembourg's trusted automotive partner with 200-point quality checks.";
+    "Explore certified luxury vehicles and premium used cars at Troysarl. Luxembourg's trusted automotive partner with 200-point quality checks.";
   const canonicalUrl = "https://troysarl.com";
   const ogImageUrl = "https://troysarl.com/og-home.jpg";
 
