@@ -63,10 +63,46 @@ export default function FavoritesPage() {
     setPage(nextPage);
   };
 
+  // SEO Meta Verileri
+  const metaTitle =
+    "Your Favorite Cars - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺";
+  const metaDescription =
+    "Browse and manage your favorite cars. Troy Cars Lux Sarl offers premium used cars in Luxembourg. 🇱🇺";
+  const canonicalUrl = "https://troysarl.com/favorites";
+  const ogImageUrl = "https://troysarl.com/og-favorites.jpg";
+
   return (
     <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
       <Head>
-        <title>My Favorite Cars - Troysarl</title>
+        {/* Temel SEO Etiketleri */}
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        {/* Schema.org Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Vehicle Catalog",
+            description: metaDescription,
+            url: canonicalUrl,
+            image: ogImageUrl,
+          })}
+        </script>
       </Head>
 
       <div className="container mx-auto p-6">

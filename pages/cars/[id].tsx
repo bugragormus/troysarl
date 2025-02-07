@@ -100,6 +100,13 @@ export default function CarDetail() {
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
   };
+  // SEO Meta Verileri
+  const metaTitle =
+    "Luxury and Second-Hand Vehicles for Sale or Rent | Troysarl | Luxembourg";
+  const metaDescription =
+    "Explore our extensive collection of luxury and second-hand vehicles for sale or rent. We offer a wide range of vehicles, including sedans, SUVs, and sports cars, with flexible rental plans available.";
+  const canonicalUrl = "https://troysarl.com/cars/" + id;
+  const ogImageUrl = "https://troysarl.com/og-cars" + id + ".jpg";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,14 +142,39 @@ export default function CarDetail() {
   return (
     <div className="min-h-screen dark:bg-gray-900 transition-colors duration-300">
       <Head>
+        {/* Temel SEO Etiketleri */}
         <title>
-          {car.brand} {car.model} | Troysarl
+          {metaTitle} {car.brand} {car.model} | Troysarl
         </title>
-        <meta
-          name="description"
-          content={car.description || `${car.year} ${car.brand} ${car.model}`}
-        />
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        {/* Schema.org Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Vehicle Catalog",
+            description: metaDescription,
+            url: canonicalUrl,
+            image: ogImageUrl,
+          })}
+        </script>
       </Head>
+
       <div className="max-w-6xl mx-auto p-6">
         {/* Başlık Alanı */}
         <header className="mb-10 relative">

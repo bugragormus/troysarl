@@ -39,11 +39,46 @@ export default function Contact() {
     }
   };
 
+  // SEO Meta Verileri
+  const metaTitle =
+    "Contact Us - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺";
+  const metaDescription =
+    "We are here to help you. Reach out to us and we will get back to you as soon as possible.";
+  const canonicalUrl = "https://troysarl.com/contact";
+  const ogImageUrl = "https://troysarl.com/og-contact.jpg";
+
   return (
     <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
       <Head>
-        <title>Contact Us - Troysarl</title>
-        <meta name="description" content="Get in touch with us" />
+        {/* Temel SEO Etiketleri */}
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        {/* Schema.org Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Vehicle Catalog",
+            description: metaDescription,
+            url: canonicalUrl,
+            image: ogImageUrl,
+          })}
+        </script>
       </Head>
 
       <div className="max-w-4xl mx-auto py-16 px-4">

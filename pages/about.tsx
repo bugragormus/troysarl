@@ -1,21 +1,49 @@
 // pages/about.tsx
 import Head from "next/head";
 import Image from "next/image";
-import {
-  BuildingOfficeIcon,
-  UserGroupIcon,
-  GlobeEuropeAfricaIcon,
-} from "@heroicons/react/24/outline";
+import { UserGroupIcon } from "@heroicons/react/24/outline";
+
+// SEO Meta Verileri
+const metaTitle =
+  "About Us - Troy Cars | About Us Page | Troy Cars SARL | Troysarl | Luxembourg";
+const metaDescription =
+  "As a Luxembourg-based second-hand vehicle trading company, weoperate with a commitment to reliability and high-quality service.Prioritizing customer satisfaction, we strive to offer the bestoptions to help you find your dream car. With our extensivevehicle portfolio and transparent trading approach, we continue togrow every day, aiming to provide you with the best possibleexperience.";
+const canonicalUrl = "https://troysarl.com/about";
+const ogImageUrl = "https://troysarl.com/og-about.jpg";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Head>
-        <title>Hakkımızda - Troysarl</title>
-        <meta
-          name="description"
-          content="Troysarl hakkında detaylı bilgi ve şirket profili"
-        />
+        {/* Temel SEO Etiketleri */}
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        {/* Schema.org Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "About Us",
+            description: metaDescription,
+            url: canonicalUrl,
+            image: ogImageUrl,
+          })}
+        </script>
       </Head>
 
       {/* Hero Bölümü */}
