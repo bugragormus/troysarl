@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SettingsPage() {
   const [preferences, setPreferences] = useState({
@@ -9,23 +10,41 @@ export default function SettingsPage() {
     analytics: false,
   });
 
-  // LocalStorage'dan tercihleri yükle
+  // Çerez tercihlerini API üzerinden al
   useEffect(() => {
-    const savedPrefs = localStorage.getItem("cookieConsent");
-    if (savedPrefs) {
-      setPreferences(JSON.parse(savedPrefs));
-    }
+    const fetchPreferences = async () => {
+      const res = await fetch("/api/get-cookie-consent");
+      const data = await res.json();
+
+      // Eğer tercih yoksa, default olarak ayarla
+      if (data.consent) {
+        setPreferences(data.consent);
+      }
+    };
+
+    fetchPreferences();
   }, []);
 
   // Tercihleri kaydet
-  const savePreferences = () => {
-    localStorage.setItem("cookieConsent", JSON.stringify(preferences));
-    window.location.reload(); // Değişiklikleri uygulamak için sayfayı yenile
+  const savePreferences = async () => {
+    const res = await fetch("/api/cookie-consent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(preferences),
+    });
+
+    if (res.ok) {
+      toast.success("Preferences saved successfully");
+      window.location.reload(); // Sayfayı yenileyerek değişiklikleri uygula
+    } else {
+      toast.error("Failed to save preferences");
+    }
   };
 
   return (
     <div className="bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
-      <div className="container mx-auto p-6 max-w-4xl ">
+      <Toaster position="top-right" reverseOrder={false} />
+      <div className="container mx-auto p-6 max-w-4xl">
         <Head>
           <title>Cookie Settings - Troysarl</title>
         </Head>

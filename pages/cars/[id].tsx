@@ -9,7 +9,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Heart } from "lucide-react";
 import Car from "@/types/car";
 import { format } from "date-fns";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 // Modal stil ayarları
 Modal.setAppElement("#__next");
@@ -93,8 +93,10 @@ export default function CarDetail() {
 
     if (updatedFavorites.includes(carId)) {
       updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+      toast.error("The car has been removed from favorites.");
     } else {
       updatedFavorites.push(carId); // Favorilere ekle
+      toast.success("The car has been added to favorites.");
     }
 
     setFavorites(updatedFavorites);
@@ -140,7 +142,11 @@ export default function CarDetail() {
   if (!car)
     return <div className="container mx-auto p-4 text-center">Loading...</div>;
   return (
-    <div className="min-h-screen dark:bg-gray-900 transition-colors duration-300">
+    <div
+      className="min-h-screen dark:bg-gray-900 transition-colors duration-300"
+      aria-label="Car Detail Page"
+    >
+      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>
@@ -177,7 +183,7 @@ export default function CarDetail() {
 
       <div className="max-w-6xl mx-auto p-6">
         {/* Başlık Alanı */}
-        <header className="mb-10 relative">
+        <header className="mb-10 relative" aria-label="Car Details">
           {/* Favori Butonu */}
           <button
             onClick={() => toggleFavorite(car.id)}
@@ -199,7 +205,10 @@ export default function CarDetail() {
             />
           </button>
 
-          <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white">
+          <h1
+            className="text-4xl font-extrabold text-gray-800 dark:text-white"
+            aria-label="Car Title"
+          >
             {car.brand} {car.model}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
@@ -210,7 +219,7 @@ export default function CarDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Sol Sütun: Resim Galerisi */}
           <section>
-            <div className="relative">
+            <div className="relative" aria-label="Car Photos">
               <Carousel
                 showThumbs={true}
                 infiniteLoop
@@ -261,6 +270,7 @@ export default function CarDetail() {
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
             style={modalStyles}
+            aria-label="Fullscreen Image View"
           >
             <div className="relative">
               {/* Kapatma Butonu */}
@@ -299,7 +309,7 @@ export default function CarDetail() {
             </div>
           </Modal>
           {/* Sağ Sütun: Detaylar, İletişim ve Form */}
-          <section className="space-y-8">
+          <section className="space-y-8" aria-label="Car Details">
             {/* Fiyat / İletişim Bilgileri */}
             <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
               {car.listing_type === "rental" ? (

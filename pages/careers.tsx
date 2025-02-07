@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import toast from "react-hot-toast";
+import * as Sentry from "@sentry/react";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -67,6 +68,7 @@ export default function CareersPage() {
       });
     } catch (err: any) {
       setError(err.message || "An error occurred. Please try again.");
+      Sentry.captureException(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -81,7 +83,10 @@ export default function CareersPage() {
   const ogImageUrl = "https://troysarl.com/og-careers.jpg";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
+    <div
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      aria-label="Careers Page"
+    >
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
@@ -135,7 +140,10 @@ export default function CareersPage() {
             {error}
           </div>
         )}
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+        <div
+          className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+          aria-label="Job Application Form"
+        >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

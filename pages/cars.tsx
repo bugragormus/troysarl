@@ -7,6 +7,7 @@ import Image from "next/image";
 import Car from "@/types/car";
 import { Heart } from "lucide-react";
 import { format } from "date-fns";
+import toast, { Toaster } from "react-hot-toast";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -67,9 +68,13 @@ export default function CarsPage() {
 
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
-    updatedFavorites = updatedFavorites.includes(carId)
-      ? updatedFavorites.filter((id) => id !== carId)
-      : [...updatedFavorites, carId];
+    if (updatedFavorites.includes(carId)) {
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+      toast.error("The car has been removed from favorites.");
+    } else {
+      updatedFavorites.push(carId); // Favorilere ekle
+      toast.success("The car has been added to favorites.");
+    }
 
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
@@ -153,7 +158,11 @@ export default function CarsPage() {
   const ogImageUrl = "https://troysarl.com/og-cars.jpg";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
+    <div
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      aria-label="Vehicle Catalog"
+    >
+      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
@@ -195,7 +204,7 @@ export default function CarsPage() {
         </script>
       </Head>
 
-      <div className="container mx-auto p-4 lg:flex lg:gap-8">
+      <div className="container mx-auto p-4 lg:flex lg:gap-8" aria-label="Cars">
         {/* Mobil Filtre Toggle Butonu */}
         <div className="md:hidden mb-4">
           <button

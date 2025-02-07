@@ -4,6 +4,7 @@ import Head from "next/head";
 import Car from "@/types/car";
 import CarCard from "@/components/CarCard";
 import { Trash2 } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function FavoritesPage() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -45,6 +46,7 @@ export default function FavoritesPage() {
     setVisibleCars((prevVisibleCars) =>
       prevVisibleCars.filter((car) => car.id !== carId)
     );
+    toast.error("The car has been removed from favorites.");
   };
 
   // Tüm favorileri temizle
@@ -53,6 +55,7 @@ export default function FavoritesPage() {
     setCars([]);
     setVisibleCars([]);
     localStorage.removeItem("favoriteCars");
+    toast.error("All favorites have been cleared.");
   };
 
   // Daha fazla araba yükle
@@ -72,7 +75,11 @@ export default function FavoritesPage() {
   const ogImageUrl = "https://troysarl.com/og-favorites.jpg";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
+    <div
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      aria-label="Favorites Page"
+    >
+      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
@@ -107,13 +114,17 @@ export default function FavoritesPage() {
 
       <div className="container mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">
+          <h1
+            className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500"
+            aria-label="Page Title"
+          >
             My Favorite Cars
           </h1>
           {cars.length > 0 && (
             <button
               onClick={clearFavorites}
               className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 flex items-center space-x-2"
+              aria-label="Clear All Favorites"
             >
               <span>Clear All Favorites</span>
               <Trash2 />
@@ -122,7 +133,10 @@ export default function FavoritesPage() {
         </div>
 
         {cars.length === 0 ? (
-          <p className="text-gray-600 dark:text-gray-300 text-lg text-center">
+          <p
+            className="text-gray-600 dark:text-gray-300 text-lg text-center"
+            aria-label="No Favorites Message"
+          >
             You haven't added any favorite cars yet.
           </p>
         ) : (

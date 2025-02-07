@@ -48,7 +48,10 @@ export default function Contact() {
   const ogImageUrl = "https://troysarl.com/og-contact.jpg";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
+    <div
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      aria-label="Contact Page"
+    >
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
@@ -84,10 +87,16 @@ export default function Contact() {
       <div className="max-w-4xl mx-auto py-16 px-4">
         {/* Başlık Bölümü */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">
+          <h1
+            className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500"
+            aria-label="Contact Us"
+          >
             Get in Touch
           </h1>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+          <p
+            className="mt-4 text-lg text-gray-600 dark:text-gray-300"
+            aria-label="Contact Us Description"
+          >
             We are here to help you. Reach out to us and we will get back to you
             as soon as possible.
           </p>
@@ -96,25 +105,40 @@ export default function Contact() {
         <div className="grid md:grid-cols-2 gap-12">
           {/* İletişim Bilgileri Kartı */}
           <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            <h2
+              className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6"
+              aria-label="Contact Information"
+            >
               Contact Information
             </h2>
 
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                <h3
+                  className="text-lg font-semibold text-gray-700 dark:text-gray-300"
+                  aria-label="Address"
+                >
                   Address
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p
+                  className="text-gray-600 dark:text-gray-400"
+                  aria-label="Address"
+                >
                   {process.env.NEXT_PUBLIC_ADRESS}
                 </p>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                <h3
+                  className="text-lg font-semibold text-gray-700 dark:text-gray-300"
+                  aria-label="Phone Number"
+                >
                   E-Mail
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p
+                  className="text-gray-600 dark:text-gray-400"
+                  aria-label="Phone Number"
+                >
                   {process.env.NEXT_PUBLIC_EMAIL}
                 </p>
               </div>
@@ -135,11 +159,21 @@ export default function Contact() {
           </div>
 
           {/* İletişim Formu Kartı */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div
+            className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+            aria-label="Contact Form"
+          >
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+              aria-label="Contact Form"
+            >
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    aria-label="Full Name"
+                  >
                     Full Name
                   </label>
                   <input
@@ -244,6 +278,7 @@ export default function Contact() {
               <button
                 type="submit"
                 className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-full shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
+                aria-label="Send Message"
               >
                 Send Message
               </button>

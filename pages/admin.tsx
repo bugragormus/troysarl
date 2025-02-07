@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Car from "@/types/car";
 import toast, { Toaster } from "react-hot-toast";
+import * as Sentry from "@sentry/react";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -132,6 +133,7 @@ export default function AdminPanel() {
       }
     } catch (error: any) {
       toast.error(`Upload error: ${error.message}`);
+      Sentry.captureException(error);
     } finally {
       setUploading(false);
       setSelectedFiles([]);
@@ -187,6 +189,7 @@ export default function AdminPanel() {
                 return pathSegments[1] || null;
               } catch (error) {
                 console.error("URL parse error:", url, error);
+                Sentry.captureException(error);
                 return null;
               }
             })
@@ -227,6 +230,7 @@ export default function AdminPanel() {
       }
     } catch (error: any) {
       toast.error(`Güncelleme hatası: ${error.message}`);
+      Sentry.captureException(error);
     }
   };
 
@@ -303,6 +307,7 @@ export default function AdminPanel() {
       }
     } catch (error: any) {
       toast.error(`Error: ${error.message}`);
+      Sentry.captureException(error);
     }
   };
 
@@ -323,6 +328,7 @@ export default function AdminPanel() {
               return pathSegments[1] || null;
             } catch (error) {
               console.error("URL parse error:", url, error);
+              Sentry.captureException(error);
               return null;
             }
           })
@@ -353,6 +359,7 @@ export default function AdminPanel() {
       toast.success("Car deleted successfully!");
     } catch (error: any) {
       console.error("Full error details:", error);
+      Sentry.captureException(error);
       toast.error(`Error: ${error.message}`);
     }
   };
@@ -366,6 +373,7 @@ export default function AdminPanel() {
       );
     } catch (error) {
       toast.error("Update failed!");
+      Sentry.captureException(error);
     }
   };
 
@@ -388,6 +396,7 @@ export default function AdminPanel() {
       toast.success("Listing type updated successfully!");
     } catch (error) {
       console.error("Update error:", error);
+      Sentry.captureException(error);
       toast.error("Failed to update listing type!");
     }
   };

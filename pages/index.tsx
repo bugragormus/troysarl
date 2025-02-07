@@ -7,6 +7,7 @@ import Image from "next/image";
 import Car from "@/types/car";
 import { Heart } from "lucide-react";
 import { format } from "date-fns";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
@@ -35,9 +36,13 @@ export default function Home() {
 
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
-    updatedFavorites = updatedFavorites.includes(carId)
-      ? updatedFavorites.filter((id) => id !== carId)
-      : [...updatedFavorites, carId];
+    if (updatedFavorites.includes(carId)) {
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+      toast.error("The car has been removed from favorites.");
+    } else {
+      updatedFavorites.push(carId); // Favorilere ekle
+      toast.success("The car has been added to favorites.");
+    }
 
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
@@ -53,6 +58,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>

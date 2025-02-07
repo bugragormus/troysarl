@@ -15,17 +15,20 @@ export default function CookieConsentBanner() {
     analytics: false,
   });
 
-  // LocalStorage'dan çerez tercihlerini yükle
   useEffect(() => {
-    const consent = localStorage.getItem("cookieConsent");
-    if (!consent) {
-      setIsVisible(true); // Eğer çerez tercihi yoksa banner'ı göster
-    } else {
-      // Daha önce izin verilmişse tercihleri yükle
-      const savedPrefs = JSON.parse(consent);
-      setPreferences(savedPrefs);
-      if (savedPrefs.analytics) loadGoogleAnalytics();
-    }
+    const checkConsent = async () => {
+      const res = await fetch("/api/get-cookie-consent");
+      const data = await res.json();
+
+      if (!data.consent) {
+        setIsVisible(true);
+      } else {
+        setPreferences(data.consent);
+        if (data.consent.analytics) loadGoogleAnalytics();
+      }
+    };
+
+    checkConsent();
   }, []);
 
   // Google Analytics'i yükle
@@ -49,19 +52,39 @@ export default function CookieConsentBanner() {
   };
 
   // Tüm çerezleri kabul et
-  const acceptAll = () => {
-    localStorage.setItem("cookieConsent", JSON.stringify(preferences));
+  const acceptAll = async () => {
+    const newPreferences = {
+      essential: true,
+      marketing: true,
+      analytics: true,
+    };
+    setPreferences(newPreferences);
     setIsVisible(false);
-    if (preferences.analytics) loadGoogleAnalytics();
+
+    await fetch("/api/cookie-consent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newPreferences),
+    });
+
+    if (newPreferences.analytics) loadGoogleAnalytics();
   };
 
-  // Tüm çerezleri reddet (sadece zorunlu çerezler kalır)
-  const rejectAll = () => {
-    localStorage.setItem(
-      "cookieConsent",
-      JSON.stringify({ essential: true, marketing: false, analytics: false })
-    );
+  // Tüm çerezleri reddet
+  const rejectAll = async () => {
+    const newPreferences = {
+      essential: true,
+      marketing: false,
+      analytics: false,
+    };
+    setPreferences(newPreferences);
     setIsVisible(false);
+
+    await fetch("/api/cookie-consent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newPreferences),
+    });
   };
 
   return (

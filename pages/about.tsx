@@ -13,7 +13,10 @@ const ogImageUrl = "https://troysarl.com/og-about.jpg";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div
+      className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300"
+      aria-label="About Page"
+    >
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
@@ -47,8 +50,11 @@ export default function AboutPage() {
       </Head>
 
       {/* Hero Bölümü */}
-      <header className="relative bg-gradient-to-r from-green-500 to-blue-500 py-20">
-        <div className="absolute inset-0">
+      <header
+        className="relative bg-gradient-to-r from-green-500 to-blue-500 py-20"
+        aria-label="Hero Section"
+      >
+        <div className="absolute inset-0" aria-label=" Background Image">
           {/* Arka plan görseli, hafif opaklıkla */}
           <Image
             src="/about-bg.jpg"
@@ -66,7 +72,10 @@ export default function AboutPage() {
       </header>
 
       {/* Hikayemiz Bölümü */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+      <section
+        className="py-16 bg-gray-50 dark:bg-gray-800"
+        aria-label="Our Story"
+      >
         <div className="max-w-7xl mx-auto px-4 lg:grid lg:grid-cols-2 lg:gap-16 items-center">
           <div className="mb-8 lg:mb-0">
             <div className="relative h-80 w-full rounded-lg shadow-xl overflow-hidden">
@@ -96,7 +105,10 @@ export default function AboutPage() {
       </section>
 
       {/* Temel Değerler Bölümü */}
-      <section className="py-16 bg-white dark:bg-gray-900">
+      <section
+        className="py-16 bg-white dark:bg-gray-900"
+        aria-label="Core Values"
+      >
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-12">
             Core Values
