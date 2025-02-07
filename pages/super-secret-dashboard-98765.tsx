@@ -131,14 +131,52 @@ export default function AdminPanel() {
   }, [isAuthenticated]);
 
   // Handle Login
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === process.env.ADMIN_PASSWORD) {
+
+    const response = await fetch("/api/admin-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+
+    if (response.ok) {
+      toast.success("Login successful!");
       setIsAuthenticated(true);
     } else {
-      toast.error("Incorrect password!");
+      const data = await response.json();
+      toast.error(data.message || "Incorrect password!");
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gradient-to-b from-premium-light to-white">
+        <form
+          onSubmit={handleLogin}
+          className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-80 border border-gray-200 dark:border-gray-700"
+        >
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
+            Admin Login
+          </h1>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="block w-full mb-4 p-3 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full hover:scale-105 transition-transform font-semibold"
+          >
+            Login
+          </button>
+        </form>
+        <Toaster position="top-right" reverseOrder={false} />
+      </div>
+    );
+  }
 
   // Check - Uncheck All
   const handleCheckAll = (category: string, checkAll: boolean) => {

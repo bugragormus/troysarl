@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/admin/:path*",
-      "destination": "/api/basic-auth?redirect=/admin/:path*"
-    }
-  ]
-}

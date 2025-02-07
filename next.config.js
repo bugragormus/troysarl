@@ -1,9 +1,7 @@
-const withTM = require('next-transpile-modules')(['react-responsive-carousel']);
+const withTM = require("next-transpile-modules")(["react-responsive-carousel"]);
 
 module.exports = {
-    images: {
-      domains: [
-        'qxrbqckbuviqgekopmiu.supabase.co'
-      ],
-    },
-  }
+  images: {
+    domains: ["qxrbqckbuviqgekopmiu.supabase.co"],
+  },
+};
