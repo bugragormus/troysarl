@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import Car from "@/types/car";
 import toast, { Toaster } from "react-hot-toast";
 import * as Sentry from "@sentry/react";
+import Image from "next/image";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -132,7 +133,7 @@ export default function AdminPanel() {
   // Handle Login
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+    if (password === process.env.ADMIN_PASSWORD) {
       setIsAuthenticated(true);
     } else {
       toast.error("Incorrect password!");
@@ -676,7 +677,9 @@ export default function AdminPanel() {
                   <div className="flex flex-wrap gap-2">
                     {uploadedUrls.map((url) => (
                       <div key={url} className="relative">
-                        <img
+                        <Image
+                          height={96}
+                          width={96}
                           src={url}
                           className="w-24 h-24 object-cover rounded border"
                           alt="Uploaded"
@@ -939,7 +942,9 @@ export default function AdminPanel() {
                       <div className="flex flex-wrap gap-2">
                         {editingCar.photos?.map((url) => (
                           <div key={url} className="relative">
-                            <img
+                            <Image
+                              height={96}
+                              width={96}
                               src={url}
                               className="w-24 h-24 object-cover rounded border"
                               alt="Uploaded"

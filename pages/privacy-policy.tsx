@@ -29,25 +29,25 @@ export default function PrivacyPolicy() {
             address, phone number. Financial details: Bank account information,
             credit card details. Vehicle-related details: License plate number,
             transmission type, engine power, vehicle images, etc. Test drive
-            details: A copy of your driver's license (for test drive requests).
-            Information provided through contact forms. 1.2 Data Sharing We may
-            share your personal information in the following cases: Legal
-            obligations: To comply with legal requirements or respond to lawful
-            requests from authorities. Financial services: For financing or
-            leasing arrangements with financial providers. Third-party service
-            providers: To support operational processes, such as payment
-            processing platforms or CRM systems. Security purposes: Video
-            surveillance footage is used solely for security purposes. 2.
-            THIRD-PARTY DATA SHARING 2.1 Security Standards All third parties we
-            work with are required to implement appropriate security measures to
-            protect your data. They are only permitted to process your data for
-            specified purposes and in accordance with our instructions. 2.2 Data
-            Transfers Outside the EU If we transfer your personal data outside
-            the European Union, we ensure that a similar level of data
-            protection is maintained. This may include using mechanisms like
-            Standard Contractual Clauses (SCCs). 3. COOKIES 3.1 What Are
-            Cookies? Cookies are small text files placed on your device by
-            websites you visit. They help improve website functionality and
+            details: A copy of your driver&apos;s license (for test drive
+            requests). Information provided through contact forms. 1.2 Data
+            Sharing We may share your personal information in the following
+            cases: Legal obligations: To comply with legal requirements or
+            respond to lawful requests from authorities. Financial services: For
+            financing or leasing arrangements with financial providers.
+            Third-party service providers: To support operational processes,
+            such as payment processing platforms or CRM systems. Security
+            purposes: Video surveillance footage is used solely for security
+            purposes. 2. THIRD-PARTY DATA SHARING 2.1 Security Standards All
+            third parties we work with are required to implement appropriate
+            security measures to protect your data. They are only permitted to
+            process your data for specified purposes and in accordance with our
+            instructions. 2.2 Data Transfers Outside the EU If we transfer your
+            personal data outside the European Union, we ensure that a similar
+            level of data protection is maintained. This may include using
+            mechanisms like Standard Contractual Clauses (SCCs). 3. COOKIES 3.1
+            What Are Cookies? Cookies are small text files placed on your device
+            by websites you visit. They help improve website functionality and
             track user preferences. 3.2 Types of Cookies We Use Strictly
             Necessary Cookies: Essential for the basic functions of our website.
             Statistical Cookies: Used to analyze how visitors interact with our
@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
             another service provider. Right to Object: Object to the processing
             of your data unless there are legitimate grounds for processing. To
             exercise these rights, please contact us using the details below. 7.
-            CHILDREN'S DATA Our website primarily interacts with adult
+            CHILDREN&apos;S DATA Our website primarily interacts with adult
             customers. We do not intentionally collect personal data from
             individuals under the age of 16 unless parental consent is provided.
             8. LEGAL COMPLIANCE This Privacy Policy complies with Luxembourg

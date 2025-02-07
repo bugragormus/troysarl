@@ -39,7 +39,6 @@ export default function CarDetail() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
-  const [showPhone, setShowPhone] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -87,7 +86,7 @@ export default function CarDetail() {
       );
       setFavorites(savedFavorites);
     }
-  }, [id]);
+  }, [id, router]); // Added `router` to the dependency array
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
 

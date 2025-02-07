@@ -1,7 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import CookieConsentBanner from "./CookieConsentBanner";
 
 interface LayoutProps {
@@ -42,7 +41,7 @@ export default function Layout({ children }: LayoutProps) {
               {/* Logo */}
               <div className="flex-shrink-0">
                 <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
-                  <a href="/">Troy Cars</a>
+                  <Link href="/">Troy Cars</Link>
                 </span>
               </div>
 

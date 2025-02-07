@@ -1,19 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Script from "next/script";
 
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: unknown[];
   }
 }
 
+type CookiePreferences = {
+  essential: boolean;
+  marketing: boolean;
+  analytics: boolean;
+};
+
 export default function CookieConsentBanner() {
   const [isVisible, setIsVisible] = useState(false);
-  const [preferences, setPreferences] = useState({
+  const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true,
     marketing: false,
     analytics: false,
   });
+
+  const loadGoogleAnalytics = useCallback((prefs: CookiePreferences) => {
+    window.dataLayer = window.dataLayer || [];
+    const gtag = (...args: [string, ...unknown[]]) => {
+      window.dataLayer.push(args);
+    };
+    gtag("js", new Date());
+
+    // GDPR compliant settings
+    gtag("consent", "default", {
+      ad_storage: prefs.marketing ? "granted" : "denied",
+      analytics_storage: prefs.analytics ? "granted" : "denied",
+    });
+
+    // IP anonymization
+    gtag("config", process.env.NEXT_PUBLIC_GA_ID, {
+      anonymize_ip: true,
+    });
+  }, []);
 
   useEffect(() => {
     const checkConsent = async () => {
@@ -24,36 +49,15 @@ export default function CookieConsentBanner() {
         setIsVisible(true);
       } else {
         setPreferences(data.consent);
-        if (data.consent.analytics) loadGoogleAnalytics();
+        if (data.consent.analytics) loadGoogleAnalytics(data.consent);
       }
     };
 
     checkConsent();
-  }, []);
+  }, [loadGoogleAnalytics]);
 
-  // Google Analytics'i yükle
-  const loadGoogleAnalytics = () => {
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
-    }
-    gtag("js", new Date());
-
-    // GDPR uyumlu ayarlar
-    gtag("consent", "default", {
-      ad_storage: preferences.marketing ? "granted" : "denied",
-      analytics_storage: preferences.analytics ? "granted" : "denied",
-    });
-
-    // IP anonimleştirme
-    gtag("config", process.env.NEXT_PUBLIC_GA_ID, {
-      anonymize_ip: true,
-    });
-  };
-
-  // Tüm çerezleri kabul et
   const acceptAll = async () => {
-    const newPreferences = {
+    const newPreferences: CookiePreferences = {
       essential: true,
       marketing: true,
       analytics: true,
@@ -67,12 +71,11 @@ export default function CookieConsentBanner() {
       body: JSON.stringify(newPreferences),
     });
 
-    if (newPreferences.analytics) loadGoogleAnalytics();
+    loadGoogleAnalytics(newPreferences);
   };
 
-  // Tüm çerezleri reddet
   const rejectAll = async () => {
-    const newPreferences = {
+    const newPreferences: CookiePreferences = {
       essential: true,
       marketing: false,
       analytics: false,
@@ -89,7 +92,6 @@ export default function CookieConsentBanner() {
 
   return (
     <>
-      {/* Google Analytics Script (Koşullu) */}
       {preferences.analytics && (
         <Script
           strategy="afterInteractive"
@@ -97,7 +99,6 @@ export default function CookieConsentBanner() {
         />
       )}
 
-      {/* Çerez Banner'ı */}
       <div
         className={`fixed bottom-4 left-4 right-4 max-w-7xl mx-auto bg-white dark:bg-gray-900 shadow-xl p-6 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 ${
           isVisible
@@ -113,7 +114,6 @@ export default function CookieConsentBanner() {
           customize your preferences.
         </p>
 
-        {/* Çerez Tercihleri */}
         <div className="mt-4 space-y-2">
           <label className="flex items-center space-x-3">
             <input
@@ -162,7 +162,6 @@ export default function CookieConsentBanner() {
           </label>
         </div>
 
-        {/* Butonlar */}
         <div className="mt-6 flex items-center justify-between">
           <button
             onClick={rejectAll}

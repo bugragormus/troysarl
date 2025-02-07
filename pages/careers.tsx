@@ -66,9 +66,14 @@ export default function CareersPage() {
         phone: "",
         message: "",
       });
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again.");
-      Sentry.captureException(error);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "An error occurred. Please try again.");
+        Sentry.captureException(err); // Burada err'i gönderiyoruz, çünkü err bir Error instance'ı
+      } else {
+        setError("An unknown error occurred. Please try again.");
+        Sentry.captureException(new Error("An unknown error occurred"));
+      }
     } finally {
       setIsSubmitting(false);
     }

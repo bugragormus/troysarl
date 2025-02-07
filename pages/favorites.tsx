@@ -137,7 +137,7 @@ export default function FavoritesPage() {
             className="text-gray-600 dark:text-gray-300 text-lg text-center"
             aria-label="No Favorites Message"
           >
-            You haven't added any favorite cars yet.
+            You haven&apos;t added any favorite cars yet.
           </p>
         ) : (
           <>

@@ -25,7 +25,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     ]);
 
     return res.status(200).json({ message: "Cookie preferences saved" });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    } else {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
   }
 }

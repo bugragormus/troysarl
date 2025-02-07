@@ -125,15 +125,6 @@ export default function CarsPage() {
     );
   });
 
-  const handleFeatureToggle = (feature: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      features: prev.features.includes(feature)
-        ? prev.features.filter((f) => f !== feature)
-        : [...prev.features, feature],
-    }));
-  };
-
   const resetFilters = () => {
     setFilters({
       listingType: "all",
