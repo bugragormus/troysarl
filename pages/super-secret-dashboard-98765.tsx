@@ -5,6 +5,7 @@ import Car from "@/types/car";
 import toast, { Toaster } from "react-hot-toast";
 import * as Sentry from "@sentry/react";
 import Image from "next/image";
+import heic2any from "heic2any";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -215,9 +216,32 @@ export default function AdminPanel() {
   const handleFileUpload = async (isEditing: boolean = false) => {
     if (!selectedFiles.length) return;
     setUploading(true);
+
     try {
-      const urls = await Promise.all(
+      const convertedFiles = await Promise.all(
         selectedFiles.map(async (file) => {
+          if (
+            file.type === "image/heic" ||
+            file.name.endsWith(".HEIC") ||
+            file.name.endsWith(".heic")
+          ) {
+            // HEIC dosyasını JPEG'e çevir
+            const blob = await heic2any({ blob: file, toType: "image/jpeg" });
+            const convertedFile = new File(
+              [blob as Blob],
+              file.name.replace(/\.heic$/i, ".jpg"),
+              {
+                type: "image/jpeg",
+              }
+            );
+            return convertedFile;
+          }
+          return file; // Diğer formatları olduğu gibi bırak
+        })
+      );
+
+      const urls = await Promise.all(
+        convertedFiles.map(async (file) => {
           const fileName = `${Date.now()}_${file.name}`;
           const { data, error } = await supabase.storage
             .from("car-photos")
