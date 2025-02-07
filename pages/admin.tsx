@@ -30,19 +30,58 @@ const featureOptions: { [key: string]: string[] } = {
     "Parking Sensors",
     "Lane Assist",
     "Blind Spot Detection",
+    "AEB", // Automatic Emergency Braking
+    "BAS", // Brake Assist System
+    "Child Lock",
+    "Distronic",
+    "ESP / VSA", // Electronic Stability Program / Vehicle Stability Assist
+    "Night Vision System",
+    "Immobilizer",
+    "Isofix",
+    "Central Locking",
+    "Hill Start Assist", // Yokuş Kalkış Desteği
+    "Driver Fatigue Detection", // Yorgunluk Tespit Sistemi
   ],
+
   comfort: [
     "Climate Control",
     "Heated Seats",
     "Keyless Entry",
     "Sunroof",
     "Power Windows",
+    "Leather Seats",
+    "Power Seats",
+    "Functional Steering Wheel",
+    "Rearview Camera",
+    "Head-up Display",
+    "Cruise Control",
+    "Hydraulic Steering",
+    "Heated Steering Wheel",
+    "Memory Seats",
+    "Cooled Seats",
+    "Fabric Seats",
+    "Automatic Dimming Rearview Mirror",
+    "Front Armrest",
+    "Cooled Glove Compartment",
+    "Start / Stop",
+    "Trip Computer",
+    "Power Mirrors",
+    "Heated Mirrors",
+    "Adaptive Headlights",
+    "Automatic Doors",
+    "Panoramic Sunroof",
+    "Parking Assist",
+    "Rear Parking Sensors",
+    "Trailer Tow Hitch",
+    "Sliding Door (Single)",
   ],
+
   entertainment: [
     "Navigation",
+    "USB / AUX",
     "Bluetooth",
     "Apple CarPlay",
-    "Premium Sound",
+    "Android Auto",
     "Rear Camera",
   ],
 };
@@ -99,6 +138,34 @@ export default function AdminPanel() {
     } else {
       toast.error("Incorrect password!");
     }
+  };
+
+  // Check - Uncheck All
+  const handleCheckAll = (category: string, checkAll: boolean) => {
+    const updatedFeatures = { ...selectedFeatures };
+
+    featureOptions[category].forEach((feature) => {
+      updatedFeatures[`${category}-${feature}`] = checkAll;
+    });
+
+    setSelectedFeatures(updatedFeatures);
+  };
+
+  const handleEditCheckAll = (category: string, check: boolean) => {
+    const updatedFeatures = check
+      ? featureOptions[category] // Check All: tüm özellikler seçilecek
+      : []; // Uncheck All: tüm özellikler kaldırılacak
+
+    setEditingCar((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        features: {
+          ...prev.features,
+          [category]: updatedFeatures,
+        },
+      };
+    });
   };
 
   // File Handling
@@ -446,161 +513,163 @@ export default function AdminPanel() {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Basic Info */}
             <div className="space-y-4">
-              <h2 className="text-xl font-bold dark:text-white">
-                Vehicle Information
-              </h2>
-              <input
-                type="text"
-                placeholder="Brand*"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Model*"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Color*"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-              <select
-                value={doors}
-                onChange={(e) => setDoors(Number(e.target.value))}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                required
-              >
-                <option value={2}>2 Doors</option>
-                <option value={3}>3 Doors</option>
-                <option value={4}>4 Doors</option>
-                <option value={5}>5 Doors</option>
-              </select>
-              <select
-                value={listingType}
-                onChange={(e) => setListingType(e.target.value as any)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                required
-              >
-                <option value="sale">For Sale</option>
-                <option value="rental">For Rent</option>
-                <option value="both">Both</option>
-                <option value="sold">Sold</option>
-              </select>
-              <select
-                value={bodyType}
-                onChange={(e) => setBodyType(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                required
-              >
-                <option value="">Select Body Type</option>
-                {bodyTypeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="date"
-                placeholder="Manufacture Date*"
-                value={manufactureDate}
-                onChange={(e) => setManufactureDate(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-              <textarea
-                placeholder="Detailed Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 h-32 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-
-            {/* Specifications */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-bold dark:text-white">
-                Technical Details
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4 border-b border-gray-300 dark:border-gray-600 pb-4">
+                <h2 className="text-xl font-bold dark:text-white">
+                  Vehicle Information
+                </h2>
                 <input
-                  type="number"
-                  placeholder="Price (€)*"
-                  value={price || ""}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                  className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  type="text"
+                  placeholder="Brand*"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
                 <input
-                  type="number"
-                  placeholder="Mileage (km)"
-                  value={mileage || ""}
-                  onChange={(e) => setMileage(Number(e.target.value))}
-                  className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  type="text"
+                  placeholder="Model*"
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
                 />
-                <select
-                  value={transmission}
-                  onChange={(e) => setTransmission(e.target.value)}
-                  className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                >
-                  <option>Automatic</option>
-                  <option>Manual</option>
-                </select>
-                <select
-                  value={fuelType}
-                  onChange={(e) => setFuelType(e.target.value)}
-                  className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                >
-                  <option>Petrol</option>
-                  <option>Diesel</option>
-                  <option>Electric</option>
-                  <option>Hybrid</option>
-                </select>
-              </div>
-              {/* Photos */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-bold dark:text-white">Photos</h2>
                 <input
-                  type="file"
-                  multiple
-                  onChange={handleFileSelect}
-                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
-                  accept="image/*"
+                  type="text"
+                  placeholder="Color*"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
                 />
-                <button
-                  type="button"
-                  onClick={() => handleFileUpload()}
-                  disabled={uploading || !selectedFiles.length}
-                  className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50"
+                <select
+                  value={doors}
+                  onChange={(e) => setDoors(Number(e.target.value))}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  required
                 >
-                  {uploading
-                    ? "Uploading..."
-                    : `Upload ${selectedFiles.length} Photos`}
-                </button>
-                <div className="flex flex-wrap gap-2">
-                  {uploadedUrls.map((url) => (
-                    <div key={url} className="relative">
-                      <img
-                        src={url}
-                        className="w-24 h-24 object-cover rounded border"
-                        alt="Uploaded"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePhoto(url)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
-                      >
-                        ×
-                      </button>
-                    </div>
+                  <option value={2}>2 Doors</option>
+                  <option value={3}>3 Doors</option>
+                  <option value={4}>4 Doors</option>
+                  <option value={5}>5 Doors</option>
+                </select>
+                <select
+                  value={listingType}
+                  onChange={(e) => setListingType(e.target.value as any)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  required
+                >
+                  <option value="sale">For Sale</option>
+                  <option value="rental">For Rent</option>
+                  <option value="both">Both</option>
+                  <option value="sold">Sold</option>
+                </select>
+                <select
+                  value={bodyType}
+                  onChange={(e) => setBodyType(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  required
+                >
+                  <option value="">Select Body Type</option>
+                  {bodyTypeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
                   ))}
+                </select>
+                <input
+                  type="date"
+                  placeholder="Manufacture Date*"
+                  value={manufactureDate}
+                  onChange={(e) => setManufactureDate(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
+                />
+                <textarea
+                  placeholder="Detailed Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 h-32 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              {/* Specifications */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold dark:text-white">
+                  Technical Details
+                </h2>
+                <div className="grid grid-cols-2 gap-4 border-b border-gray-300 dark:border-gray-600 pb-4">
+                  <input
+                    type="number"
+                    placeholder="Price (€)*"
+                    value={price || ""}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Mileage (km)"
+                    value={mileage || ""}
+                    onChange={(e) => setMileage(Number(e.target.value))}
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  />
+                  <select
+                    value={transmission}
+                    onChange={(e) => setTransmission(e.target.value)}
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  >
+                    <option>Automatic</option>
+                    <option>Manual</option>
+                  </select>
+                  <select
+                    value={fuelType}
+                    onChange={(e) => setFuelType(e.target.value)}
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                  >
+                    <option>Petrol</option>
+                    <option>Diesel</option>
+                    <option>Electric</option>
+                    <option>Hybrid</option>
+                  </select>
+                </div>
+                {/* Photos */}
+                <div className="space-y-4">
+                  <h2 className="text-xl font-bold dark:text-white">Photos</h2>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    accept="image/*"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleFileUpload()}
+                    disabled={uploading || !selectedFiles.length}
+                    className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50"
+                  >
+                    {uploading
+                      ? "Uploading..."
+                      : `Upload ${selectedFiles.length} Photos`}
+                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    {uploadedUrls.map((url) => (
+                      <div key={url} className="relative">
+                        <img
+                          src={url}
+                          className="w-24 h-24 object-cover rounded border"
+                          alt="Uploaded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePhoto(url)}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -609,10 +678,38 @@ export default function AdminPanel() {
             <div className="space-y-4">
               <h2 className="text-xl font-bold dark:text-white">Features</h2>
               {Object.entries(featureOptions).map(([category, features]) => (
-                <div key={category} className="mb-4">
-                  <h3 className="font-semibold mb-2 capitalize text-gray-700 dark:text-gray-300">
-                    {category}
+                <div
+                  key={category}
+                  className="mb-4 border-b border-gray-300 dark:border-gray-600 pb-4"
+                >
+                  <h3 className="font-semibold mb-4 capitalize text-gray-700 dark:text-gray-300">
+                    {category}:
                   </h3>
+
+                  {/* Check All / Uncheck All buttons */}
+                  <div className="flex justify-between mb-3">
+                    <button
+                      type="button" // type="button" eklenmeli
+                      onClick={(e) => {
+                        e.preventDefault(); // Submit'i engelle
+                        handleCheckAll(category, true);
+                      }}
+                      className="text-blue-600 dark:text-blue-400 text-sm"
+                    >
+                      Check All
+                    </button>
+                    <button
+                      type="button" // type="button" eklenmeli
+                      onClick={(e) => {
+                        e.preventDefault(); // Submit'i engelle
+                        handleCheckAll(category, false);
+                      }}
+                      className="text-blue-600 dark:text-blue-400 text-sm"
+                    >
+                      Uncheck All
+                    </button>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-2">
                     {features.map((feature) => (
                       <label
@@ -727,10 +824,6 @@ export default function AdminPanel() {
                       }
                       className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 h-32 focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
-                  </div>
-
-                  {/* Sağ Sütun */}
-                  <div className="space-y-4">
                     <input
                       type="number"
                       placeholder="Price (€)*"
@@ -800,40 +893,6 @@ export default function AdminPanel() {
                       />
                     </div>
 
-                    {/* Özellikler */}
-                    <div className="space-y-4">
-                      {Object.entries(featureOptions).map(
-                        ([category, features]) => (
-                          <div key={category} className="mb-4">
-                            <h3 className="font-semibold mb-2 capitalize">
-                              {category}
-                            </h3>
-                            <div className="grid grid-cols-2 gap-2">
-                              {features.map((feature) => (
-                                <label
-                                  key={feature}
-                                  className="flex items-center space-x-2"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      editingCar.features?.[category]?.includes(
-                                        feature
-                                      ) || false
-                                    }
-                                    onChange={() =>
-                                      handleEditFeatureToggle(category, feature)
-                                    }
-                                    className="rounded text-blue-600"
-                                  />
-                                  <span>{feature}</span>
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
                     {/* Fotoğraflar */}
                     <div className="space-y-4">
                       <h2 className="text-xl font-bold dark:text-white">
@@ -881,6 +940,72 @@ export default function AdminPanel() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Sağ Sütun */}
+                  {/* Özellikler */}
+                  <div className="space-y-4">
+                    <div className="space-y-4">
+                      {Object.entries(featureOptions).map(
+                        ([category, features]) => (
+                          <div
+                            key={category}
+                            className="mb-4 border-b border-gray-300 dark:border-gray-600 pb-4"
+                          >
+                            <h3 className="font-semibold mb-2 capitalize">
+                              {category}
+                            </h3>
+
+                            {/* Check All / Uncheck All buttons */}
+                            <div className="flex justify-between mb-2">
+                              <button
+                                type="button" // type="button" eklenmeli
+                                onClick={(e) => {
+                                  e.preventDefault(); // Submit'i engelle
+                                  handleEditCheckAll(category, true);
+                                }}
+                                className="text-blue-600 dark:text-blue-400 text-sm"
+                              >
+                                Check All
+                              </button>
+                              <button
+                                type="button" // type="button" eklenmeli
+                                onClick={(e) => {
+                                  e.preventDefault(); // Submit'i engelle
+                                  handleEditCheckAll(category, false);
+                                }}
+                                className="text-blue-600 dark:text-blue-400 text-sm"
+                              >
+                                Uncheck All
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                              {features.map((feature) => (
+                                <label
+                                  key={feature}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={
+                                      editingCar.features?.[category]?.includes(
+                                        feature
+                                      ) || false
+                                    }
+                                    onChange={() =>
+                                      handleEditFeatureToggle(category, feature)
+                                    }
+                                    className="rounded text-blue-600"
+                                  />
+                                  <span>{feature}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
