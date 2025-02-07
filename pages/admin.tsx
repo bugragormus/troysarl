@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Car from "@/types/car";
+import toast, { Toaster } from "react-hot-toast";
 
 const bodyTypeOptions = [
   "Sedan",
@@ -95,7 +96,7 @@ export default function AdminPanel() {
     if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       setIsAuthenticated(true);
     } else {
-      alert("Incorrect password!");
+      toast.error("Incorrect password!");
     }
   };
 
@@ -130,7 +131,7 @@ export default function AdminPanel() {
         setUploadedUrls((prev) => [...prev, ...urls]);
       }
     } catch (error: any) {
-      alert(`Upload error: ${error.message}`);
+      toast.error(`Upload error: ${error.message}`);
     } finally {
       setUploading(false);
       setSelectedFiles([]);
@@ -144,7 +145,7 @@ export default function AdminPanel() {
     const { error } = await supabase.storage
       .from("car-photos")
       .remove([fileName || ""]);
-    if (error) alert(`Delete failed: ${error.message}`);
+    if (error) toast.error(`Delete failed: ${error.message}`);
     else setUploadedUrls((prev) => prev.filter((u) => u !== url));
   };
 
@@ -222,10 +223,10 @@ export default function AdminPanel() {
       if (data?.[0]) {
         setCars((prev) => prev.map((c) => (c.id === data[0].id ? data[0] : c)));
         setIsEditModalOpen(false);
-        alert("Araç başarıyla güncellendi!");
+        toast.success("Araç başarıyla güncellendi!");
       }
     } catch (error: any) {
-      alert(`Güncelleme hatası: ${error.message}`);
+      toast.error(`Güncelleme hatası: ${error.message}`);
     }
   };
 
@@ -248,7 +249,7 @@ export default function AdminPanel() {
       !price ||
       uploadedUrls.length === 0
     ) {
-      alert("Please fill all required fields!");
+      toast.error("Please fill all required fields!");
       return;
     }
     const features = {
@@ -298,10 +299,10 @@ export default function AdminPanel() {
         setPrice(undefined);
         setUploadedUrls([]);
         setSelectedFeatures({});
-        alert("Car added successfully!");
+        toast.success("Car added successfully!");
       }
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -349,10 +350,10 @@ export default function AdminPanel() {
       if (deleteError) throw deleteError;
 
       setCars((prev) => prev.filter((c) => c.id !== id));
-      alert("Car deleted successfully!");
+      toast.success("Car deleted successfully!");
     } catch (error: any) {
       console.error("Full error details:", error);
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -364,7 +365,7 @@ export default function AdminPanel() {
         prev.map((c) => (c.id === id ? { ...c, is_hidden: !current } : c))
       );
     } catch (error) {
-      alert("Update failed!");
+      toast.error("Update failed!");
     }
   };
 
@@ -384,10 +385,10 @@ export default function AdminPanel() {
           car.id === carId ? { ...car, listing_type: newType } : car
         )
       );
-      alert("Listing type updated successfully!");
+      toast.success("Listing type updated successfully!");
     } catch (error) {
       console.error("Update error:", error);
-      alert("Failed to update listing type!");
+      toast.error("Failed to update listing type!");
     }
   };
 
@@ -416,6 +417,7 @@ export default function AdminPanel() {
             Login
           </button>
         </form>
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
     );
   }
@@ -969,6 +971,7 @@ export default function AdminPanel() {
           </table>
         </div>
       </div>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import toast from "react-hot-toast";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ export default function CareersPage() {
       );
 
       if (response.ok) {
-        alert("Mesajınız başarıyla gönderildi!");
+        toast.success("Message sent successfully!");
         setFormData({
           firstName: "",
           lastName: "",
@@ -53,7 +54,7 @@ export default function CareersPage() {
           message: "",
         });
       } else {
-        alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+        toast.error("An error has occurred. Please try again.");
       }
 
       setSubmitSuccess(true);

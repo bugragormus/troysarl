@@ -2,12 +2,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Head from "next/head";
+import Image from "next/image";
 import { Carousel } from "react-responsive-carousel";
 import Modal from "react-modal";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Heart } from "lucide-react";
 import Car from "@/types/car";
 import { format } from "date-fns";
+import toast from "react-hot-toast";
 
 // Modal stil ayarları
 Modal.setAppElement("#__next");
@@ -102,7 +104,7 @@ export default function CarDetail() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!consents.privacy) {
-      alert("You must accept the privacy policy to continue");
+      toast.error("You must accept the privacy policy to continue");
       return;
     }
     const response = await fetch(
@@ -123,7 +125,7 @@ export default function CarDetail() {
       }
     );
     if (response.ok) {
-      alert("Your request has been submitted successfully!");
+      toast.success("Your request has been submitted successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
       setShowContactForm(false);
     }
@@ -188,9 +190,13 @@ export default function CarDetail() {
                       key={index}
                       className="h-20 w-20 cursor-pointer border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden"
                     >
-                      <img
+                      <Image
+                        loading="lazy"
                         src={car.photos[index]}
                         alt={`Thumbnail ${index + 1}`}
+                        width={80}
+                        height={80}
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover w-full h-full"
                       />
                     </div>
@@ -203,11 +209,13 @@ export default function CarDetail() {
                     className="h-[500px] relative cursor-zoom-in border border-gray-300 dark:border-gray-600 rounded-lg"
                     onClick={() => handleImageClick(index)}
                   >
-                    <img
+                    <Image
+                      loading="lazy"
                       src={photo}
                       alt={`${car.brand} ${car.model}`}
-                      className="object-contain w-full h-full"
-                      style={{ cursor: "zoom-in" }}
+                      layout="fill"
+                      objectFit="contain"
+                      className="cursor-zoom-in"
                     />
                     {/* Hafif karartma efekti, mouse ile üzerine gelindiğinde değil, sürekli hafif kontrast için */}
                     <div className="absolute inset-0 bg-black/" />
@@ -231,9 +239,12 @@ export default function CarDetail() {
                 &times;
               </button>
               {/* Resim */}
-              <img
+              <Image
+                loading="lazy"
                 src={car.photos[activeImageIndex]}
                 alt="Fullscreen view"
+                width={1200} // Resmin genişliği
+                height={800} // Resmin yüksekliği
                 className="max-h-[80vh] max-w-[90vw] object-contain"
               />
               {/* Navigasyon Butonları */}

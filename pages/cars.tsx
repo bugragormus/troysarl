@@ -43,7 +43,7 @@ export default function CarsPage() {
   });
   const [visibleCars, setVisibleCars] = useState<Car[]>([]);
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -350,7 +350,7 @@ export default function CarsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleCars.map((car) => (
               <CarCard
                 key={car.id}

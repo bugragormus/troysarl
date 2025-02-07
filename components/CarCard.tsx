@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Heart, Trash } from "lucide-react";
+import Image from "next/image";
 import Car from "@/types/car";
 import { format } from "date-fns";
 
@@ -23,9 +24,12 @@ export default function CarCard({
       className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-shadow flex flex-col h-full ${className}`}
     >
       <div className="relative h-48 w-full overflow-hidden rounded-t-xl">
-        <img
+        <Image
+          height={80}
+          width={80}
           src={car.photos[0]}
           alt={`${car.brand} ${car.model}`}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
         {/* Eğer onFavoriteToggle varsa, favori butonunu göster; yoksa onRemove varsa çöp butonunu göster */}

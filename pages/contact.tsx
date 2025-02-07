@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ export default function Contact() {
     e.preventDefault();
 
     if (!consents.privacy) {
-      alert("You must accept the privacy policy");
+      toast.error("You must accept the privacy policy");
       return;
     }
 
@@ -31,10 +32,10 @@ export default function Contact() {
     );
 
     if (response.ok) {
-      alert("Mesajınız başarıyla gönderildi!");
+      toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
     } else {
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+      toast.error("An error has occurred. Please try again.");
     }
   };
 
@@ -215,6 +216,7 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }
