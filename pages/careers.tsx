@@ -82,9 +82,11 @@ export default function CareersPage() {
 
   // SEO Meta Verileri
   const metaTitle =
-    "Careers - Troy Cars | Careers Page | Troy Cars SARL | Troysarl | Luxembourg | Jobs in Luxembourg | Job Opportunities in Luxembourg";
+    "Careers - Troy Cars | Careers Page | Troy Cars SARL | Troysarl | Luxembourg | Jobs in Luxembourg | Job Opportunities in Luxembourg | Carrières - Troy Cars | Page Carrières | Troy Cars SARL | Troysarl | Luxembourg | Emplois au Luxembourg | Opportunités d'emploi au Luxembourg | Karriere - Troy Cars | Karriereseite | Troy Cars SARL | Troysarl | Luxemburg | Jobs in Luxemburg | Jobmöglichkeiten in Luxemburg";
+
   const metaDescription =
-    "Explore career opportunities at Troy Cars. We are always looking for talented individuals to join our team. Apply now! Troy Cars is a Luxembourg-based second-hand vehicle trading company, operating with a commitment to reliability and high-quality service.";
+    "Explore career opportunities at Troy Cars. We are always looking for talented individuals to join our team. Apply now! Troy Cars is a Luxembourg-based second-hand vehicle trading company, operating with a commitment to reliability and high-quality service. Découvrez les opportunités de carrière chez Troy Cars. Nous recherchons toujours des personnes talentueuses pour rejoindre notre équipe. Postulez dès maintenant ! Troy Cars est une entreprise luxembourgeoise spécialisée dans le commerce de véhicules d'occasion, opérant avec un engagement envers la fiabilité et un service de haute qualité. Entdecken Sie Karrieremöglichkeiten bei Troy Cars. Wir sind stets auf der Suche nach talentierten Personen, die unser Team verstärken. Bewerben Sie sich jetzt! Troy Cars ist ein in Luxemburg ansässiges Unternehmen für den Handel mit Gebrauchtfahrzeugen, das mit einem Engagement für Zuverlässigkeit und hochwertigen Service arbeitet.";
+
   const canonicalUrl = "https://troysarl.com/careers";
   const ogImageUrl = "https://troysarl.com/og-careers.jpg";
 

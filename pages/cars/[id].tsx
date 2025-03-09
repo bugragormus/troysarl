@@ -104,9 +104,11 @@ export default function CarDetail() {
   };
   // SEO Meta Verileri
   const metaTitle =
-    "Luxury and Second-Hand Vehicles for Sale or Rent | Troysarl | Luxembourg";
+    "Luxury and Second-Hand Vehicles for Sale or Rent | Troysarl | Luxembourg | Véhicules de luxe et d'occasion à vendre ou à louer | Troysarl | Luxembourg | Luxus- und Gebrauchtfahrzeuge zum Verkauf oder zur Miete | Troysarl | Luxemburg";
+
   const metaDescription =
-    "Explore our extensive collection of luxury and second-hand vehicles for sale or rent. We offer a wide range of vehicles, including sedans, SUVs, and sports cars, with flexible rental plans available.";
+    "Explore our extensive collection of luxury and second-hand vehicles for sale or rent. We offer a wide range of vehicles, including sedans, SUVs, and sports cars, with flexible rental plans available. Découvrez notre vaste collection de véhicules de luxe et d'occasion à vendre ou à louer. Nous proposons une large gamme de véhicules, y compris des berlines, des SUV et des voitures de sport, avec des plans de location flexibles. Entdecken Sie unsere umfangreiche Sammlung von Luxus- und Gebrauchtfahrzeugen zum Verkauf oder zur Miete. Wir bieten eine breite Palette von Fahrzeugen, darunter Limousinen, SUVs und Sportwagen, mit flexiblen Mietplänen.";
+
   const canonicalUrl = "https://troysarl.com/cars/" + id;
   const ogImageUrl = "https://troysarl.com/og-cars" + id + ".jpg";
 
@@ -143,7 +145,7 @@ export default function CarDetail() {
     return <div className="container mx-auto p-4 text-center">Loading...</div>;
   return (
     <div
-      className="min-h-screen dark:bg-gray-900 transition-colors duration-300"
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
       aria-label="Car Detail Page"
     >
       <Toaster position="top-right" reverseOrder={false} />

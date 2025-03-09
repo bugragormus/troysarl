@@ -6,9 +6,11 @@ import Script from "next/script";
 
 // SEO Meta Verileri
 const metaTitle =
-  "About Us - Troy Cars | About Us Page | Troy Cars SARL | Troysarl | Luxembourg";
+  "About Us - Troy Cars | About Us Page | Troy Cars SARL | Troysarl | Luxembourg | À propos de nous - Troy Cars | Page À propos | Troy Cars SARL | Troysarl | Luxembourg | Über uns - Troy Cars | Über uns Seite | Troy Cars SARL | Troysarl | Luxemburg";
+
 const metaDescription =
-  "As a Luxembourg-based used car trading company, weoperate with a commitment to reliability and high-quality service.Prioritizing customer satisfaction, we strive to offer the bestoptions to help you find your dream car. With our extensivevehicle portfolio and transparent trading approach, we continue togrow every day, aiming to provide you with the best possibleexperience.";
+  "As a Luxembourg-based used car trading company, we operate with a commitment to reliability and high-quality service. Prioritizing customer satisfaction, we strive to offer the best options to help you find your dream car. With our extensive vehicle portfolio and transparent trading approach, we continue to grow every day, aiming to provide you with the best possible experience. En tant qu'entreprise de commerce de voitures d'occasion basée au Luxembourg, nous opérons avec un engagement envers la fiabilité et un service de haute qualité. En priorisant la satisfaction de nos clients, nous nous efforçons d'offrir les meilleures options pour vous aider à trouver la voiture de vos rêves. Grâce à notre vaste portefeuille de véhicules et à notre approche transparente du commerce, nous continuons de croître chaque jour afin de vous offrir la meilleure expérience possible. Als in Luxemburg ansässiges Unternehmen für den Handel mit Gebrauchtwagen arbeiten wir mit einem Engagement für Zuverlässigkeit und hochwertigen Service. Mit dem Fokus auf Kundenzufriedenheit bemühen wir uns, Ihnen die besten Optionen zu bieten, damit Sie Ihr Traumauto finden. Mit unserem umfangreichen Fahrzeugportfolio und unserem transparenten Handelsansatz wachsen wir jeden Tag weiter und möchten Ihnen die bestmögliche Erfahrung bieten.";
+
 const canonicalUrl = "https://troysarl.com/about";
 const ogImageUrl = "https://troysarl.com/og-about.jpg";
 

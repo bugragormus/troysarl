@@ -29,6 +29,17 @@ const bodyTypeOptions = [
 ];
 
 const fuelTypeOptions = ["Petrol", "Diesel", "Electric", "Hybrid"];
+const transmissionOptions = ["Automatic", "Manual", "Semi-Automatic"];
+const doorOptions = ["3", "4", "5"];
+const colorOptions = [
+  "White",
+  "Black",
+  "Gray",
+  "Silver",
+  "Red",
+  "Blue",
+  "Other",
+];
 
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -46,6 +57,9 @@ export default function CarsPage() {
     minMileage: "",
     maxMileage: "",
     features: [] as string[],
+    transmission_type: "",
+    doors: "",
+    color: "",
   });
 
   useEffect(() => {
@@ -70,10 +84,10 @@ export default function CarsPage() {
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
     if (updatedFavorites.includes(carId)) {
-      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
+      updatedFavorites = updatedFavorites.filter((id) => id !== carId);
       toast.error("The car has been removed from favorites.");
     } else {
-      updatedFavorites.push(carId); // Favorilere ekle
+      updatedFavorites.push(carId);
       toast.success("The car has been added to favorites.");
     }
 
@@ -81,50 +95,70 @@ export default function CarsPage() {
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
   };
 
-  const filteredCars = cars.filter((car) => {
-    const matchesSearch =
-      car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      car.model.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredCars = cars
+    .filter((car) => {
+      const matchesSearch =
+        car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.model.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesListingType =
-      filters.listingType === "all" ||
-      car.listing_type === filters.listingType ||
-      (filters.listingType === "both" && car.listing_type === "both");
+      const matchesListingType =
+        filters.listingType === "all" ||
+        car.listing_type === filters.listingType ||
+        (filters.listingType === "both" && car.listing_type === "both");
 
-    const matchesBodyType =
-      !filters.bodyType || car.body_type === filters.bodyType;
-    const matchesFuelType =
-      !filters.fuelType || car.fuel_type === filters.fuelType;
+      const matchesBodyType =
+        !filters.bodyType || car.body_type === filters.bodyType;
+      const matchesFuelType =
+        !filters.fuelType || car.fuel_type === filters.fuelType;
 
-    const matchesPrice =
-      (!filters.minPrice || car.price >= Number(filters.minPrice)) &&
-      (!filters.maxPrice || car.price <= Number(filters.maxPrice));
+      const matchesPrice =
+        (!filters.minPrice || car.price >= Number(filters.minPrice)) &&
+        (!filters.maxPrice || car.price <= Number(filters.maxPrice));
 
-    const matchesYear =
-      (!filters.minYear || car.year >= Number(filters.minYear)) &&
-      (!filters.maxYear || car.year <= Number(filters.maxYear));
+      const matchesYear =
+        (!filters.minYear || car.year >= Number(filters.minYear)) &&
+        (!filters.maxYear || car.year <= Number(filters.maxYear));
 
-    const matchesMileage =
-      (!filters.minMileage || car.mileage >= Number(filters.minMileage)) &&
-      (!filters.maxMileage || car.mileage <= Number(filters.maxMileage));
+      const matchesMileage =
+        (!filters.minMileage || car.mileage >= Number(filters.minMileage)) &&
+        (!filters.maxMileage || car.mileage <= Number(filters.maxMileage));
 
-    const matchesFeatures =
-      filters.features.length === 0 ||
-      filters.features.every((feature) =>
-        Object.values(car.features).flat().includes(feature)
+      const matchesFeatures =
+        filters.features.length === 0 ||
+        filters.features.every((feature) =>
+          Object.values(car.features).flat().includes(feature)
+        );
+
+      const matchesTransmission =
+        !filters.transmission_type ||
+        car.transmission === filters.transmission_type;
+
+      const matchesDoors =
+        !filters.doors || car.doors === Number(filters.doors);
+
+      const matchesColor =
+        !filters.color ||
+        car.color.toLowerCase() === filters.color.toLowerCase();
+
+      return (
+        matchesSearch &&
+        matchesListingType &&
+        matchesBodyType &&
+        matchesFuelType &&
+        matchesPrice &&
+        matchesYear &&
+        matchesMileage &&
+        matchesFeatures &&
+        matchesTransmission &&
+        matchesDoors &&
+        matchesColor
       );
-
-    return (
-      matchesSearch &&
-      matchesListingType &&
-      matchesBodyType &&
-      matchesFuelType &&
-      matchesPrice &&
-      matchesYear &&
-      matchesMileage &&
-      matchesFeatures
-    );
-  });
+    })
+    .sort((a, b) => {
+      if (a.listing_type === "sold" && b.listing_type !== "sold") return 1;
+      if (a.listing_type !== "sold" && b.listing_type === "sold") return -1;
+      return 0;
+    });
 
   const resetFilters = () => {
     setFilters({
@@ -138,14 +172,19 @@ export default function CarsPage() {
       minMileage: "",
       maxMileage: "",
       features: [] as string[],
+      transmission_type: "",
+      doors: "",
+      color: "",
     });
   };
 
   // SEO Meta Verileri
   const metaTitle =
-    "Vehicle Catalog - Troy Cars | Vehicle Catalog | Cars for Sale or Rent | Troysarl";
+    "Troy Cars - Premium Luxury & Used Cars in Luxembourg | Vehicle Catalog | Cars for Sale or Rent | Troy Cars SARL | Troysarl Luxembourg | Troy Cars - Voitures de luxe et d'occasion haut de gamme au Luxembourg | Catalogue de véhicules | Voitures à vendre ou à louer | Troy Cars SARL | Troysarl Luxembourg | Troy Cars - Premium-Luxus- und Gebrauchtwagen in Luxemburg | Fahrzeugkatalog | Autos zum Verkauf oder zur Miete | Troy Cars SARL | Troysarl Luxemburg";
+
   const metaDescription =
-    "Browse our premium selection of luxury and second-hand vehicles at Troysarl. Find the perfect car for sale or rent.";
+    "Explore certified luxury vehicles and premium used cars at Troysarl. Luxembourg's trusted automotive partner with 200-point quality checks. Browse our premium selection of luxury and second-hand vehicles at Troysarl. Find the perfect car for sale or rent. Découvrez des véhicules de luxe certifiés et des voitures d'occasion haut de gamme chez Troysarl. Le partenaire automobile de confiance du Luxembourg avec 200 contrôles qualité. Parcourez notre sélection haut de gamme de véhicules de luxe et d'occasion chez Troysarl. Trouvez la voiture parfaite à vendre ou à louer. Entdecken Sie zertifizierte Luxusfahrzeuge und hochwertige Gebrauchtwagen bei Troysarl. Luxemburgs vertrauenswürdiger Automobilpartner mit 200-Punkte-Qualitätsprüfung. Durchsuchen Sie unsere Premium-Auswahl an Luxus- und Gebrauchtfahrzeugen bei Troysarl. Finden Sie das perfekte Auto zum Verkauf oder zur Miete.";
+
   const canonicalUrl = "https://troysarl.com/cars";
   const ogImageUrl = "https://troysarl.com/og-cars.jpg";
 
@@ -156,25 +195,18 @@ export default function CarsPage() {
     >
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
-        {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
-
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:image" content={ogImageUrl} />
-
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={metaTitle} />
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content={ogImageUrl} />
-
-        {/* Schema.org Markup */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -196,7 +228,6 @@ export default function CarsPage() {
         </script>
       </Head>
 
-      {/* Google Tag Manager */}
       <Script
         strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-099SZW867E"
@@ -210,312 +241,385 @@ export default function CarsPage() {
         `}
       </Script>
 
-      <div className="container mx-auto p-4 lg:flex lg:gap-8" aria-label="Cars">
-        {/* Mobil Filtre Toggle Butonu */}
-        <div className="md:hidden mb-4">
-          <button
-            onClick={() => setShowFilters((prev) => !prev)}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors"
-            aria-label="Toggle filters"
-          >
-            {showFilters ? "Hide Filters" : "Show Filters"}
-          </button>
+      <div className="container mx-auto p-4" aria-label="Cars">
+        {/* Search Bar */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="🔍 Search by brand or model..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 rounded-xl border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all"
+            aria-label="Search vehicles"
+          />
         </div>
 
-        {/* Filters Sidebar */}
-        <aside
-          className={`lg:w-80 mb-8 lg:mb-0 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 ${
-            showFilters ? "block" : "hidden md:block"
-          } top-20 max-h-[calc(80vh)] overflow-y-auto`}
-          aria-label="Filters sidebar"
-        >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-              Filters
-            </h2>
+        {/* Filtre Kontrol Butonları */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
+            Filters
+          </h2>
+          <div className="flex gap-2">
+            {/* Masaüstü Show/Hide Butonu */}
             <button
-              onClick={resetFilters}
-              className="text-sm text-blue-600 hover:underline dark:text-blue-400"
-              aria-label="Clear all filters"
+              onClick={() => setShowFilters((prev) => !prev)}
+              className="w-full p-3 hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
             >
-              Clear All
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+              </svg>
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </button>
+
+            {/* Mobil Buton (Halihazırda var olan) */}
+            <button
+              onClick={() => setShowFilters((prev) => !prev)}
+              className="w-full p-3 md:hidden w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 h-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+              </svg>
+              {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
+        </div>
 
-          <div className="space-y-6">
-            {/* Listing Type */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Listing Type
-              </h3>
-              <select
-                value={filters.listingType}
-                onChange={(e) =>
-                  setFilters({ ...filters, listingType: e.target.value })
-                }
-                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                aria-label="Select listing type"
-              >
-                <option value="all">All Listings</option>
-                <option value="sale">For Sale</option>
-                <option value="rental">For Rent</option>
-                <option value="both">Both</option>
-                <option value="sold">Sold</option>
-              </select>
-            </div>
-
-            {/* Body Type */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Body Type
-              </h3>
-              <select
-                value={filters.bodyType}
-                onChange={(e) =>
-                  setFilters({ ...filters, bodyType: e.target.value })
-                }
-                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                aria-label="Select body type"
-              >
-                <option value="">All Body Types</option>
-                {bodyTypeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Price Range */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Price Range (€)
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={filters.minPrice}
-                  onChange={(e) =>
-                    setFilters({ ...filters, minPrice: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Minimum price"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={filters.maxPrice}
-                  onChange={(e) =>
-                    setFilters({ ...filters, maxPrice: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Maximum price"
-                />
-              </div>
-            </div>
-
-            {/* Year Range */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Year
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={filters.minYear}
-                  onChange={(e) =>
-                    setFilters({ ...filters, minYear: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Minimum year"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={filters.maxYear}
-                  onChange={(e) =>
-                    setFilters({ ...filters, maxYear: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Maximum year"
-                />
-              </div>
-            </div>
-
-            {/* Fuel Type */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Fuel Type
-              </h3>
-              <select
-                value={filters.fuelType}
-                onChange={(e) =>
-                  setFilters({ ...filters, fuelType: e.target.value })
-                }
-                className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                aria-label="Select fuel type"
-              >
-                <option value="">All Fuel Types</option>
-                {fuelTypeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Mileage Range */}
-            <div>
-              <h3 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                Mileage (km)
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={filters.minMileage}
-                  onChange={(e) =>
-                    setFilters({ ...filters, minMileage: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Minimum mileage"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={filters.maxMileage}
-                  onChange={(e) =>
-                    setFilters({ ...filters, maxMileage: e.target.value })
-                  }
-                  className="p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                  aria-label="Maximum mileage"
-                />
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1">
-          <div className="mb-8">
-            <input
-              type="text"
-              placeholder="Search by brand or model..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
-              aria-label="Search vehicles"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCars.map((car) => (
-              <article
-                key={car.id}
-                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-shadow flex flex-col h-full"
-                itemScope
-                itemType="https://schema.org/Car"
-              >
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={car.photos[0]}
-                    alt={`${car.brand} ${car.model} for ${car.listing_type}`}
-                    fill
-                    className="w-full h-full object-cover rounded-t-xl"
-                    loading="lazy"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    itemProp="image"
-                  />
-                  <button
-                    onClick={() => toggleFavorite(car.id)}
-                    className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-300 ${
-                      favorites.includes(car.id)
-                        ? "bg-red-500 text-white hover:bg-red-600 scale-110"
-                        : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
-                    }`}
-                    aria-label={`${
-                      favorites.includes(car.id) ? "Remove from" : "Add to"
-                    } favorites`}
+        {/* Filtreler */}
+        <div className={`${showFilters ? "block" : "hidden"} mb-8`}>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
+            <div className="flex flex-col gap-6">
+              {/* İlk Filtre Grubu */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Listing Type */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Listing Type
+                  </label>
+                  <select
+                    value={filters.listingType}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        listingType: e.target.value,
+                      })
+                    }
+                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
-                    <Heart
-                      size={20}
-                      fill={favorites.includes(car.id) ? "white" : "none"}
-                      strokeWidth={2}
+                    <option value="all">All Listings</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rental">For Rent</option>
+                    <option value="both">Both</option>
+                    <option value="sold">Sold</option>
+                  </select>
+                </div>
+
+                {/* Body Type */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Body Type
+                  </label>
+                  <select
+                    value={filters.bodyType}
+                    onChange={(e) =>
+                      setFilters({ ...filters, bodyType: e.target.value })
+                    }
+                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                  >
+                    <option value="">All Types</option>
+                    {bodyTypeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Transmission Type */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Transmission
+                  </label>
+                  <select
+                    value={filters.transmission_type}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        transmission_type: e.target.value,
+                      })
+                    }
+                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                  >
+                    <option value="">All</option>
+                    {transmissionOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Doors */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Doors
+                  </label>
+                  <select
+                    value={filters.doors}
+                    onChange={(e) =>
+                      setFilters({ ...filters, doors: e.target.value })
+                    }
+                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                  >
+                    <option value="">All</option>
+                    {doorOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* İkinci Filtre Grubu */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Price Range */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Price (€)
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minPrice}
+                      onChange={(e) =>
+                        setFilters({ ...filters, minPrice: e.target.value })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
                     />
-                  </button>
-                </div>
-                <div className="p-4 flex flex-col flex-grow">
-                  <h3 className="text-xl text-gray-800 dark:text-gray-100 truncate">
-                    <span className="font-bold" itemProp="brand">
-                      {car.brand}
-                    </span>{" "}
-                    <span itemProp="model">{car.model}</span>
-                  </h3>
-
-                  <div className="flex-grow">
-                    <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-                      <time
-                        dateTime={new Date(car.year).toISOString()}
-                        itemProp="releaseDate"
-                      >
-                        {format(new Date(car.year), "dd.MM.yyyy")}
-                      </time>{" "}
-                      • <span itemProp="bodyType">{car.body_type}</span>
-                    </p>
-
-                    <div className="flex justify-between items-center mt-4">
-                      <div>
-                        {car.listing_type === "rental" ? (
-                          <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
-                            Rental
-                          </span>
-                        ) : car.listing_type === "sale" ? (
-                          <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
-                            Sale
-                          </span>
-                        ) : car.listing_type === "both" ? (
-                          <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
-                            Sale/Rental
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">
-                            Sold
-                          </span>
-                        )}
-                      </div>
-                      <div className="min-h-[2.5rem] flex items-center">
-                        {car.listing_type !== "rental" && car.price && (
-                          <p
-                            className="text-2xl font-bold text-green-600 dark:text-green-400"
-                            itemProp="offers"
-                            itemScope
-                            itemType="https://schema.org/Offer"
-                          >
-                            <meta itemProp="priceCurrency" content="EUR" />€
-                            <span itemProp="price">
-                              {car.price.toLocaleString()}
-                            </span>
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxPrice}
+                      onChange={(e) =>
+                        setFilters({ ...filters, maxPrice: e.target.value })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
-
-                  <Link
-                    href={`/cars/${car.id}`}
-                    className="block mt-4 text-center bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition-colors"
-                    aria-label={`View details of ${car.brand} ${car.model}`}
-                    itemProp="url"
-                  >
-                    View Details
-                  </Link>
                 </div>
-              </article>
-            ))}
+
+                {/* Year Range*/}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Year
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minYear}
+                      onChange={(e) =>
+                        setFilters({ ...filters, minYear: e.target.value })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxYear}
+                      onChange={(e) =>
+                        setFilters({ ...filters, maxYear: e.target.value })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Mileage Range*/}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Mileage (km)
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minMileage}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          minMileage: e.target.value,
+                        })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxMileage}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          maxMileage: e.target.value,
+                        })
+                      }
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Color */}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Color
+                  </label>
+                  <select
+                    value={filters.color}
+                    onChange={(e) =>
+                      setFilters({ ...filters, color: e.target.value })
+                    }
+                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                  >
+                    <option value="">All</option>
+                    {colorOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Clear Button*/}
+              <div className="flex justify-end">
+                <button
+                  onClick={resetFilters}
+                  className="w-full md:w-auto px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  Clear Filters
+                </button>
+              </div>
+            </div>
           </div>
-        </main>
+        </div>
+
+        {/* Araç Listesi */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCars.map((car) => (
+            <article
+              key={car.id}
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
+              itemScope
+              itemType="https://schema.org/Car"
+            >
+              {/* Araç görseli ve favori butonu */}
+              <div className="relative h-48 w-full">
+                <Image
+                  src={car.photos[0]}
+                  alt={`${car.brand} ${car.model} for ${car.listing_type}`}
+                  fill
+                  className="w-full h-full object-cover rounded-t-xl"
+                  loading="lazy"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  itemProp="image"
+                />
+                <button
+                  onClick={() => toggleFavorite(car.id)}
+                  className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-300 ${
+                    favorites.includes(car.id)
+                      ? "bg-red-500 text-white hover:bg-red-600 scale-110"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  <Heart
+                    size={20}
+                    fill={favorites.includes(car.id) ? "white" : "none"}
+                    strokeWidth={2}
+                  />
+                </button>
+              </div>
+
+              {/* Araç detayları */}
+              <div className="p-4 flex flex-col flex-grow">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 truncate">
+                  <span itemProp="brand">{car.brand}</span>{" "}
+                  <span itemProp="model">{car.model}</span>
+                </h3>
+
+                <div className="flex-grow mt-2">
+                  <p className="text-gray-600 dark:text-gray-300">
+                    <time
+                      dateTime={new Date(car.year).toISOString()}
+                      itemProp="releaseDate"
+                      className="mr-2"
+                    >
+                      {format(new Date(car.year), "yyyy")}
+                    </time>
+                    • <span itemProp="bodyType">{car.body_type}</span>
+                  </p>
+
+                  <div className="flex justify-between items-center mt-4">
+                    <div>
+                      {car.listing_type === "rental" && (
+                        <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                          Rental
+                        </span>
+                      )}
+                      {car.listing_type === "sale" && (
+                        <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
+                          Sale
+                        </span>
+                      )}
+                      {car.listing_type === "sold" && (
+                        <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">
+                          Sold
+                        </span>
+                      )}
+                    </div>
+                    {car.listing_type !== "sold" && (
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                        €{car.price.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <Link
+                  href={`/cars/${car.id}`}
+                  className="mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  aria-label={`View details of ${car.brand} ${car.model}`}
+                >
+                  View Details
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   );

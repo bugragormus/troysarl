@@ -40,14 +40,15 @@ export default function Contact() {
     }
   };
 
-  // SEO Meta Verileri
+  // SEO Meta Verileri - Contact Us
   const metaTitle =
-    "Contact Us - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺";
+    "Contact Us - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺 | Contactez-nous - Troy Cars Lux Sarl - Voitures d'occasion haut de gamme au Luxembourg 🇱🇺 | Kontaktieren Sie uns - Troy Cars Lux Sarl - Premium-Gebrauchtwagen in Luxemburg 🇱🇺";
+
   const metaDescription =
-    "We are here to help you. Reach out to us and we will get back to you as soon as possible.";
+    "We are here to help you. Reach out to us and we will get back to you as soon as possible. Nous sommes là pour vous aider. Contactez-nous et nous vous répondrons dans les plus brefs délais. Wir sind hier, um Ihnen zu helfen. Kontaktieren Sie uns und wir werden Ihnen so schnell wie möglich antworten.";
+
   const canonicalUrl = "https://troysarl.com/contact";
   const ogImageUrl = "https://troysarl.com/og-contact.jpg";
-
   return (
     <div
       className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
@@ -106,7 +107,7 @@ export default function Contact() {
             className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500"
             aria-label="Contact Us"
           >
-            Get in Touch
+            Let's Make an Appointment!
           </h1>
           <p
             className="mt-4 text-lg text-gray-600 dark:text-gray-300"
@@ -295,7 +296,7 @@ export default function Contact() {
                 className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-full shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
                 aria-label="Send Message"
               >
-                Send Message
+                Send Appointment Request
               </button>
             </form>
           </div>

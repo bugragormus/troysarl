@@ -41,12 +41,13 @@ export default function Layout({ children }: LayoutProps) {
               {/* Logo */}
               <div className="flex-shrink-0">
                 <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
-                  <Link href="/">Troy Cars</Link>
+                  <Link href="/cars">Troy Cars</Link>
                 </span>
               </div>
 
               {/* Desktop Menü */}
               <div className="hidden md:flex items-center space-x-8">
+                {/*
                 <Link
                   href="/"
                   className={`text-white hover:text-gray-300 transition-colors font-medium ${
@@ -54,7 +55,7 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Home
-                </Link>
+                </Link>  */}
                 <Link
                   href="/cars"
                   className={`text-white hover:text-gray-300 transition-colors font-medium ${
@@ -69,7 +70,7 @@ export default function Layout({ children }: LayoutProps) {
                     isActive("/contact") ? "underline" : ""
                   }`}
                 >
-                  Contact
+                  Appointment
                 </Link>
                 <Link
                   href="/about"
@@ -139,6 +140,7 @@ export default function Layout({ children }: LayoutProps) {
           {isMenuOpen && (
             <div className="md:hidden bg-indigo-700">
               <div className="px-2 pt-2 pb-3 space-y-1">
+                {/*
                 <Link
                   href="/"
                   onClick={() => setIsMenuOpen(false)}
@@ -147,7 +149,7 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Home
-                </Link>
+                </Link> */}
                 <Link
                   href="/cars"
                   onClick={() => setIsMenuOpen(false)}
@@ -164,7 +166,7 @@ export default function Layout({ children }: LayoutProps) {
                     isActive("/contact") ? "underline" : ""
                   }`}
                 >
-                  Contact
+                  Appointment
                 </Link>
                 <Link
                   href="/about"
@@ -210,9 +212,10 @@ export default function Layout({ children }: LayoutProps) {
                 <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
                 <ul className="space-y-2 text-sm">
                   <li>
+                    {/* 
                     <Link href="/" className="hover:underline">
                       Home
-                    </Link>
+                    </Link> */}
                   </li>
                   <li>
                     <Link href="/cars" className="hover:underline">
@@ -226,7 +229,7 @@ export default function Layout({ children }: LayoutProps) {
                   </li>
                   <li>
                     <Link href="/contact" className="hover:underline">
-                      Contact
+                      Appointment
                     </Link>
                   </li>
                   <li>
@@ -256,7 +259,7 @@ export default function Layout({ children }: LayoutProps) {
 
               {/* İletişim Bilgileri */}
               <div>
-                <h4 className="text-lg font-semibold mb-3">Contact</h4>
+                <h4 className="text-lg font-semibold mb-3">Appointment</h4>
                 <ul className="space-y-2 text-sm">
                   <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
                   <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>

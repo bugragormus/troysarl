@@ -67,11 +67,13 @@ export default function FavoritesPage() {
     setPage(nextPage);
   };
 
-  // SEO Meta Verileri
+  // SEO Meta Verileri - Favorites
   const metaTitle =
-    "Your Favorite Cars - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺";
+    "Your Favorite Cars - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺 | Vos voitures préférées - Troy Cars Lux Sarl - Voitures d'occasion haut de gamme au Luxembourg 🇱🇺 | Ihre Lieblingsautos - Troy Cars Lux Sarl - Premium-Gebrauchtwagen in Luxemburg 🇱🇺";
+
   const metaDescription =
-    "Browse and manage your favorite cars. Troy Cars Lux Sarl offers premium used cars in Luxembourg. 🇱🇺";
+    "Browse and manage your favorite cars. Troy Cars Lux Sarl offers premium used cars in Luxembourg. 🇱🇺 Consultez et gérez vos voitures préférées. Troy Cars Lux Sarl propose des voitures d'occasion haut de gamme au Luxembourg. 🇱🇺 Durchsuchen und verwalten Sie Ihre Lieblingsautos. Troy Cars Lux Sarl bietet Premium-Gebrauchtwagen in Luxemburg an. 🇱🇺";
+
   const canonicalUrl = "https://troysarl.com/favorites";
   const ogImageUrl = "https://troysarl.com/og-favorites.jpg";
 
