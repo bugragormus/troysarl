@@ -27,8 +27,6 @@ const bodyTypeOptions = [
   "Cabriolet",
   "Compact",
 ];
-
-const fuelTypeOptions = ["Petrol", "Diesel", "Electric", "Hybrid"];
 const transmissionOptions = ["Automatic", "Manual", "Semi-Automatic"];
 const doorOptions = ["3", "4", "5"];
 const colorOptions = [

@@ -107,7 +107,7 @@ export default function Contact() {
             className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500"
             aria-label="Contact Us"
           >
-            Let's Make an Appointment!
+            Let&apos;s Make an Appointment!
           </h1>
           <p
             className="mt-4 text-lg text-gray-600 dark:text-gray-300"
