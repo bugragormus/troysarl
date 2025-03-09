@@ -648,7 +648,7 @@ export default function CarDetail() {
                   <h3 className="text-2xl font-bold mb-4 dark:text-white">
                     Detailed Information
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
                     {car.description}
                   </p>
                 </div>
