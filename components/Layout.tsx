@@ -65,9 +65,9 @@ export default function Layout({ children }: LayoutProps) {
                   Cars
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/appointments"
                   className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/contact") ? "underline" : ""
+                    isActive("/appointments") ? "underline" : ""
                   }`}
                 >
                   Appointment
@@ -229,7 +229,7 @@ export default function Layout({ children }: LayoutProps) {
                   </li>
                   <li>
                     <Link href="/contact" className="hover:underline">
-                      Appointment
+                      Contact
                     </Link>
                   </li>
                   <li>

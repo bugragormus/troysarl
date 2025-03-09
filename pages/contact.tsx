@@ -107,7 +107,7 @@ export default function Contact() {
             className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500"
             aria-label="Contact Us"
           >
-            Let&apos;s Make an Appointment!
+            Get in Touch
           </h1>
           <p
             className="mt-4 text-lg text-gray-600 dark:text-gray-300"
@@ -296,7 +296,7 @@ export default function Contact() {
                 className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-full shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
                 aria-label="Send Message"
               >
-                Send Appointment Request
+                Submit Message
               </button>
             </form>
           </div>
