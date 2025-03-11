@@ -76,9 +76,9 @@ export default function CarCard({
               <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
                 Sale
               </span>
-            ) : car.listing_type === "both" ? (
+            ) : car.listing_type === "reserved" ? (
               <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
-                Sale/Rental
+                Reserved
               </span>
             ) : (
               <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">

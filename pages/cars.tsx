@@ -102,7 +102,7 @@ export default function CarsPage() {
       const matchesListingType =
         filters.listingType === "all" ||
         car.listing_type === filters.listingType ||
-        (filters.listingType === "both" && car.listing_type === "both");
+        (filters.listingType === "reserved" && car.listing_type === "reserved");
 
       const matchesBodyType =
         !filters.bodyType || car.body_type === filters.bodyType;
@@ -316,7 +316,7 @@ export default function CarsPage() {
                     <option value="all">All Listings</option>
                     <option value="sale">For Sale</option>
                     <option value="rental">For Rent</option>
-                    <option value="both">Both</option>
+                    <option value="reserved">Reserved</option>
                     <option value="sold">Sold</option>
                   </select>
                 </div>
@@ -584,23 +584,28 @@ export default function CarsPage() {
                   <div className="flex justify-between items-center mt-4">
                     <div>
                       {car.listing_type === "rental" && (
-                        <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                        <span className="px-2 py-1 text-[14px] font-semibold bg-blue-100 text-blue-800 rounded-full">
                           Rental
                         </span>
                       )}
                       {car.listing_type === "sale" && (
-                        <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
+                        <span className="px-2 py-1 text-[14px] font-semibold bg-green-100 text-green-800 rounded-full">
                           Sale
                         </span>
                       )}
                       {car.listing_type === "sold" && (
-                        <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">
+                        <span className="px-2 py-1 text-[14px] font-semibold bg-red-100 text-red-800 rounded-full">
                           Sold
+                        </span>
+                      )}
+                      {car.listing_type === "reserved" && (
+                        <span className="px-2 py-1 text-[14px] font-semibold bg-purple-100 text-purple-800 rounded-full">
+                          Reserved
                         </span>
                       )}
                     </div>
                     {car.listing_type !== "sold" && (
-                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                         €{car.price.toLocaleString()}
                       </div>
                     )}

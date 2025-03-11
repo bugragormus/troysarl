@@ -8,7 +8,7 @@ interface Car {
   price: number;
   fuel_type: string;
   photos: string[];
-  listing_type: "sale" | "rental" | "both" | "sold";
+  listing_type: "sale" | "rental" | "reserved" | "sold";
   mileage: number;
   body_type: string;
   color: string;

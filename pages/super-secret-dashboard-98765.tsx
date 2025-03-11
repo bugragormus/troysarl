@@ -108,7 +108,7 @@ export default function AdminPanel() {
   const [doors, setDoors] = useState<number>(5);
   const [fuelType, setFuelType] = useState("Petrol");
   const [listingType, setListingType] = useState<
-    "sale" | "rental" | "both" | "sold"
+    "sale" | "rental" | "reserved" | "sold"
   >("sale");
   const [description, setDescription] = useState("");
   const [selectedFeatures, setSelectedFeatures] = useState<{
@@ -530,7 +530,7 @@ export default function AdminPanel() {
   // Update Listing Type
   const updateListingType = async (
     carId: string,
-    newType: "sale" | "rental" | "both" | "sold"
+    newType: "sale" | "rental" | "reserved" | "sold"
   ) => {
     try {
       const { error } = await supabase
@@ -639,7 +639,7 @@ export default function AdminPanel() {
                   value={listingType}
                   onChange={(e) =>
                     setListingType(
-                      e.target.value as "sale" | "rental" | "both" | "sold"
+                      e.target.value as "sale" | "rental" | "reserved" | "sold"
                     )
                   }
                   className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
@@ -647,7 +647,7 @@ export default function AdminPanel() {
                 >
                   <option value="sale">For Sale</option>
                   <option value="rental">For Rent</option>
-                  <option value="both">Both</option>
+                  <option value="reserved">Reserved</option>
                   <option value="sold">Sold</option>
                 </select>
                 <select
@@ -1159,14 +1159,18 @@ export default function AdminPanel() {
                       onChange={(e) =>
                         updateListingType(
                           car.id,
-                          e.target.value as "sale" | "rental" | "both" | "sold"
+                          e.target.value as
+                            | "sale"
+                            | "rental"
+                            | "reserved"
+                            | "sold"
                         )
                       }
                       className="bg-gray-100 dark:bg-gray-700 p-2 rounded"
                     >
                       <option value="sale">For Sale</option>
                       <option value="rental">For Rent</option>
-                      <option value="both">Both</option>
+                      <option value="reserved">Reserved</option>
                       <option value="sold">Sold</option>
                     </select>
                   </td>

@@ -480,7 +480,7 @@ export default function CarDetail() {
                 </form>
               </div>
             )}
-            {car.listing_type === "sale" || car.listing_type === "both" ? (
+            {car.listing_type === "sale" || car.listing_type === "reserved" ? (
               <div className="space-y-6 text-center">
                 <button
                   onClick={() => setShowContactForm((prev) => !prev)}
@@ -492,7 +492,8 @@ export default function CarDetail() {
             ) : null}
             {/* İletişim Formu (Sadece Satılık İlanları İçin) */}
             {showContactForm &&
-              (car.listing_type === "sale" || car.listing_type === "both") && (
+              (car.listing_type === "sale" ||
+                car.listing_type === "reserved") && (
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
                   <form
                     onSubmit={handleSubmit}
