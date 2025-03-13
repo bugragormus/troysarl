@@ -578,7 +578,7 @@ export default function CarsPage() {
                     >
                       {format(new Date(car.year), "yyyy")}
                     </time>
-                    • <span itemProp="bodyType">{car.body_type}</span>
+                    • <span itemProp="transmission">{car.transmission}</span>
                   </p>
 
                   <div className="flex justify-between items-center mt-4">
