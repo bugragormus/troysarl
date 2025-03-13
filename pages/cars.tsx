@@ -344,7 +344,7 @@ export default function CarsPage() {
 
                 {/* Transmission Type */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Transmission
                   </label>
                   <select
@@ -355,7 +355,7 @@ export default function CarsPage() {
                         transmission_type: e.target.value,
                       })
                     }
-                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="">All</option>
                     {transmissionOptions.map((option) => (
@@ -368,7 +368,7 @@ export default function CarsPage() {
 
                 {/* Doors */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Doors
                   </label>
                   <select
@@ -376,7 +376,7 @@ export default function CarsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, doors: e.target.value })
                     }
-                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="">All</option>
                     {doorOptions.map((option) => (
@@ -403,7 +403,7 @@ export default function CarsPage() {
                       onChange={(e) =>
                         setFilters({ ...filters, minPrice: e.target.value })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                     <input
                       type="number"
@@ -412,14 +412,14 @@ export default function CarsPage() {
                       onChange={(e) =>
                         setFilters({ ...filters, maxPrice: e.target.value })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Year Range*/}
                 <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Year
                   </label>
                   <div className="flex gap-2">
@@ -430,7 +430,7 @@ export default function CarsPage() {
                       onChange={(e) =>
                         setFilters({ ...filters, minYear: e.target.value })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                     <input
                       type="number"
@@ -439,14 +439,14 @@ export default function CarsPage() {
                       onChange={(e) =>
                         setFilters({ ...filters, maxYear: e.target.value })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Mileage Range*/}
                 <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Mileage (km)
                   </label>
                   <div className="flex gap-2">
@@ -460,7 +460,7 @@ export default function CarsPage() {
                           minMileage: e.target.value,
                         })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                     <input
                       type="number"
@@ -472,14 +472,14 @@ export default function CarsPage() {
                           maxMileage: e.target.value,
                         })
                       }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Color */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div className="space-y-0.5">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Color
                   </label>
                   <select
@@ -487,7 +487,7 @@ export default function CarsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, color: e.target.value })
                     }
-                    className="w-full p-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
+                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="">All</option>
                     {colorOptions.map((option) => (

@@ -620,11 +620,12 @@ export default function CarDetail() {
                     ? format(new Date(car.year), "dd.MM.yyyy")
                     : "",
                 },
-                { label: "Body Type", value: car.body_type },
+                //{ label: "Body Type", value: car.body_type },
                 {
                   label: "Mileage",
                   value: `${car.mileage?.toLocaleString()} km`,
                 },
+                { label: "Fuel", value: car.fuel_type },
                 { label: "Transmission", value: car.transmission },
                 { label: "Doors", value: car.doors },
                 { label: "Color", value: car.color },
