@@ -263,14 +263,14 @@ export default function CarsPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
           <div className="mt-4 md:mt-0 mb-4">
             <div className="flex items-center gap-2">
-              <label className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
                 Sort by Price
-              </label>
-              <div className="relative">
+              </h2>
+              <div className="relative w-full md:w-auto">
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="p-3 pr-10 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
+                  className="w-full p-3 pr-10 bg-blue-600  px-4 py-2 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
                 >
                   <option value="desc">High to Low</option>
                   <option value="asc">Low to High</option>
@@ -301,7 +301,7 @@ export default function CarsPage() {
             {/* Mobile Button */}
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className="p-3 md:hidden pr-2 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2"
+              className="p-3 md:hidden pr-2 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 flex-grow"
             >
               {showFilters ? "Hide Filters" : "Show Filters"}
               <Filter size={20} strokeWidth={2} />
@@ -605,7 +605,7 @@ export default function CarsPage() {
                     </span>
                     •{" "}
                     <span itemProp="milage" className="mr-1">
-                      {car.mileage} km
+                      {car.mileage?.toLocaleString()} km
                     </span>
                   </p>
 
