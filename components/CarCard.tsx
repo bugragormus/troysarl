@@ -1,3 +1,4 @@
+// this code looks useless i need to fix it's scope
 import Link from "next/link";
 import { Heart, Trash } from "lucide-react";
 import Image from "next/image";
