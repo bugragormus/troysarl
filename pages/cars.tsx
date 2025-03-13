@@ -5,7 +5,7 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import Car from "@/types/car";
-import { Heart } from "lucide-react";
+import { Heart, Filter, ArrowDown } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
 import Script from "next/script";
@@ -41,6 +41,7 @@ const colorOptions = [
 
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
+  const [sortOrder, setSortOrder] = useState("desc"); // varsayılan: yüksekten düşüğe
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -155,7 +156,12 @@ export default function CarsPage() {
     .sort((a, b) => {
       if (a.listing_type === "sold" && b.listing_type !== "sold") return 1;
       if (a.listing_type !== "sold" && b.listing_type === "sold") return -1;
-      return 0;
+      // Fiyat sıralaması, sortOrder durumuna göre
+      if (sortOrder === "desc") {
+        return b.price - a.price;
+      } else {
+        return a.price - b.price;
+      }
     });
 
   const resetFilters = () => {
@@ -252,41 +258,53 @@ export default function CarsPage() {
           />
         </div>
 
-        {/* Filtre Kontrol Butonları */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
-            Filters
-          </h2>
-          <div className="flex gap-2">
-            {/* Masaüstü Show/Hide Butonu */}
+        {/* Filter & Sort Controls */}
+        {/* Sort Controls */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+          <div className="mt-4 md:mt-0 mb-4">
+            <div className="flex items-center gap-2">
+              <label className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
+                Sort by Price
+              </label>
+              <div className="relative">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  className="p-3 pr-10 bg-blue-600 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
+                >
+                  <option value="desc">High to Low</option>
+                  <option value="asc">Low to High</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ArrowDown
+                    size={20}
+                    strokeWidth={2}
+                    className="h-5 w-5 mr-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
+              Filters
+            </h2>
+            {/* Desktop Show/Hide Button */}
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className="w-full p-3 hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
+              className="p-3 hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-              </svg>
+              <Filter size={20} strokeWidth={2} className="h-5 w-5 mr-2" />
+
               {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
-
-            {/* Mobil Buton (Halihazırda var olan) */}
+            {/* Mobile Button */}
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className="w-full p-3 md:hidden w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 h-full"
+              className="p-3 md:hidden py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-              </svg>
+              <Filter size={20} strokeWidth={2} />
               {showFilters ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
@@ -574,11 +592,22 @@ export default function CarsPage() {
                     <time
                       dateTime={new Date(car.year).toISOString()}
                       itemProp="releaseDate"
-                      className="mr-2"
+                      className="mr-1"
                     >
                       {format(new Date(car.year), "yyyy")}
                     </time>
-                    • <span itemProp="transmission">{car.transmission}</span>
+                    •{" "}
+                    <span itemProp="transmission" className="mr-1">
+                      {car.transmission}
+                    </span>
+                    •{" "}
+                    <span itemProp="fuel_type" className="mr-1">
+                      {car.fuel_type}
+                    </span>
+                    •{" "}
+                    <span itemProp="milage" className="mr-1">
+                      {car.mileage} km
+                    </span>
                   </p>
 
                   <div className="flex justify-between items-center mt-4">
