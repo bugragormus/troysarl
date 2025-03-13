@@ -270,7 +270,7 @@ export default function CarsPage() {
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="p-3 pr-10 bg-blue-600 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
+                  className="p-3 pr-10 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
                 >
                   <option value="desc">High to Low</option>
                   <option value="asc">Low to High</option>
@@ -279,7 +279,7 @@ export default function CarsPage() {
                   <ArrowDown
                     size={20}
                     strokeWidth={2}
-                    className="h-5 w-5 mr-2"
+                    className="h-5 w-5 mr-1"
                   />
                 </div>
               </div>
@@ -295,17 +295,16 @@ export default function CarsPage() {
               onClick={() => setShowFilters((prev) => !prev)}
               className="p-3 hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
             >
-              <Filter size={20} strokeWidth={2} className="h-5 w-5 mr-2" />
-
               {showFilters ? "Hide Filters" : "Show Filters"}
+              <Filter size={20} strokeWidth={2} className="h-5 w-5 ml-2" />
             </button>
             {/* Mobile Button */}
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className="p-3 md:hidden py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2"
+              className="p-3 md:hidden pr-2 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2"
             >
-              <Filter size={20} strokeWidth={2} />
               {showFilters ? "Hide Filters" : "Show Filters"}
+              <Filter size={20} strokeWidth={2} />
             </button>
           </div>
         </div>
