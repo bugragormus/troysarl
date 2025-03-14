@@ -64,26 +64,47 @@ export default function CarCard({
           <span className="font-bold">{car.brand}</span> {car.model}
         </h3>
         <p className="text-gray-600 dark:text-gray-300 mt-1">
-          {format(new Date(car.year), "dd.MM.yyyy")} • {car.body_type}
+          <time
+            dateTime={new Date(car.year).toISOString()}
+            itemProp="releaseDate"
+            className="mr-1"
+          >
+            {format(new Date(car.year), "yyyy")}
+          </time>
+          •{" "}
+          <span itemProp="transmission" className="mr-1">
+            {car.transmission}
+          </span>
+          •{" "}
+          <span itemProp="fuel_type" className="mr-1">
+            {car.fuel_type}
+          </span>
+          •{" "}
+          <span itemProp="milage" className="mr-1">
+            {car.mileage?.toLocaleString()} km
+          </span>
         </p>
 
         <div className="flex justify-between items-center mt-4">
           <div>
-            {car.listing_type === "rental" ? (
-              <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+            {car.listing_type === "rental" && (
+              <span className="px-2 py-1 text-[14px] font-semibold bg-blue-100 text-blue-800 rounded-full">
                 Rental
               </span>
-            ) : car.listing_type === "sale" ? (
-              <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
+            )}
+            {car.listing_type === "sale" && (
+              <span className="px-2 py-1 text-[14px] font-semibold bg-green-100 text-green-800 rounded-full">
                 Sale
               </span>
-            ) : car.listing_type === "reserved" ? (
-              <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
-                Reserved
-              </span>
-            ) : (
-              <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded-full">
+            )}
+            {car.listing_type === "sold" && (
+              <span className="px-2 py-1 text-[14px] font-semibold bg-red-100 text-red-800 rounded-full">
                 Sold
+              </span>
+            )}
+            {car.listing_type === "reserved" && (
+              <span className="px-2 py-1 text-[14px] font-semibold bg-purple-100 text-purple-800 rounded-full">
+                Reserved
               </span>
             )}
           </div>
@@ -100,7 +121,7 @@ export default function CarCard({
 
         <Link
           href={`/cars/${car.id}`}
-          className="block mt-4 text-center bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition-colors"
+          className="mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
           View Details
         </Link>
