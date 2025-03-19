@@ -1,13 +1,11 @@
 // pages/cars.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import Link from "next/link";
 import Head from "next/head";
-import Image from "next/image";
 import Car from "@/types/car";
-import { Heart, Filter, ArrowDown } from "lucide-react";
-import { format } from "date-fns";
+import { Filter, ArrowDown } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import CarCard from "@/components/CarCard";
 import Script from "next/script";
 
 const bodyTypeOptions = [
@@ -552,102 +550,12 @@ export default function CarsPage() {
               itemScope
               itemType="https://schema.org/Car"
             >
-              {/* Araç görseli ve favori butonu */}
-              <div className="relative h-48 w-full">
-                <Image
-                  src={car.photos[0]}
-                  alt={`${car.brand} ${car.model} for ${car.listing_type}`}
-                  fill
-                  className="w-full h-full object-cover rounded-t-xl"
-                  loading="lazy"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  itemProp="image"
-                />
-                <button
-                  onClick={() => toggleFavorite(car.id)}
-                  className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition-all duration-300 ${
-                    favorites.includes(car.id)
-                      ? "bg-red-500 text-white hover:bg-red-600 scale-110"
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  <Heart
-                    size={20}
-                    fill={favorites.includes(car.id) ? "white" : "none"}
-                    strokeWidth={2}
-                  />
-                </button>
-              </div>
-
-              {/* Araç detayları */}
-              <div className="p-4 flex flex-col flex-grow">
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 truncate">
-                  <span itemProp="brand">{car.brand}</span>{" "}
-                  <span itemProp="model">{car.model}</span>
-                </h3>
-
-                <div className="flex-grow mt-2">
-                  <p className="text-gray-600 dark:text-gray-300">
-                    <time
-                      dateTime={new Date(car.year).toISOString()}
-                      itemProp="releaseDate"
-                      className="mr-1"
-                    >
-                      {format(new Date(car.year), "yyyy")}
-                    </time>
-                    •{" "}
-                    <span itemProp="transmission" className="mr-1">
-                      {car.transmission}
-                    </span>
-                    •{" "}
-                    <span itemProp="fuel_type" className="mr-1">
-                      {car.fuel_type}
-                    </span>
-                    •{" "}
-                    <span itemProp="milage" className="mr-1">
-                      {car.mileage?.toLocaleString()} km
-                    </span>
-                  </p>
-
-                  <div className="flex justify-between items-center mt-4">
-                    <div>
-                      {car.listing_type === "rental" && (
-                        <span className="px-2 py-1 text-[14px] font-semibold bg-blue-100 text-blue-800 rounded-full">
-                          Rental
-                        </span>
-                      )}
-                      {car.listing_type === "sale" && (
-                        <span className="px-2 py-1 text-[14px] font-semibold bg-green-100 text-green-800 rounded-full">
-                          Sale
-                        </span>
-                      )}
-                      {car.listing_type === "sold" && (
-                        <span className="px-2 py-1 text-[14px] font-semibold bg-red-100 text-red-800 rounded-full">
-                          Sold
-                        </span>
-                      )}
-                      {car.listing_type === "reserved" && (
-                        <span className="px-2 py-1 text-[14px] font-semibold bg-purple-100 text-purple-800 rounded-full">
-                          Reserved
-                        </span>
-                      )}
-                    </div>
-                    {car.listing_type !== "sold" && (
-                      <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                        €{car.price.toLocaleString()}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <Link
-                  href={`/cars/${car.id}`}
-                  className="mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  aria-label={`View details of ${car.brand} ${car.model}`}
-                >
-                  View Details
-                </Link>
-              </div>
+              <CarCard
+                key={car.id}
+                car={car}
+                onFavoriteToggle={toggleFavorite}
+                isFavorite={favorites.includes(car.id)}
+              />
             </article>
           ))}
         </div>

@@ -1,9 +1,9 @@
-// this code looks useless i need to fix it's scope
 import Link from "next/link";
 import { Heart, Trash } from "lucide-react";
 import Image from "next/image";
 import Car from "@/types/car";
 import { format } from "date-fns";
+import clsx from "clsx";
 
 type Props = {
   car: Car;
@@ -12,6 +12,56 @@ type Props = {
   isFavorite?: boolean;
   className?: string;
 };
+
+// Etiketleri daha sade yönetmek için bir nesne
+const listingStyles = {
+  rental: "bg-blue-100 text-blue-800",
+  sale: "bg-green-100 text-green-800",
+  sold: "bg-red-100 text-red-800",
+  reserved: "bg-purple-100 text-purple-800",
+};
+
+// Favori veya Çöp butonunu yöneten ayrı bir bileşen
+function ActionButton({
+  carId,
+  isFavorite,
+  onFavoriteToggle,
+  onRemove,
+}: {
+  carId: string;
+  isFavorite?: boolean;
+  onFavoriteToggle?: (carId: string) => void;
+  onRemove?: (carId: string) => void;
+}) {
+  if (onFavoriteToggle) {
+    return (
+      <button
+        onClick={() => onFavoriteToggle(carId)}
+        className={clsx(
+          "absolute top-3 right-3 p-2 rounded-full shadow-sm transition-colors duration-300",
+          isFavorite
+            ? "bg-red-500 text-white hover:bg-red-600"
+            : "bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600"
+        )}
+      >
+        <Heart size={20} fill={isFavorite ? "white" : "none"} strokeWidth={2} />
+      </button>
+    );
+  }
+
+  if (onRemove) {
+    return (
+      <button
+        onClick={() => onRemove(carId)}
+        className="absolute top-3 right-3 p-2 rounded-full shadow-sm bg-red-500 text-white transition-colors duration-300 hover:bg-red-600"
+      >
+        <Trash size={20} strokeWidth={2} />
+      </button>
+    );
+  }
+
+  return null;
+}
 
 export default function CarCard({
   car,
@@ -22,7 +72,11 @@ export default function CarCard({
 }: Props) {
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-shadow flex flex-col h-full ${className}`}
+      className={clsx(
+        "bg-white dark:bg-gray-800 rounded-xl border shadow-lg hover:shadow-2xl transition-shadow flex flex-col h-full",
+        "border-gray-200 dark:border-gray-700",
+        className
+      )}
     >
       <div className="relative h-48 w-full overflow-hidden rounded-t-xl">
         <Image
@@ -33,30 +87,12 @@ export default function CarCard({
           sizes="(max-width: 768px) 100vw, 50vw"
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
-        {/* Eğer onFavoriteToggle varsa, favori butonunu göster; yoksa onRemove varsa çöp butonunu göster */}
-        {onFavoriteToggle ? (
-          <button
-            onClick={() => onFavoriteToggle(car.id)}
-            className={`absolute top-3 right-3 p-2 rounded-full shadow-sm transition-colors duration-300 ${
-              isFavorite
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600"
-            }`}
-          >
-            <Heart
-              size={20}
-              fill={isFavorite ? "white" : "none"}
-              strokeWidth={2}
-            />
-          </button>
-        ) : onRemove ? (
-          <button
-            onClick={() => onRemove(car.id)}
-            className="absolute top-3 right-3 p-2 rounded-full shadow-sm bg-red-500 text-white transition-colors duration-300 hover:bg-red-600"
-          >
-            <Trash size={20} strokeWidth={2} />
-          </button>
-        ) : null}
+        <ActionButton
+          carId={car.id}
+          isFavorite={isFavorite}
+          onFavoriteToggle={onFavoriteToggle}
+          onRemove={onRemove}
+        />
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
@@ -86,28 +122,17 @@ export default function CarCard({
         </p>
 
         <div className="flex justify-between items-center mt-4">
-          <div>
-            {car.listing_type === "rental" && (
-              <span className="px-2 py-1 text-[14px] font-semibold bg-blue-100 text-blue-800 rounded-full">
-                Rental
-              </span>
-            )}
-            {car.listing_type === "sale" && (
-              <span className="px-2 py-1 text-[14px] font-semibold bg-green-100 text-green-800 rounded-full">
-                Sale
-              </span>
-            )}
-            {car.listing_type === "sold" && (
-              <span className="px-2 py-1 text-[14px] font-semibold bg-red-100 text-red-800 rounded-full">
-                Sold
-              </span>
-            )}
-            {car.listing_type === "reserved" && (
-              <span className="px-2 py-1 text-[14px] font-semibold bg-purple-100 text-purple-800 rounded-full">
-                Reserved
-              </span>
-            )}
-          </div>
+          {car.listing_type && (
+            <span
+              className={clsx(
+                "px-2 py-1 text-[14px] font-semibold rounded-full",
+                listingStyles[car.listing_type]
+              )}
+            >
+              {car.listing_type.charAt(0).toUpperCase() +
+                car.listing_type.slice(1)}
+            </span>
+          )}
           <div className="min-h-[2.5rem] flex items-center">
             {car.listing_type !== "rental" && car.price ? (
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">
