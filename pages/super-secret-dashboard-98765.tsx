@@ -145,7 +145,10 @@ export default function AdminPanel() {
   // Fetch Cars
   useEffect(() => {
     const fetchCars = async () => {
-      const { data, error } = await supabase.from("cars").select("*");
+      const { data, error } = await supabase
+        .from("cars")
+        .select("*")
+        .neq("listing_type", "sold");
       if (error) console.error("Error:", error);
       else setCars(data || []);
     };
@@ -743,11 +746,13 @@ export default function AdminPanel() {
                   required
                 >
                   <option value="">Araba Seçin*</option>
-                  {cars.map((car) => (
-                    <option key={car.id} value={car.id}>
-                      {car.brand} {car.model} ({car.color})
-                    </option>
-                  ))}
+                  {cars
+                    .filter((car) => car.listing_type !== "sold") // Sold durumunu filtrele
+                    .map((car) => (
+                      <option key={car.id} value={car.id}>
+                        {car.brand} {car.model} ({car.color})
+                      </option>
+                    ))}
                 </select>
 
                 <select
