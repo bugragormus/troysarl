@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# Googlebot
+User-agent: Googlebot
+Disallow: /super-secret-dashboard-98765
+
+# Host
+Host: https://troysarl.com
+
+# Sitemaps
+Sitemap: https://troysarl.com/sitemap.xml

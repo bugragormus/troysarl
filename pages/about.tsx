@@ -75,7 +75,7 @@ export default function AboutPage() {
           {/* Arka plan görseli, hafif opaklıkla */}
           <Image
             src="/about-bg.jpg"
-            alt="Troysarl Logo"
+            alt="Luxembourg Cars"
             fill
             objectFit="cover"
             className="opacity-20"
@@ -98,7 +98,7 @@ export default function AboutPage() {
             <div className="relative h-80 w-full rounded-lg shadow-xl overflow-hidden">
               <Image
                 src="/troysarl_logos.png"
-                alt="Troysarl Showroom"
+                alt="Luxembourg Car Showroom"
                 fill
                 objectFit="cover"
               />

@@ -83,7 +83,7 @@ export default function CarCard({
           height={80}
           width={80}
           src={car.photos[0]}
-          alt={`${car.brand} ${car.model}`}
+          alt={`${car.brand} ${car.model} for ${car.listing_type} in Luxembourg`}
           sizes="(max-width: 768px) 100vw, 50vw"
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />

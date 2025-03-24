@@ -274,7 +274,7 @@ export default function CarDetail() {
                     <Image
                       loading="lazy"
                       src={photo}
-                      alt={`${car.brand} ${car.model}`}
+                      alt={`${car.brand} ${car.model} for ${car.listing_type} in Luxembourg`}
                       layout="fill"
                       objectFit="contain"
                       className="cursor-zoom-in"
@@ -305,7 +305,7 @@ export default function CarDetail() {
               <Image
                 loading="lazy"
                 src={car.photos[activeImageIndex]}
-                alt="Fullscreen view"
+                alt="Luxembourg cars"
                 width={1200} // Resmin genişliği
                 height={800} // Resmin yüksekliği
                 className="max-h-[80vh] max-w-[90vw] object-contain"

@@ -181,12 +181,16 @@ export default function CarsPage() {
   };
 
   // SEO Meta Verileri
-  const metaTitle =
-    "Troy Cars - Premium Luxury & Used Cars in Luxembourg | Vehicle Catalog | Cars for Sale or Rent | Troy Cars SARL | Troysarl Luxembourg | Troy Cars - Voitures de luxe et d'occasion haut de gamme au Luxembourg | Catalogue de véhicules | Voitures à vendre ou à louer | Troy Cars SARL | Troysarl Luxembourg | Troy Cars - Premium-Luxus- und Gebrauchtwagen in Luxemburg | Fahrzeugkatalog | Autos zum Verkauf oder zur Miete | Troy Cars SARL | Troysarl Luxemburg";
-
-  const metaDescription =
-    "Explore certified luxury vehicles and premium used cars at Troysarl. Luxembourg's trusted automotive partner with 200-point quality checks. Browse our premium selection of luxury and second-hand vehicles at Troysarl. Find the perfect car for sale or rent. Découvrez des véhicules de luxe certifiés et des voitures d'occasion haut de gamme chez Troysarl. Le partenaire automobile de confiance du Luxembourg avec 200 contrôles qualité. Parcourez notre sélection haut de gamme de véhicules de luxe et d'occasion chez Troysarl. Trouvez la voiture parfaite à vendre ou à louer. Entdecken Sie zertifizierte Luxusfahrzeuge und hochwertige Gebrauchtwagen bei Troysarl. Luxemburgs vertrauenswürdiger Automobilpartner mit 200-Punkte-Qualitätsprüfung. Durchsuchen Sie unsere Premium-Auswahl an Luxus- und Gebrauchtfahrzeugen bei Troysarl. Finden Sie das perfekte Auto zum Verkauf oder zur Miete.";
-
+  const metaTitles = {
+    en: "Buy Quality Used Cars in Luxembourg | Troy Cars SARL | Affordable Prices",
+    fr: "Acheter des Voitures d'Occasion au Luxembourg | Luxembourg cars | Luxembourg car sale",
+    de: "Gebrauchtwagen in Luxemburg kaufen | Troy Cars SARL | Günstige Preise",
+  };
+  const metaDescriptions = {
+    en: "Find your next car at Troy Cars! Browse affordable used cars in Luxembourg. Financing options available. Visit us today!",
+    fr: "Trouvez votre prochaine voiture chez Troy Cars! Découvrez des voitures d'occasion de qualité au Luxembourg. Options de financement disponibles.",
+    de: "Finden Sie Ihr nächstes Auto bei Troy Cars! Entdecken Sie hochwertige Gebrauchtwagen in Luxemburg. Finanzierungsoptionen verfügbar.",
+  };
   const canonicalUrl = "https://troysarl.com/cars";
   const ogImageUrl = "https://troysarl.com/og-cars.jpg";
 
@@ -197,34 +201,34 @@ export default function CarsPage() {
     >
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+        <title>{metaTitles.fr}</title>
+        <meta name="description" content={metaDescriptions.fr} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
+        <meta property="og:title" content={metaTitles.fr} />
+        <meta property="og:description" content={metaDescriptions.fr} />
         <meta property="og:image" content={ogImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={metaTitle} />
-        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:title" content={metaTitles.fr} />
+        <meta name="twitter:description" content={metaDescriptions.fr} />
         <meta name="twitter:image" content={ogImageUrl} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             name: "Vehicle Catalog",
-            description: metaDescription,
+            description: metaDescriptions.fr,
             url: canonicalUrl,
             image: ogImageUrl,
             mainEntity: filteredCars.map((car) => ({
               "@type": "Car",
-              brand: car.brand,
-              model: car.model,
-              price: car.price,
-              mileage: car.mileage,
-              bodyType: car.body_type,
-              url: `${canonicalUrl}/cars/${car.id}`,
+              name: `${car.brand} ${car.model}`,
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "EUR",
+                price: car.price,
+              },
             })),
           })}
         </script>
