@@ -213,6 +213,7 @@ export default function CarsPage() {
         <meta name="twitter:title" content={metaTitles.fr} />
         <meta name="twitter:description" content={metaDescriptions.fr} />
         <meta name="twitter:image" content={ogImageUrl} />
+        {/* JSON‑LD Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -224,10 +225,23 @@ export default function CarsPage() {
             mainEntity: filteredCars.map((car) => ({
               "@type": "Car",
               name: `${car.brand} ${car.model}`,
+              vehicleModelDate: car.year,
+              itemCondition:
+                car.listing_type === "sold"
+                  ? "https://schema.org/UsedCondition"
+                  : "https://schema.org/NewCondition",
+              numberOfDoors: car.doors,
+              vehicleInteriorColor: car.color,
+              vehicleTransmission: car.transmission,
+              color: car.color,
               offers: {
                 "@type": "Offer",
                 priceCurrency: "EUR",
-                price: car.price,
+                price: Number(car.price),
+                availability:
+                  car.listing_type === "sold"
+                    ? "https://schema.org/OutOfStock"
+                    : "https://schema.org/InStock",
               },
             })),
           })}

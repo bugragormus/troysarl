@@ -157,6 +157,33 @@ export default function CarDetail() {
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
 
+        {/* JSON‑LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Car",
+            name: `${car.brand} ${car.model}`,
+            vehicleModelDate: car.year, // Üretim veya model tarihi
+            itemCondition:
+              car.listing_type === "sold"
+                ? "https://schema.org/UsedCondition"
+                : "https://schema.org/NewCondition",
+            numberOfDoors: car.doors,
+            vehicleInteriorColor: car.color,
+            vehicleTransmission: car.transmission,
+            color: car.color,
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "EUR",
+              price: Number(car.price),
+              availability:
+                car.listing_type === "sold"
+                  ? "https://schema.org/OutOfStock"
+                  : "https://schema.org/InStock",
+            },
+          })}
+        </script>
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
