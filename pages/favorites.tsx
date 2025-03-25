@@ -26,6 +26,7 @@ export default function FavoritesPage() {
         const { data, error } = await supabase
           .from("cars")
           .select("*")
+          .eq("is_hidden", false)
           .in("id", savedFavorites);
         if (error) console.error("Error:", error);
         else {
