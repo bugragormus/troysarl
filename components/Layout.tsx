@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
     if (!visitedBefore) {
       localStorage.setItem("visitedBefore", "true");
       setShowWelcomeBubble(true);
-      setTimeout(() => setShowWelcomeBubble(false), 4000); // 10 saniye sonra kapanır
+      setTimeout(() => setShowWelcomeBubble(false), 4000); // 4 saniye sonra kapanır
     }
   }, []);
 
