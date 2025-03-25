@@ -100,7 +100,7 @@ export default function CookieConsentBanner() {
       )}
 
       <div
-        className={`fixed bottom-4 left-4 right-4 max-w-7xl mx-auto bg-white dark:bg-gray-900 shadow-xl p-6 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+        className={`fixed bottom-4 left-4 right-4 max-w-7xl z-50 mx-auto bg-white dark:bg-gray-900 shadow-xl p-6 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 ${
           isVisible
             ? "translate-y-0 opacity-100"
             : "translate-y-10 opacity-0 pointer-events-none"

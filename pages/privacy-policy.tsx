@@ -98,7 +98,7 @@ export default function PrivacyPolicy() {
             Luxembourg Website: https://www.troysarl.com Email:
             info@troysarl.com VAT Number: LU35903812 Company Registration
             Number: B288193 10. LAST UPDATED This Privacy Policy was last
-            updated on: 05.0.2025
+            updated on: 25.3.2025
           </p>
         </div>
       </div>
