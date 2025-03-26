@@ -8,6 +8,7 @@ module.exports = withTM({
     return [
       {
         source: "/",
+        minimumCacheTTL: 864000, // 10 gün
         destination: "/cars",
         permanent: true, // SEO açısından kalıcı yönlendirme (301)
       },
