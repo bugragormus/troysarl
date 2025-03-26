@@ -2,6 +2,7 @@ const withTM = require("next-transpile-modules")(["react-responsive-carousel"]);
 
 module.exports = withTM({
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
