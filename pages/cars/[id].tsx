@@ -169,9 +169,28 @@ export default function CarDetail() {
                 ? "https://schema.org/UsedCondition"
                 : "https://schema.org/NewCondition",
             numberOfDoors: car.doors,
-            vehicleInteriorColor: car.color,
             vehicleTransmission: car.transmission,
             color: car.color,
+            brand: {
+              "@type": "Brand",
+              name: car.brand,
+            },
+            model: car.model,
+            image: car.photos,
+            bodyType: car.body_type,
+            vehicleIdentificationNumber: "None",
+            vehicleInteriorType: "Standart",
+            vehicleEngine: {
+              "@type": "EngineSpecification",
+              fuelType: car.fuel_type,
+            },
+            vehicleSeatingCapacity: 5,
+            vehicleInteriorColor: "Standart",
+            mileageFromOdometer: {
+              "@type": "QuantitativeValue",
+              value: car.mileage,
+              unitCode: "KMH",
+            },
             offers: {
               "@type": "Offer",
               priceCurrency: "EUR",
