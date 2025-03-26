@@ -163,38 +163,41 @@ export default function CarDetail() {
             "@context": "https://schema.org",
             "@type": "Car",
             name: `${car.brand} ${car.model}`,
-            vehicleModelDate: car.year, // Üretim veya model tarihi
+            vehicleModelDate: new Date(car.year).getFullYear().toString(), // Yılı ISO formatında al
             itemCondition:
               car.listing_type === "sold"
                 ? "https://schema.org/UsedCondition"
                 : "https://schema.org/NewCondition",
             numberOfDoors: car.doors,
-            vehicleTransmission: car.transmission,
+            vehicleTransmission:
+              car.transmission === "automatic"
+                ? "AutomaticTransmission"
+                : "ManualTransmission", // Schema.org uyumlu
             color: car.color,
             brand: {
               "@type": "Brand",
               name: car.brand,
             },
             model: car.model,
-            image: car.photos,
+            image: car.photos.map((photo) => `https://troysarl.com${photo}`), // Mutlak URL sağla
             bodyType: car.body_type,
-            vehicleIdentificationNumber: "None",
-            vehicleInteriorType: "Standart",
             vehicleEngine: {
               "@type": "EngineSpecification",
-              fuelType: car.fuel_type,
+              fuelType:
+                car.fuel_type.toLowerCase() === "diesel"
+                  ? "https://schema.org/DieselFuel"
+                  : "https://schema.org/Gasoline", // Doğru fuelType değerleri
             },
             vehicleSeatingCapacity: 5,
-            vehicleInteriorColor: "Standart",
             mileageFromOdometer: {
               "@type": "QuantitativeValue",
               value: car.mileage,
-              unitCode: "KMH",
+              unitCode: "KMT", // KMH -> KMT olarak düzeltildi
             },
             offers: {
               "@type": "Offer",
               priceCurrency: "EUR",
-              price: Number(car.price),
+              price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
               availability:
                 car.listing_type === "sold"
                   ? "https://schema.org/OutOfStock"
