@@ -142,13 +142,19 @@ export default function AdminPanel() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
 
+  // Sayfalama state'leri
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.ceil(cars.length / pageSize);
+  const displayedCars = cars.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   // Fetch Cars
   useEffect(() => {
     const fetchCars = async () => {
-      const { data, error } = await supabase
-        .from("cars")
-        .select("*")
-        .neq("listing_type", "sold");
+      const { data, error } = await supabase.from("cars").select("*");
       if (error) console.error("Error:", error);
       else setCars(data || []);
     };
@@ -1611,7 +1617,7 @@ export default function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {cars.map((car) => (
+              {displayedCars.map((car) => (
                 <tr
                   key={car.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -1653,7 +1659,7 @@ export default function AdminPanel() {
                       }}
                       className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     >
-                      Düzenle
+                      Edit
                     </button>
                     <button
                       onClick={() => toggleVisibility(car.id, car.is_hidden)}
@@ -1672,6 +1678,28 @@ export default function AdminPanel() {
               ))}
             </tbody>
           </table>
+        </div>
+        {/* Pagination Kontrolleri */}
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 rounded-l disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 rounded-r disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
       <Toaster position="top-right" reverseOrder={false} />
