@@ -241,7 +241,7 @@ export default function CarsPage() {
                 name: car.brand,
               },
               model: car.model,
-              image: car.photos.map((photo) => `https://troysarl.com${photo}`), // Mutlak URL sağla
+              image: car.photos.map((photo) => `${photo}`), // Mutlak URL sağla
               bodyType: car.body_type,
               vehicleEngine: {
                 "@type": "EngineSpecification",
@@ -251,7 +251,7 @@ export default function CarsPage() {
                     : "https://schema.org/Gasoline", // Doğru fuelType değerleri
               },
               vehicleSeatingCapacity: 5,
-              vehicleIdentificationNumber: "N/A", // veya "Not Available"
+              vehicleIdentificationNumber: "UNKNOWNVIN1234567",
               mileageFromOdometer: {
                 "@type": "QuantitativeValue",
                 value: car.mileage,
