@@ -225,19 +225,41 @@ export default function CarsPage() {
             mainEntity: filteredCars.map((car) => ({
               "@type": "Car",
               name: `${car.brand} ${car.model}`,
-              vehicleModelDate: car.year,
+              vehicleModelDate: new Date(car.year).getFullYear().toString(), // Yılı ISO formatında al
               itemCondition:
                 car.listing_type === "sold"
                   ? "https://schema.org/UsedCondition"
                   : "https://schema.org/NewCondition",
               numberOfDoors: car.doors,
-              vehicleInteriorColor: car.color,
-              vehicleTransmission: car.transmission,
+              vehicleTransmission:
+                car.transmission === "automatic"
+                  ? "AutomaticTransmission"
+                  : "ManualTransmission", // Schema.org uyumlu
               color: car.color,
+              brand: {
+                "@type": "Brand",
+                name: car.brand,
+              },
+              model: car.model,
+              image: car.photos.map((photo) => `https://troysarl.com${photo}`), // Mutlak URL sağla
+              bodyType: car.body_type,
+              vehicleEngine: {
+                "@type": "EngineSpecification",
+                fuelType:
+                  car.fuel_type.toLowerCase() === "diesel"
+                    ? "https://schema.org/DieselFuel"
+                    : "https://schema.org/Gasoline", // Doğru fuelType değerleri
+              },
+              vehicleSeatingCapacity: 5,
+              mileageFromOdometer: {
+                "@type": "QuantitativeValue",
+                value: car.mileage,
+                unitCode: "KMT", // KMH -> KMT olarak düzeltildi
+              },
               offers: {
                 "@type": "Offer",
                 priceCurrency: "EUR",
-                price: Number(car.price),
+                price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
                 availability:
                   car.listing_type === "sold"
                     ? "https://schema.org/OutOfStock"
