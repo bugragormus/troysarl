@@ -251,7 +251,7 @@ export default function CarsPage() {
                     : "https://schema.org/Gasoline", // Doğru fuelType değerleri
               },
               vehicleSeatingCapacity: 5,
-              vehicleIdentificationNumber: "UR6642",
+              vehicleIdentificationNumber: "UNKNOWNVIN1234567",
               mileageFromOdometer: {
                 "@type": "QuantitativeValue",
                 value: car.mileage,
