@@ -38,7 +38,8 @@
     "react-icons": "^5.4.0",
     "react-modal": "^3.16.3",
     "react-quill": "^2.0.0",
-    "react-responsive-carousel": "^3.2.23"
+    "react-responsive-carousel": "^3.2.23",
+    "requirements": "^2.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

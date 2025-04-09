@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Head from "next/head";
 import Car from "@/types/car";
-import { Filter, ArrowDown } from "lucide-react";
+import { Filter, ArrowDown, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import CarCard from "@/components/CarCard";
 import Script from "next/script";
@@ -112,9 +112,21 @@ export default function CarsPage() {
         (!filters.minPrice || car.price >= Number(filters.minPrice)) &&
         (!filters.maxPrice || car.price <= Number(filters.maxPrice));
 
+      // İlk olarak car.year'i tam yıl sayısına çeviriyoruz
+      const carYear = new Date(car.year).getFullYear();
+
+      // Input'lardan gelen değerleri kontrol edip, boşsa undefined yapıyoruz
+      const minYear = filters.minYear.trim()
+        ? Number(filters.minYear)
+        : undefined;
+      const maxYear = filters.maxYear.trim()
+        ? Number(filters.maxYear)
+        : undefined;
+
+      // Son olarak, karşılaştırmayı carYear üzerinden yapıyoruz
       const matchesYear =
-        (!filters.minYear || car.year >= Number(filters.minYear)) &&
-        (!filters.maxYear || car.year <= Number(filters.maxYear));
+        (minYear === undefined || carYear >= minYear) &&
+        (maxYear === undefined || carYear <= maxYear);
 
       const matchesMileage =
         (!filters.minMileage || car.mileage >= Number(filters.minMileage)) &&
@@ -285,101 +297,104 @@ export default function CarsPage() {
       </Script>
 
       <div className="container mx-auto p-4" aria-label="Cars">
-        {/* Search Bar */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="🔍 Search by brand or model..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 rounded-xl border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition-all"
-            aria-label="Search vehicles"
-          />
-        </div>
-
         {/* Filter & Sort Controls */}
         {/* Sort Controls */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-          <div className="mt-4 md:mt-0 mb-4">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
-                Sort by Price
-              </h2>
-              <div className="relative w-full md:w-auto">
-                <select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  className="w-full p-3 pr-10 bg-blue-600  px-4 py-2 hover:bg-blue-700 text-white rounded-lg appearance-none focus:outline-none transition-all"
-                >
-                  <option value="desc">High to Low</option>
-                  <option value="asc">Low to High</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <ArrowDown
-                    size={20}
-                    strokeWidth={2}
-                    className="h-5 w-5 mr-1"
-                  />
-                </div>
-              </div>
+        <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-m border border-gray-100 dark:border-gray-700">
+          {/* Arama Çubuğu */}
+          <div className="mb-6">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by brand, model or keyword..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-4 pl-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm"
+                aria-label="Search vehicles"
+              />
+              <svg
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 hidden md:block">
-              Filters
-            </h2>
-            {/* Desktop Show/Hide Button */}
-            <button
-              onClick={() => setShowFilters((prev) => !prev)}
-              className="p-3 hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
-            >
-              {showFilters ? "Hide Filters" : "Show Filters"}
-              <Filter size={20} strokeWidth={2} className="h-5 w-5 ml-2" />
-            </button>
-            {/* Mobile Button */}
-            <button
-              onClick={() => setShowFilters((prev) => !prev)}
-              className="p-3 md:hidden pr-2 bg-blue-600 px-4 py-2 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 flex-grow"
-            >
-              {showFilters ? "Hide Filters" : "Show Filters"}
-              <Filter size={20} strokeWidth={2} />
-            </button>
-          </div>
-        </div>
+          {/* Filtre ve Sıralama Kontrolleri */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            {/* Sonuç Sayısı */}
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Showing {filteredCars.length} of {cars.length} vehicles
+            </div>
 
-        {/* Filtreler */}
-        <div className={`${showFilters ? "block" : "hidden"} mb-8`}>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
-            <div className="flex flex-col gap-6">
-              {/* İlk Filtre Grubu */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Kontrol Butonları */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              {/* Sıralama */}
+              <div className="relative flex-1 md:flex-none">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  className="w-full p-3 pr-10 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-sm"
+                >
+                  <option value="desc">Price: High to Low</option>
+                  <option value="asc">Price: Low to High</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <ArrowDown
+                    size={18}
+                    className="text-gray-500 dark:text-gray-400"
+                  />
+                </div>
+              </div>
+
+              {/* Filtre Butonu */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg transition-colors ${
+                  showFilters
+                    ? "bg-blue-600 text-white"
+                    : "bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+                }`}
+              >
+                <Filter size={18} />
+                <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Filtreler */}
+          {showFilters && (
+            <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Listing Type */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Listing Type
                   </label>
                   <select
                     value={filters.listingType}
                     onChange={(e) =>
-                      setFilters({
-                        ...filters,
-                        listingType: e.target.value,
-                      })
+                      setFilters({ ...filters, listingType: e.target.value })
                     }
-                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="all">All Listings</option>
                     <option value="sale">For Sale</option>
-                    <option value="rental">For Rent</option>
                     <option value="reserved">Reserved</option>
                     <option value="sold">Sold</option>
                   </select>
                 </div>
 
                 {/* Body Type */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Body Type
                   </label>
                   <select
@@ -387,7 +402,7 @@ export default function CarsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, bodyType: e.target.value })
                     }
-                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="">All Types</option>
                     {bodyTypeOptions.map((option) => (
@@ -398,9 +413,66 @@ export default function CarsPage() {
                   </select>
                 </div>
 
-                {/* Transmission Type */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                {/* Price Range */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Price Range (€)
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minPrice}
+                      onChange={(e) =>
+                        setFilters({ ...filters, minPrice: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxPrice}
+                      onChange={(e) =>
+                        setFilters({ ...filters, maxPrice: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* Year Range */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Year
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minYear}
+                      onChange={(e) =>
+                        setFilters({ ...filters, minYear: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxYear}
+                      onChange={(e) =>
+                        setFilters({ ...filters, maxYear: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* İkinci Filtre Satırı */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                {/* Transmission */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Transmission
                   </label>
                   <select
@@ -411,9 +483,9 @@ export default function CarsPage() {
                         transmission_type: e.target.value,
                       })
                     }
-                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
-                    <option value="">All</option>
+                    <option value="">All Types</option>
                     {transmissionOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -422,9 +494,36 @@ export default function CarsPage() {
                   </select>
                 </div>
 
+                {/* Mileage */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Mileage (km)
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.minMileage}
+                      onChange={(e) =>
+                        setFilters({ ...filters, minMileage: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.maxMileage}
+                      onChange={(e) =>
+                        setFilters({ ...filters, maxMileage: e.target.value })
+                      }
+                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                </div>
+
                 {/* Doors */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Doors
                   </label>
                   <select
@@ -432,7 +531,7 @@ export default function CarsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, doors: e.target.value })
                     }
-                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
                     <option value="">All</option>
                     {doorOptions.map((option) => (
@@ -442,100 +541,10 @@ export default function CarsPage() {
                     ))}
                   </select>
                 </div>
-              </div>
-
-              {/* İkinci Filtre Grubu */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Price Range */}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Price (€)
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={filters.minPrice}
-                      onChange={(e) =>
-                        setFilters({ ...filters, minPrice: e.target.value })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={filters.maxPrice}
-                      onChange={(e) =>
-                        setFilters({ ...filters, maxPrice: e.target.value })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* Year Range*/}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Year
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={filters.minYear}
-                      onChange={(e) =>
-                        setFilters({ ...filters, minYear: e.target.value })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={filters.maxYear}
-                      onChange={(e) =>
-                        setFilters({ ...filters, maxYear: e.target.value })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* Mileage Range*/}
-                <div className="space-y-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Mileage (km)
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={filters.minMileage}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          minMileage: e.target.value,
-                        })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={filters.maxMileage}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          maxMileage: e.target.value,
-                        })
-                      }
-                      className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                  </div>
-                </div>
 
                 {/* Color */}
-                <div className="space-y-0.5">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Color
                   </label>
                   <select
@@ -543,9 +552,9 @@ export default function CarsPage() {
                     onChange={(e) =>
                       setFilters({ ...filters, color: e.target.value })
                     }
-                    className="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 transition-all"
                   >
-                    <option value="">All</option>
+                    <option value="">All Colors</option>
                     {colorOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -555,31 +564,18 @@ export default function CarsPage() {
                 </div>
               </div>
 
-              {/* Clear Button*/}
-              <div className="flex justify-end">
+              {/* Filtre Temizleme */}
+              <div className="flex justify-end mt-6">
                 <button
                   onClick={resetFilters}
-                  className="w-full md:w-auto px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                  Clear Filters
+                  <X size={16} />
+                  Clear all filters
                 </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Araç Listesi */}
