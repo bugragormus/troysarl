@@ -299,7 +299,7 @@ export default function CarsPage() {
       <div className="container mx-auto p-4" aria-label="Cars">
         {/* Filter & Sort Controls */}
         {/* Sort Controls */}
-        <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-m border border-gray-100 dark:border-gray-700">
+        <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
           {/* Arama Çubuğu */}
           <div className="mb-6">
             <div className="relative">
