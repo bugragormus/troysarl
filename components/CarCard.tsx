@@ -105,7 +105,7 @@ export default function CarCard({
             itemProp="releaseDate"
             className="mr-1"
           >
-            {format(new Date(car.year), "yyyy")}
+            {format(new Date(car.year), "MM.yyyy")}
           </time>
           •{" "}
           <span itemProp="transmission" className="mr-1">
