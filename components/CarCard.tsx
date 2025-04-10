@@ -221,17 +221,20 @@ export default function CarCard({
             </p>
           </div>
 
-          <Link
-            href={`/cars/${car.id}`}
-            className={clsx(
-              "px-4 py-2.5 rounded-lg font-medium flex items-center gap-2",
-              "transition-colors duration-300",
-              "bg-gray-900 hover:bg-gray-800 text-white",
-              "dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
-            )}
-          >
-            View Details
-          </Link>
+          {/* Conditional Rendering of "View Details" Button */}
+          {car.listing_type !== "sold" && (
+            <Link
+              href={`/cars/${car.id}`}
+              className={clsx(
+                "px-4 py-2.5 rounded-lg font-medium flex items-center gap-2",
+                "transition-colors duration-300",
+                "bg-gray-900 hover:bg-gray-800 text-white",
+                "dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
+              )}
+            >
+              View Details
+            </Link>
+          )}
         </div>
       </div>
     </article>
