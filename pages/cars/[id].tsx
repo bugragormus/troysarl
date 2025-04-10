@@ -7,6 +7,7 @@ import { Carousel } from "react-responsive-carousel";
 import Modal from "react-modal";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Heart, Share } from "lucide-react";
+import clsx from "clsx";
 import Car from "@/types/car";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
@@ -277,7 +278,7 @@ export default function CarDetail() {
         >
           <div>
             <h1
-              className="text-4xl font-extrabold text-gray-800 dark:text-white"
+              className="text-4xl font-extrabold text-gray-800 dark:text-white mb-2"
               aria-label="Car Title"
             >
               {car?.brand} {car?.model}
@@ -293,7 +294,7 @@ export default function CarDetail() {
             {/* Favori Butonu */}
             <button
               onClick={() => toggleFavorite(car?.id || "")}
-              className={`p-3 rounded-full shadow-md transition-all duration-300 ${
+              className={`p-3 rounded-full shadow-lg backdrop-blur-md bg-black/30 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300  ${
                 favorites.includes(car?.id || "")
                   ? "bg-red-500 text-white hover:bg-red-600"
                   : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -314,7 +315,7 @@ export default function CarDetail() {
             {/* Share Butonu */}
             <button
               onClick={handleShare}
-              className="p-3 rounded-full shadow-md transition-all duration-300 bg-blue-500 text-white hover:bg-blue-600"
+              className="p-3 rounded-full shadow-lg backdrop-blur-md bg-black/30 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 "
               title="Share this car"
             >
               <Share size={20} fill="none" strokeWidth={2} />
@@ -324,18 +325,35 @@ export default function CarDetail() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Sol Sütun: Resim Galerisi */}
-          <section>
+          <section className="relative" aria-label="Car Image Gallery">
+            {/* Resim Galerisi */}
             <div className="relative" aria-label="Car Photos">
+              <span
+                className={`absolute top-4 left-4 px-3 py-1.5 text-xs font-semibold rounded-full shadow-md backdrop-blur-sm z-10 ${
+                  {
+                    rental: "bg-blue-600/60 text-white",
+                    sale: "bg-emerald-600/60 text-white",
+                    sold: "bg-rose-600/60 text-white",
+                    reserved: "bg-purple-600/60 text-white",
+                  }[car.listing_type]
+                }`}
+              >
+                {car.listing_type.toUpperCase()}
+              </span>
               <Carousel
                 showThumbs={true}
                 infiniteLoop
                 selectedItem={activeImageIndex}
-                className="rounded-2xl overflow-hidden shadow-xl" // hover:scale-105 kaldırıldı
+                className="rounded-2xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900/80 p-2"
                 renderThumbs={(children) =>
                   children.map((_, index) => (
                     <div
                       key={index}
-                      className="h-20 w-20 cursor-pointer border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden"
+                      className={`h-20 w-20 cursor-pointer border-2 transition-all duration-300 rounded-md overflow-hidden ${
+                        activeImageIndex === index
+                          ? "border-blue-500"
+                          : "border-gray-300 dark:border-gray-600 hover:border-blue-400"
+                      }`}
                     >
                       <Image
                         loading="lazy"
@@ -353,7 +371,7 @@ export default function CarDetail() {
                 {car.photos.map((photo, index) => (
                   <div
                     key={index}
-                    className="h-[500px] relative cursor-zoom-in border border-gray-300 dark:border-gray-600 rounded-lg"
+                    className="h-[500px] relative cursor-zoom-in rounded-2xl overflow-hidden group"
                     onClick={() => handleImageClick(index)}
                   >
                     <Image
@@ -362,10 +380,10 @@ export default function CarDetail() {
                       alt={`${car.brand} ${car.model} for ${car.listing_type} in Luxembourg`}
                       layout="fill"
                       objectFit="contain"
-                      className="cursor-zoom-in"
+                      className="transition-transform duration-300 "
                     />
-                    {/* Hafif karartma efekti, mouse ile üzerine gelindiğinde değil, sürekli hafif kontrast için */}
-                    <div className="absolute inset-0 bg-black/" />
+                    {/* Gradient overlay for subtle dark effect */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
                   </div>
                 ))}
               </Carousel>
@@ -375,49 +393,75 @@ export default function CarDetail() {
           <Modal
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
-            style={modalStyles}
+            style={{
+              ...modalStyles,
+              overlay: {
+                ...modalStyles.overlay,
+                padding: "0", // Overlay için paddingi sıfırladık
+              },
+              content: {
+                ...modalStyles.content,
+                maxWidth: "95vw", // Mobilde biraz daha geniş
+                maxHeight: "85vh", // Mobilde biraz daha büyük
+                margin: "auto",
+                padding: "0",
+                borderRadius: "16px",
+                backgroundColor: "transparent",
+              },
+            }}
             aria-label="Fullscreen Image View"
           >
-            <div className="relative">
+            <div className="relative flex items-center justify-center w-full h-full overflow-hidden">
               {/* Kapatma Butonu */}
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute -top-10 right-0 text-white text-4xl hover:text-gray-300 transition-colors z-50"
+                className="absolute top-4 right-4 text-white text-4xl hover:scale-110 hover:text-red-400 transition-all z-50"
+                aria-label="Close Modal"
               >
                 &times;
               </button>
+
               {/* Resim */}
-              <Image
-                loading="lazy"
-                src={car.photos[activeImageIndex]}
-                alt="Luxembourg cars"
-                width={1200} // Resmin genişliği
-                height={800} // Resmin yüksekliği
-                className="max-h-[80vh] max-w-[90vw] object-contain"
-              />
-              {/* Navigasyon Butonları */}
+              <div className="relative w-full h-full overflow-auto">
+                <Image
+                  loading="lazy"
+                  src={car.photos[activeImageIndex]}
+                  alt={`${car.brand} ${car.model}`}
+                  width={1200}
+                  height={800}
+                  className="max-h-[80vh] max-w-full object-contain rounded-lg shadow-xl transition-all duration-300"
+                />
+              </div>
+
+              {/* Sol Ok */}
               <button
                 onClick={handlePrev}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors z-50"
+                className="absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white text-3xl p-3 rounded-full transition-all z-50"
+                aria-label="Previous Image"
               >
-                &larr;
+                &#10094;
               </button>
+
+              {/* Sağ Ok */}
               <button
                 onClick={handleNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors z-50"
+                className="absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white text-3xl p-3 rounded-full transition-all z-50"
+                aria-label="Next Image"
               >
-                &rarr;
+                &#10095;
               </button>
+
               {/* Resim Sayacı */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/60 text-white px-4 py-1 rounded-full text-sm shadow-lg backdrop-blur">
                 {activeImageIndex + 1} / {car.photos.length}
               </div>
             </div>
           </Modal>
+
           {/* Sağ Sütun: Detaylar, İletişim ve Form */}
-          <section className="space-y-8" aria-label="Car Details">
+          <section className="space-y-4" aria-label="Car Details">
             {/* Fiyat / İletişim Bilgileri */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <div className="p-6 bg-white/90 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
               {car.listing_type === "rental" ? (
                 <div className="space-y-6 text-center">
                   <p className="text-2xl font-semibold text-gray-800 dark:text-white">
@@ -434,8 +478,15 @@ export default function CarDetail() {
                 </div>
               ) : car.listing_type === "sold" ? (
                 <div className="flex justify-center items-center">
-                  <p className="text-4xl font-bold text-red-600 dark:text-red-400">
-                    SOLD!
+                  <p
+                    className={clsx(
+                      "text-4xl font-extrabold tracking-tight",
+                      car.listing_type === "sold"
+                        ? "text-gray-400 line-through dark:text-gray-600"
+                        : "text-emerald-600 dark:text-emerald-400"
+                    )}
+                  >
+                    €{car.price.toLocaleString()}
                   </p>
                 </div>
               ) : (
@@ -569,7 +620,7 @@ export default function CarDetail() {
               <div className="space-y-6 text-center">
                 <button
                   onClick={() => setShowContactForm((prev) => !prev)}
-                  className="w-full py-4 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold shadow-lg transform transition-all duration-300 hover:scale-105"
+                  className="w-full py-4 rounded-lg bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900 font-medium shadow-md transition-all duration-300"
                 >
                   {showContactForm ? "Close Form" : "Make an Appointment"}
                 </button>
@@ -689,7 +740,7 @@ export default function CarDetail() {
                     </div>
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-full bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition-colors"
+                      className="w-full py-4 rounded-lg bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900 font-medium shadow-md transition-all duration-300"
                     >
                       Send Appointment Request
                     </button>
@@ -705,7 +756,6 @@ export default function CarDetail() {
                     ? format(new Date(car.year), "dd.MM.yyyy")
                     : "",
                 },
-                //{ label: "Body Type", value: car.body_type },
                 {
                   label: "Mileage",
                   value: `${car.mileage?.toLocaleString()} km`,
@@ -717,96 +767,95 @@ export default function CarDetail() {
               ].map((spec, index) => (
                 <div
                   key={index}
-                  className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700"
+                  className="p-6 bg-white/90 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300"
                 >
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">
                     {spec.label}
                   </p>
-                  <p className="mt-2 text-xl font-semibold dark:text-white">
+                  <p className="mt-2 text-xl font-bold text-gray-800 dark:text-gray-100">
                     {spec.value}
                   </p>
                 </div>
               ))}
             </div>
-            {/* Detailed Description */}
-            <div className="mt-8">
-              {car.description && car.description.length > 0 && (
-                <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                    Detailed Information
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                    {car.description}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Features */}
-            <div className="mt-8 space-y-8">
-              {/* Safety Features */}
-              {car.features.safety && car.features.safety.length > 0 && (
-                <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                    Safety Features
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {car.features.safety.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <span className="text-green-600 font-bold">✓</span>
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {feature}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Comfort & Convenience Features */}
-              {car.features.comfort && car.features.comfort.length > 0 && (
-                <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                    Comfort &amp; Convenience
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {car.features.comfort.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <span className="text-green-600 font-bold">✓</span>
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {feature}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Entertainment Features */}
-              {car.features.entertainment &&
-                car.features.entertainment.length > 0 && (
-                  <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                    <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                      Entertainment Features
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      {car.features.entertainment.map((feature, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center space-x-2"
-                        >
-                          <span className="text-green-600 font-bold">✓</span>
-                          <span className="text-gray-700 dark:text-gray-300">
-                            {feature}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-            </div>
           </section>
         </div>
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Detailed Description */}
+          <div className="p-6 bg-white/90 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
+            {car.description && car.description.length > 0 && (
+              <>
+                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                  Detailed Information
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                  {car.description}
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Features */}
+          <div className="mt-8 space-y-6">
+            {/* Safety Features */}
+            {car.features.safety && car.features.safety.length > 0 && (
+              <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                  Safety Features
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {car.features.safety.map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Comfort & Convenience Features */}
+            {car.features.comfort && car.features.comfort.length > 0 && (
+              <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                  Comfort &amp; Convenience
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {car.features.comfort.map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Entertainment Features */}
+            {car.features.entertainment &&
+              car.features.entertainment.length > 0 && (
+                <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                    Entertainment Features
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {car.features.entertainment.map((feature, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <span className="text-green-600 font-bold">✓</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+          </div>
+        </section>
       </div>
     </div>
   );

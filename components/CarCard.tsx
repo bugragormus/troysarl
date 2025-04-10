@@ -105,7 +105,7 @@ export default function CarCard({
         .share({
           title: `${car.brand} ${car.model}`,
           text: `Check out this car: ${car.brand} ${car.model}`,
-          url: window.location.href, // You can link to the car's detail page or anywhere relevant
+          url: `${window.location.origin}/cars/${car.id}`,
         })
         .then(() => console.log("Successfully shared!"))
         .catch((error) => console.log("Error sharing:", error));

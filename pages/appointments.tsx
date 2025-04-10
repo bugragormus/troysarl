@@ -266,7 +266,7 @@ export default function CareersPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-full shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold shadow-lg hover:scale-105 transform transition-all duration-300"
             >
               {isSubmitting ? "Sending..." : "Send Appointment Request"}
             </button>
