@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Carousel } from "react-responsive-carousel";
 import Modal from "react-modal";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Heart } from "lucide-react";
+import { Heart, Share } from "lucide-react";
 import Car from "@/types/car";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
@@ -32,6 +32,7 @@ const modalStyles = {
     zIndex: 1000,
   },
 };
+
 export default function CarDetail() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const router = useRouter();
@@ -88,6 +89,7 @@ export default function CarDetail() {
       setFavorites(savedFavorites);
     }
   }, [id, router]); // Added `router` to the dependency array
+
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
 
@@ -102,6 +104,27 @@ export default function CarDetail() {
     setFavorites(updatedFavorites);
     localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
   };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `${car?.brand || "Unknown Brand"} ${
+            car?.model || "Unknown Model"
+          }`,
+          text: `Check out this car: ${car?.brand || "Unknown Brand"} ${
+            car?.model || "Unknown Model"
+          }`,
+          url: window.location.href, // You can link to the car's detail page or anywhere relevant
+        })
+        .then(() => console.log("Successfully shared!"))
+        .catch((error) => console.log("Error sharing:", error));
+    } else {
+      // Fallback for browsers that don't support `navigator.share`
+      alert("Share functionality is not supported on this device.");
+    }
+  };
+
   // SEO Meta Verileri
   const metaTitle =
     "Luxury and Second-Hand Vehicles for Sale or Rent | Troysarl | Luxembourg | Véhicules de luxe et d'occasion à vendre ou à louer | Troysarl | Luxembourg | Luxus- und Gebrauchtfahrzeuge zum Verkauf oder zur Miete | Troysarl | Luxemburg";
@@ -257,33 +280,46 @@ export default function CarDetail() {
               className="text-4xl font-extrabold text-gray-800 dark:text-white"
               aria-label="Car Title"
             >
-              {car.brand} {car.model}
+              {car?.brand} {car?.model}
             </h1>
             <p className="text-gray-600 dark:text-gray-300 truncate mt-1">
-              {format(new Date(car.year), "dd.MM.yyyy")} • {car.body_type}
+              {format(new Date(car?.year || ""), "dd.MM.yyyy")} •{" "}
+              {car?.body_type}
             </p>
           </div>
 
-          {/* Favori Butonu */}
-          <button
-            onClick={() => toggleFavorite(car.id)}
-            className={`p-3 rounded-full shadow-md transition-all duration-300 ${
-              favorites.includes(car.id)
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
-            }`}
-            title={
-              favorites.includes(car.id)
-                ? "Remove from Favorites"
-                : "Add to Favorites"
-            }
-          >
-            <Heart
-              size={20}
-              fill={favorites.includes(car.id) ? "white" : "none"}
-              strokeWidth={2}
-            />
-          </button>
+          {/* Button Container */}
+          <div className="flex gap-4">
+            {/* Favori Butonu */}
+            <button
+              onClick={() => toggleFavorite(car?.id || "")}
+              className={`p-3 rounded-full shadow-md transition-all duration-300 ${
+                favorites.includes(car?.id || "")
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-600"
+              }`}
+              title={
+                favorites.includes(car?.id || "")
+                  ? "Remove from Favorites"
+                  : "Add to Favorites"
+              }
+            >
+              <Heart
+                size={20}
+                fill={favorites.includes(car?.id || "") ? "white" : "none"}
+                strokeWidth={2}
+              />
+            </button>
+
+            {/* Share Butonu */}
+            <button
+              onClick={handleShare}
+              className="p-3 rounded-full shadow-md transition-all duration-300 bg-blue-500 text-white hover:bg-blue-600"
+              title="Share this car"
+            >
+              <Share size={20} fill="none" strokeWidth={2} />
+            </button>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

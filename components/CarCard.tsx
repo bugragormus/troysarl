@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Gauge,
   BadgeInfo,
+  Share,
 } from "lucide-react";
 import Image from "next/image";
 import Car from "@/types/car";
@@ -39,11 +40,13 @@ function ActionButton({
   isFavorite,
   onFavoriteToggle,
   onRemove,
+  onShare,
 }: {
   carId: string;
   isFavorite?: boolean;
   onFavoriteToggle?: (carId: string) => void;
   onRemove?: (carId: string) => void;
+  onShare?: () => void; // Add share button action handler
 }) {
   return (
     <div className="absolute top-3 right-3 flex gap-2">
@@ -74,6 +77,16 @@ function ActionButton({
           <Trash size={20} className="drop-shadow-md" />
         </button>
       )}
+
+      {onShare && ( // Share Button
+        <button
+          onClick={onShare}
+          className="p-2 rounded-full shadow-lg backdrop-blur-md bg-black/30 hover:bg-black/40 text-white transition-all duration-300"
+          aria-label="Share car"
+        >
+          <Share size={20} className="drop-shadow-md" />
+        </button>
+      )}
     </div>
   );
 }
@@ -85,6 +98,23 @@ export default function CarCard({
   isFavorite,
   className = "",
 }: Props) {
+  // Share function
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `${car.brand} ${car.model}`,
+          text: `Check out this car: ${car.brand} ${car.model}`,
+          url: window.location.href, // You can link to the car's detail page or anywhere relevant
+        })
+        .then(() => console.log("Successfully shared!"))
+        .catch((error) => console.log("Error sharing:", error));
+    } else {
+      // Fallback for browsers that don't support `navigator.share`
+      alert("Share functionality is not supported on this device.");
+    }
+  };
+
   return (
     <article
       className={clsx(
@@ -106,7 +136,7 @@ export default function CarCard({
           priority
         />
 
-        {/* Status Badge - Daha belirgin ve okunaklı */}
+        {/* Status Badge */}
         <div className="absolute top-3 left-3">
           <span
             className={clsx(
@@ -125,6 +155,7 @@ export default function CarCard({
           isFavorite={isFavorite}
           onFavoriteToggle={onFavoriteToggle}
           onRemove={onRemove}
+          onShare={handleShare} // Passing the share handler to the button
         />
       </div>
 
