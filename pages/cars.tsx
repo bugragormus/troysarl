@@ -164,14 +164,19 @@ export default function CarsPage() {
       );
     })
     .sort((a, b) => {
-      if (a.listing_type === "sold" && b.listing_type !== "sold") return 1;
-      if (a.listing_type !== "sold" && b.listing_type === "sold") return -1;
-      // Fiyat sıralaması, sortOrder durumuna göre
-      if (sortOrder === "desc") {
-        return b.price - a.price;
-      } else {
-        return a.price - b.price;
-      }
+      const listingOrder = {
+        sale: 0,
+        rental: 1,
+        reserved: 2,
+        sold: 3,
+      };
+
+      const typeComparison =
+        listingOrder[a.listing_type] - listingOrder[b.listing_type];
+      if (typeComparison !== 0) return typeComparison;
+
+      // Eğer listing_type aynıysa fiyata göre sırala
+      return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
     });
 
   const resetFilters = () => {
