@@ -10,6 +10,7 @@ import Script from "next/script";
 export default function FavoritesPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState("desc"); // varsayılan: yüksekten düşüğe
   const [visibleCars, setVisibleCars] = useState<Car[]>([]);
   const [page, setPage] = useState(1);
   const itemsPerPage = 6; // Sayfa başına gösterilecek araba sayısı
@@ -30,8 +31,25 @@ export default function FavoritesPage() {
           .in("id", savedFavorites);
         if (error) console.error("Error:", error);
         else {
-          setCars(data || []);
-          setVisibleCars(data?.slice(0, itemsPerPage) || []); // İlk sayfayı yükle
+          const sortedData = (data || []).sort((a, b) => {
+            const listingOrder = {
+              sale: 0,
+              rental: 1,
+              reserved: 2,
+              sold: 3,
+            };
+
+            const typeComparison =
+              listingOrder[a.listing_type as keyof typeof listingOrder] -
+              listingOrder[b.listing_type as keyof typeof listingOrder];
+            if (typeComparison !== 0) return typeComparison;
+
+            // Eğer listing_type aynıysa fiyata göre sırala
+            return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
+          });
+
+          setCars(sortedData);
+          setVisibleCars(sortedData.slice(0, itemsPerPage)); // İlk sayfayı yükle
         }
       };
 
