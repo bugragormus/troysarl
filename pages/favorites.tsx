@@ -10,7 +10,7 @@ import Script from "next/script";
 export default function FavoritesPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState("desc"); // varsayılan: yüksekten düşüğe
+  const [sortOrder] = useState("desc"); // Varsayılan sıralama düzeni
   const [visibleCars, setVisibleCars] = useState<Car[]>([]);
   const [page, setPage] = useState(1);
   const itemsPerPage = 6; // Sayfa başına gösterilecek araba sayısı
