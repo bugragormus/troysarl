@@ -26,11 +26,11 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, []);
 
-  const whatsappMessage = `Bonjour! ${
+  const whatsappMessage = `Hello! ${
     router.query.source === "website"
-      ? "Je vous contacte via votre site web."
+      ? "I am contacting you via your website."
       : ""
-  } Je souhaite obtenir des informations sur les véhicules.`;
+  } I would like to get information about the vehicles.`;
   const encodedMessage = encodeURIComponent(whatsappMessage);
 
   // Tema durumunu güncelle ve kaydet
@@ -326,7 +326,7 @@ export default function Layout({ children }: LayoutProps) {
             {showWelcomeBubble && (
               <div className="absolute -top-20 -right-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xl animate-fadeInUp w-64 z-60">
                 <div className="text-sm text-gray-600 dark:text-gray-200">
-                  🚗 Bienvenue ! Comment pouvons-nous vous aider ?
+                  🚗 Welcome! How can we assist you?
                 </div>
                 <div className="absolute bottom-0 right-6 w-4 h-4 bg-white dark:bg-gray-800 transform rotate-45 translate-y-2"></div>
               </div>
