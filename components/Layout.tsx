@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
     router.query.source === "website"
       ? "I am contacting you via your website."
       : ""
-  } I would like to get information about the vehicles.`;
+  } I would like to get information about the cars.`;
   const encodedMessage = encodeURIComponent(whatsappMessage);
 
   // Tema durumunu güncelle ve kaydet
