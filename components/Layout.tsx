@@ -52,16 +52,15 @@ export default function Layout({ children }: LayoutProps) {
         {/* Modern Header */}
         <header className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center h-16 w-full">
               {/* Logo */}
-              <div className="flex-shrink-0">
-                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+              <div className="flex-shrink-0 flex items-center justify-start w-1/3">
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
                   <Link href="/cars">Troy Cars - Nearby Cars</Link>
                 </span>
               </div>
-
               {/* Desktop Menü */}
-              <div className="hidden md:flex items-center space-x-8">
+              <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
                 {/*
                 <Link
                   href="/"
@@ -104,9 +103,8 @@ export default function Layout({ children }: LayoutProps) {
                   Favorites
                 </Link>
               </div>
-
               {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
-              <div className="flex items-center">
+              <div className="flex items-center justify-end w-1/3">
                 {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
@@ -115,7 +113,6 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   {darkMode ? "🌙" : "🌞"}
                 </button>
-
                 {/* Mobil Menü Butonu */}
                 <div className="md:hidden">
                   <button
