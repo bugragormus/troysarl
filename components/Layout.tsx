@@ -51,11 +51,11 @@ export default function Layout({ children }: LayoutProps) {
       <div className="dark:bg-gray-900 dark:text-gray-100">
         {/* Modern Header */}
         <header className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="flex items-center h-16 w-full">
               {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-start w-1/3">
-                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+              <div className="flex-shrink-0 flex items-center justify-start min-w-0">
+                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent truncate max-w-[60vw]">
                   <Link href="/cars">Troy Cars - Nearby Cars</Link>
                 </span>
               </div>
@@ -104,11 +104,11 @@ export default function Layout({ children }: LayoutProps) {
                 </Link>
               </div>
               {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
-              <div className="flex items-center justify-end w-1/3">
+              <div className="flex items-center justify-end flex-shrink-0 ml-auto">
                 {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
-                  className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors mr-4"
+                  className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors mr-2 sm:mr-4"
                   aria-label="Toggle Dark Mode"
                 >
                   {darkMode ? "🌙" : "🌞"}
