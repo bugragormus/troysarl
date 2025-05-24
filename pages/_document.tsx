@@ -5,6 +5,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <link rel="manifest" href="/site.webmanifest" />
           <link rel="icon" href="/fav_icon.ico" sizes="any" />
           <link
             rel="apple-touch-icon"
