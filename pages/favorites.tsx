@@ -55,7 +55,7 @@ export default function FavoritesPage() {
 
       fetchFavoriteCars();
     }
-  }, []);
+  }, [sortOrder]);
 
   // Favoriden araç kaldır
   const removeFavorite = (carId: string) => {
