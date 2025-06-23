@@ -194,16 +194,22 @@ export default function CarCard({
 
         {/* Price & CTA */}
         <div className="mt-auto border-t pt-5 flex justify-between items-center">
-          {car.listing_type !== "sold" && (
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {car.listing_type === "rental" ? "Daily rate" : "Asking price"}
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                €{car.price?.toLocaleString()}
-              </p>
-            </div>
-          )}
+          <div>
+            Add commentMore actions
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+              {car.listing_type === "rental" ? "Daily rate" : "Asking price"}
+            </p>
+            <p
+              className={clsx(
+                "text-2xl font-bold",
+                car.listing_type === "sold"
+                  ? "text-gray-400 dark:text-gray-600 line-through"
+                  : "text-gray-900 dark:text-gray-100"
+              )}
+            >
+              €{car.price?.toLocaleString()}
+            </p>
+          </div>
 
           {/* Conditional Rendering of "View Details" Button */}
           {car.listing_type !== "sold" && (
