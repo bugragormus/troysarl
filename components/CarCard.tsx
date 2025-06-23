@@ -195,7 +195,6 @@ export default function CarCard({
         {/* Price & CTA */}
         <div className="mt-auto border-t pt-5 flex justify-between items-center">
           <div>
-            Add commentMore actions
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               {car.listing_type === "rental" ? "Daily rate" : "Asking price"}
             </p>
