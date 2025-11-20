@@ -132,21 +132,6 @@ export default function Contact() {
               <div>
                 <h3
                   className="text-lg font-semibold text-gray-700 dark:text-gray-300"
-                  aria-label="Address"
-                >
-                  Address
-                </h3>
-                <p
-                  className="text-gray-600 dark:text-gray-400"
-                  aria-label="Address"
-                >
-                  {process.env.NEXT_PUBLIC_ADRESS}
-                </p>
-              </div>
-
-              <div>
-                <h3
-                  className="text-lg font-semibold text-gray-700 dark:text-gray-300"
                   aria-label="Phone Number"
                 >
                   E-Mail

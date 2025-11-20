@@ -56,7 +56,7 @@ export default function Layout({ children }: LayoutProps) {
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center justify-start min-w-0">
                 <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent truncate max-w-[60vw]">
-                  <Link href="/cars">Troy Cars - Nearby Cars</Link>
+                  <Link href="/cars">Troy Cars</Link>
                 </span>
               </div>
               {/* Desktop Menü */}
@@ -273,7 +273,6 @@ export default function Layout({ children }: LayoutProps) {
               <div>
                 <h4 className="text-lg font-semibold mb-3">Appointment</h4>
                 <ul className="space-y-2 text-sm">
-                  <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
                   <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>
                 </ul>
                 {/* Sosyal Medya İkonları (Opsiyonel) 
