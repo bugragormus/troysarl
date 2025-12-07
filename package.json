@@ -24,11 +24,11 @@
     "heic2any": "^0.0.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.474.0",
-    "next": "15.3.0",
-    "next-auth": "^4.24.11",
+    "next": "^15.5.7",
+    "next-auth": "^4.24.12",
     "next-sitemap": "^4.2.3",
     "next-transpile-modules": "^10.0.1",
-    "nodemailer": "^6.10.0",
+    "nodemailer": "^7.0.7",
     "punycode": "^2.3.1",
     "react": "18.3.1",
     "react-cookie-consent": "^9.0.0",
@@ -52,13 +52,16 @@
     "@types/react-dom": "^18.2.22",
     "@types/react-modal": "^3.16.3",
     "eslint": "^9",
-    "eslint-config-next": "15.3.0",
+    "eslint-config-next": "^15.5.7",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
   "overrides": {
     "@types/react": "^18.2.67",
-    "@types/react-dom": "^18.2.22"
+    "@types/react-dom": "^18.2.22",
+    "jws": "^4.0.1",
+    "js-yaml": "^4.1.1",
+    "brace-expansion": "^2.0.1"
   }
 }
