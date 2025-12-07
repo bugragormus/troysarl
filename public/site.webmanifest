@@ -31,7 +31,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#1a1a1a",
+  "theme_color": "#2563eb",
   "background_color": "#ffffff",
   "display": "standalone",
   "start_url": "/cars",
@@ -39,15 +39,6 @@
   "scope": "/",
   "lang": "en",
   "categories": ["automotive", "shopping"],
-  "screenshots": [
-    {
-      "src": "/screenshots/home.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide",
-      "label": "Troy Cars Home Screen"
-    }
-  ],
   "shortcuts": [
     {
       "name": "Search Cars",

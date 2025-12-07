@@ -24,6 +24,17 @@ export default class MyDocument extends Document {
             sizes="16x16"
             href="/favicon-16x16.png"
           />
+          {/* PWA Meta Tags */}
+          <meta name="theme-color" content="#2563eb" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+          />
+          <meta name="apple-mobile-web-app-title" content="Troy Cars" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="msapplication-TileColor" content="#2563eb" />
+          <meta name="msapplication-config" content="/browserconfig.xml" />
         </Head>
         <body className="antialiased dark:bg-gray-900">
           <Main />
