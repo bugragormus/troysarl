@@ -304,20 +304,6 @@ export default function CareersPage() {
                 className="text-lg font-semibold text-gray-700 dark:text-gray-300"
                 aria-label="Phone Number"
               >
-                Phone Number
-              </h3>
-              <p
-                className="text-gray-600 dark:text-gray-400"
-                aria-label="Phone Number"
-              >
-                {process.env.NEXT_PUBLIC_PHONE_NUMBER}
-              </p>
-            </div>
-            <div>
-              <h3
-                className="text-lg font-semibold text-gray-700 dark:text-gray-300"
-                aria-label="Phone Number"
-              >
                 Address
               </h3>
               <p

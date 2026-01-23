@@ -274,7 +274,6 @@ export default function Layout({ children }: LayoutProps) {
                 <h4 className="text-lg font-semibold mb-3">Appointment</h4>
                 <ul className="space-y-2 text-sm">
                   <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>
-                  <li>Phone Number: {process.env.NEXT_PUBLIC_PHONE_NUMBER}</li>
                   <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
                 </ul>
                 {/* Sosyal Medya İkonları (Opsiyonel) 
