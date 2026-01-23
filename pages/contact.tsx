@@ -29,7 +29,7 @@ export default function Contact() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      }
+      },
     );
 
     if (response.ok) {
@@ -143,6 +143,20 @@ export default function Contact() {
                   {process.env.NEXT_PUBLIC_EMAIL}
                 </p>
               </div>
+              <div>
+                <h3
+                  className="text-lg font-semibold text-gray-700 dark:text-gray-300"
+                  aria-label="Phone Number"
+                >
+                  Address
+                </h3>
+                <p
+                  className="text-gray-600 dark:text-gray-400"
+                  aria-label="Phone Number"
+                >
+                  {process.env.NEXT_PUBLIC_ADRESS}
+                </p>
+              </div>
             </div>
 
             {/* Google Maps Embed */}
@@ -152,7 +166,7 @@ export default function Contact() {
                 height="100%"
                 frameBorder="0"
                 style={{ border: 0 }}
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2589.4155842268747!2d6.124349!3d49.533308!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4795491431775f71%3A0xcfdff054d6367aa5!2sTroy%20Cars%20Lux%20Sarl!5e0!3m2!1str!2str!4v1737918898496!5m2!1str!2str"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2585.1750626092194!2d6.164532399999999!3d49.613304199999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47954fda6b6941e7%3A0xcc94f7eca515c520!2sTroy%20Cars!5e0!3m2!1str!2sch!4v1769205962785!5m2!1str!2sch"
                 allowFullScreen
                 className="w-full h-full"
               ></iframe>
