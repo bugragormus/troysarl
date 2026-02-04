@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Vercel edge'de request.geo doldurulur (NextRequest'ta tip tanımlı değil)
-type RequestWithGeo = NextRequest & { geo?: { country?: string } };
-
-export function middleware(request: RequestWithGeo) {
-  // Türkiye'den erişimi engelle (Vercel'de request.geo otomatik doldurulur)
-  const country = request.geo?.country;
+export function middleware(request: NextRequest) {
+  // Türkiye'den erişimi engelle - Vercel X-Vercel-IP-Country header'ı kullan (geo bazen dolu gelmeyebilir)
+  const country =
+    request.headers.get("x-vercel-ip-country") ??
+    (request as NextRequest & { geo?: { country?: string } }).geo?.country;
   if (country === "TR") {
     return new NextResponse(
       "Web sitemiz şu anda bakım çalışması nedeniyle geçici olarak kullanılamıyor.",
