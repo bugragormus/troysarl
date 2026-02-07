@@ -1144,7 +1144,7 @@ export default function AdminPanel() {
                       💎 Mark as Exclusive
                     </span>
                     <span className="text-sm text-gray-600 dark:text-gray-400 block mt-1">
-                      Hide price and show "Contact for Price" message
+                      Hide price and show &quot;Contact for Price&quot; message
                     </span>
                   </div>
                 </label>
@@ -1431,7 +1431,7 @@ export default function AdminPanel() {
                           💎 Mark as Exclusive
                         </span>
                         <span className="text-sm text-gray-600 dark:text-gray-400 block mt-1">
-                          Hide price and show "Contact for Price" message
+                          Hide price and show &quot;Contact for Price&quot; message
                         </span>
                       </div>
                     </label>
