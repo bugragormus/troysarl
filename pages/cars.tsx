@@ -164,6 +164,11 @@ export default function CarsPage() {
       );
     })
     .sort((a, b) => {
+      // 1. Önce exclusive araçları en üste al
+      if (a.is_exclusive && !b.is_exclusive) return -1;
+      if (!a.is_exclusive && b.is_exclusive) return 1;
+
+      // 2. Listing type sıralaması
       const listingOrder = {
         sale: 0,
         rental: 1,
@@ -175,8 +180,11 @@ export default function CarsPage() {
         listingOrder[a.listing_type] - listingOrder[b.listing_type];
       if (typeComparison !== 0) return typeComparison;
 
-      // Eğer listing_type aynıysa fiyata göre sırala
-      return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
+      // 3. Fiyat sıralaması (exclusive olmayanlar için)
+      if (!a.is_exclusive && !b.is_exclusive) {
+        return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
+      }
+      return 0;
     });
 
   const resetFilters = () => {

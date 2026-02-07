@@ -26,6 +26,7 @@ interface Car {
   };
   description: string;
   is_hidden: boolean;
+  is_exclusive: boolean;
 }
 
 export default Car;

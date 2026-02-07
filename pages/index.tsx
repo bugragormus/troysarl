@@ -293,7 +293,16 @@ export default function Home() {
                         )}
                       </div>
                       <div className="min-h-[2.5rem] flex items-center">
-                        {car.listing_type !== "rental" && car.price && (
+                        {car.is_exclusive ? (
+                          <div className="text-center">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                              💎 Exclusive Vehicle
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-500">
+                              Contact for pricing
+                            </p>
+                          </div>
+                        ) : car.listing_type !== "rental" && car.price ? (
                           <p
                             className="text-2xl font-bold text-green-600 dark:text-green-400"
                             itemProp="offers"
@@ -305,7 +314,7 @@ export default function Home() {
                               {car.price.toLocaleString()}
                             </span>
                           </p>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                   </div>

@@ -137,8 +137,20 @@ export default function CarCard({
           priority
         />
 
+        {/* Exclusive Badge (Top Priority) */}
+        {car.is_exclusive && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="px-3 py-1.5 text-xs font-bold rounded-full flex items-center shadow-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 animate-pulse">
+              💎 EXCLUSIVE
+            </span>
+          </div>
+        )}
+
         {/* Status Badge */}
-        <div className="absolute top-3 left-3">
+        <div className={clsx(
+          "absolute left-3 z-10",
+          car.is_exclusive ? "top-14" : "top-3"
+        )}>
           <span
             className={clsx(
               "px-3 py-1.5 text-xs font-semibold rounded-full flex items-center",
@@ -194,32 +206,38 @@ export default function CarCard({
 
         {/* Price & CTA */}
         <div className="mt-auto border-t pt-5 flex justify-between items-center">
-          <div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              {car.listing_type === "rental" ? "Daily rate" : "Asking price"}
-            </p>
-            <p
-              className={clsx(
-                "text-2xl font-bold",
-                car.listing_type === "sold"
-                  ? "text-gray-400 dark:text-gray-600 line-through"
-                  : "text-gray-900 dark:text-gray-100"
-              )}
-            >
-              €{car.price?.toLocaleString()}
-            </p>
-          </div>
+          {car.is_exclusive ? (
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                💎 Exclusive Vehicle
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-500">
+                Price available upon request
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                {car.listing_type === "rental" ? "Daily rate" : "Asking price"}
+              </p>
+              <p
+                className={clsx(
+                  "text-2xl font-bold",
+                  car.listing_type === "sold"
+                    ? "text-gray-400 dark:text-gray-600 line-through"
+                    : "text-gray-900 dark:text-gray-100"
+                )}
+              >
+                €{car.price?.toLocaleString()}
+              </p>
+            </div>
+          )}
 
-          {/* Conditional Rendering of "View Details" Button */}
+          {/* Conditional Rendering of Button */}
           {car.listing_type !== "sold" && (
             <Link
               href={`/cars/${car.id}`}
-              className={clsx(
-                "px-4 py-2.5 rounded-lg font-medium flex items-center gap-2",
-                "transition-colors duration-300",
-                "bg-gray-900 hover:bg-gray-800 text-white",
-                "dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
-              )}
+              className="px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors duration-300 bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900"
             >
               View Details
             </Link>

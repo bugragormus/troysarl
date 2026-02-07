@@ -328,6 +328,13 @@ export default function CarDetail() {
           <section className="relative" aria-label="Car Image Gallery">
             {/* Resim Galerisi */}
             <div className="relative" aria-label="Car Photos">
+              {/* Exclusive Badge (if applicable) */}
+              {car.is_exclusive && (
+                <span className="absolute top-4 right-4 px-3 py-1.5 text-xs font-bold rounded-full shadow-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 z-10 animate-pulse">
+                  💎 EXCLUSIVE
+                </span>
+              )}
+
               <span
                 className={`absolute top-4 left-4 px-3 py-1.5 text-xs font-semibold rounded-full shadow-md backdrop-blur-sm z-10 ${
                   {
@@ -462,7 +469,24 @@ export default function CarDetail() {
           <section className="space-y-4" aria-label="Car Details">
             {/* Fiyat / İletişim Bilgileri */}
             <div className="p-6 bg-white/90 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
-              {car.listing_type === "rental" ? (
+              {car.is_exclusive ? (
+                <div className="space-y-6 text-center">
+                  <div className="space-y-2">
+                    <p className="text-2xl font-bold text-gray-800 dark:text-white flex items-center justify-center gap-2">
+                      💎 Exclusive Vehicle
+                    </p>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                      Price available upon request
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowContactForm((prev) => !prev)}
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold shadow-lg transform transition-all duration-300 hover:scale-105"
+                  >
+                    {showContactForm ? "Close Form" : "Contact for Price"}
+                  </button>
+                </div>
+              ) : car.listing_type === "rental" ? (
                 <div className="space-y-6 text-center">
                   <p className="text-2xl font-semibold text-gray-800 dark:text-white">
                     Flexible Rental Plans Available
@@ -616,20 +640,24 @@ export default function CarDetail() {
                 </form>
               </div>
             )}
-            {car.listing_type === "sale" || car.listing_type === "reserved" ? (
-              <div className="space-y-6 text-center">
-                <button
-                  onClick={() => setShowContactForm((prev) => !prev)}
-                  className="w-full py-4 rounded-lg bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900 font-medium shadow-md transition-all duration-300"
-                >
-                  {showContactForm ? "Close Form" : "Make an Appointment"}
-                </button>
-              </div>
+            {/* İletişim Formu (Exclusive ve Sale/Reserved için) */}
+            {car.listing_type === "sale" || car.listing_type === "reserved" || car.is_exclusive ? (
+              !car.is_exclusive && (
+                <div className="space-y-6 text-center">
+                  <button
+                    onClick={() => setShowContactForm((prev) => !prev)}
+                    className="w-full py-4 rounded-lg bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900 font-medium shadow-md transition-all duration-300"
+                  >
+                    {showContactForm ? "Close Form" : "Make an Appointment"}
+                  </button>
+                </div>
+              )
             ) : null}
             {/* İletişim Formu (Sadece Satılık İlanları İçin) */}
             {showContactForm &&
               (car.listing_type === "sale" ||
-                car.listing_type === "reserved") && (
+                car.listing_type === "reserved" ||
+                car.is_exclusive) && (
                 <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
                   <form
                     onSubmit={handleSubmit}

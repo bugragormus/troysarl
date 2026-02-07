@@ -133,6 +133,7 @@ export default function AdminPanel() {
     "sale" | "rental" | "reserved" | "sold"
   >("sale");
   const [description, setDescription] = useState("");
+  const [isExclusive, setIsExclusive] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState<{
     [key: string]: boolean;
   }>({});
@@ -554,6 +555,7 @@ export default function AdminPanel() {
             photos: uploadedUrls,
             description,
             features,
+            is_exclusive: isExclusive,
           },
         ])
         .select();
@@ -567,6 +569,7 @@ export default function AdminPanel() {
         setPrice(undefined);
         setUploadedUrls([]);
         setSelectedFeatures({});
+        setIsExclusive(false);
         toast.success("Car added successfully!");
       }
     } catch (error: unknown) {
@@ -1127,6 +1130,25 @@ export default function AdminPanel() {
                   <option value="reserved">Reserved</option>
                   <option value="sold">Sold</option>
                 </select>
+
+                {/* Exclusive Checkbox */}
+                <label className="flex items-center gap-3 p-4 rounded-lg border-2 border-dashed border-yellow-400 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={isExclusive}
+                    onChange={(e) => setIsExclusive(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-yellow-600 focus:ring-yellow-500 cursor-pointer"
+                  />
+                  <div className="flex-1">
+                    <span className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                      💎 Mark as Exclusive
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 block mt-1">
+                      Hide price and show "Contact for Price" message
+                    </span>
+                  </div>
+                </label>
+
                 <select
                   value={bodyType}
                   onChange={(e) => setBodyType(e.target.value)}
@@ -1390,6 +1412,30 @@ export default function AdminPanel() {
                       }
                       className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 h-32 focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
+
+                    {/* Exclusive Checkbox in Edit Modal */}
+                    <label className="flex items-center gap-3 p-4 rounded-lg border-2 border-dashed border-yellow-400 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 cursor-pointer hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={editingCar.is_exclusive || false}
+                        onChange={(e) =>
+                          setEditingCar({
+                            ...editingCar,
+                            is_exclusive: e.target.checked,
+                          })
+                        }
+                        className="w-5 h-5 rounded border-gray-300 text-yellow-600 focus:ring-yellow-500 cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <span className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                          💎 Mark as Exclusive
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 block mt-1">
+                          Hide price and show "Contact for Price" message
+                        </span>
+                      </div>
+                    </label>
+
                     <input
                       type="number"
                       placeholder="Price (€)*"
