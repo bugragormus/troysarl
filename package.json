@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build && next-sitemap",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:unit": "jest"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

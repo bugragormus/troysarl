@@ -1,0 +1,103 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - navigation [ref=e6]:
+        - generic [ref=e7]:
+          - link "Troy Cars" [ref=e10] [cursor=pointer]:
+            - /url: /cars
+          - generic [ref=e11]:
+            - link "Cars" [ref=e12] [cursor=pointer]:
+              - /url: /cars
+            - link "Appointment" [ref=e13] [cursor=pointer]:
+              - /url: /appointments
+            - link "About Us" [ref=e14] [cursor=pointer]:
+              - /url: /about
+            - link "Favorites" [ref=e15] [cursor=pointer]:
+              - /url: /favorites
+          - button "Toggle Dark Mode" [ref=e17] [cursor=pointer]: 🌞
+    - main [ref=e18]:
+      - generic "Vehicle Catalog" [ref=e19]:
+        - generic "Cars" [ref=e20]:
+          - generic [ref=e21]:
+            - generic [ref=e23]:
+              - textbox "Search vehicles" [ref=e24]:
+                - /placeholder: Search by brand, model or keyword...
+              - img [ref=e25]
+            - generic [ref=e27]:
+              - generic [ref=e28]: Showing 0 of 0 vehicles
+              - generic [ref=e29]:
+                - generic [ref=e30]:
+                  - combobox [ref=e31]:
+                    - 'option "Price: High to Low" [selected]'
+                    - 'option "Price: Low to High"'
+                  - generic:
+                    - img
+                - button "Show Filters" [ref=e32] [cursor=pointer]:
+                  - img [ref=e33]
+                  - generic [ref=e35]: Show Filters
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Failed to load vehicles.
+            - paragraph [ref=e38]: Please try refreshing the page.
+    - contentinfo [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - heading "Troy Cars Lux SARL" [level=3] [ref=e43]
+            - paragraph [ref=e44]: Premium vehicle experience with an exclusive collection of luxury and used cars.
+          - generic [ref=e45]:
+            - heading "Quick Links" [level=4] [ref=e46]
+            - list [ref=e47]:
+              - listitem
+              - listitem [ref=e48]:
+                - link "Cars" [ref=e49] [cursor=pointer]:
+                  - /url: /cars
+              - listitem [ref=e50]:
+                - link "About Us" [ref=e51] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e52]:
+                - link "Contact" [ref=e53] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e54]:
+                - link "Careers" [ref=e55] [cursor=pointer]:
+                  - /url: /careers
+          - generic [ref=e56]:
+            - heading "Legal & Privacy" [level=4] [ref=e57]
+            - list [ref=e58]:
+              - listitem [ref=e59]:
+                - link "Privacy Policy" [ref=e60] [cursor=pointer]:
+                  - /url: /privacy-policy
+              - listitem [ref=e61]:
+                - link "Cookie Settings" [ref=e62] [cursor=pointer]:
+                  - /url: /settings
+          - generic [ref=e63]:
+            - heading "Appointment" [level=4] [ref=e64]
+            - list [ref=e65]:
+              - listitem [ref=e66]: "Email: info@troysarl.com"
+              - listitem [ref=e67]: "Address: 20 Rue des Peupliers L-2328 Hamm, Luxembourg"
+        - generic [ref=e68]: © 2026 Troy Cars Lux SARL. All Rights Reserved.
+    - link "WhatsApp ile iletişim" [ref=e71] [cursor=pointer]:
+      - /url: https://wa.me/+352661930571?text=Hello!%20%20I%20would%20like%20to%20get%20information%20about%20the%20cars.
+      - img [ref=e72]
+    - generic [ref=e74]:
+      - heading "🍪 Cookie Preferences" [level=2] [ref=e75]
+      - paragraph [ref=e76]: We use cookies to improve your experience. You can accept all or customize your preferences.
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - checkbox "Essential Cookies (Required)" [checked] [disabled] [ref=e79]
+          - generic [ref=e80]: Essential Cookies (Required)
+        - generic [ref=e81]:
+          - checkbox "Marketing Cookies" [ref=e82] [cursor=pointer]
+          - generic [ref=e83]: Marketing Cookies
+        - generic [ref=e84]:
+          - checkbox "Analytics Cookies" [ref=e85] [cursor=pointer]
+          - generic [ref=e86]: Analytics Cookies
+      - generic [ref=e87]:
+        - button "Reject All" [ref=e88] [cursor=pointer]
+        - button "Accept All" [ref=e89] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e95] [cursor=pointer]:
+    - img [ref=e96]
+  - alert [ref=e99]
+```
