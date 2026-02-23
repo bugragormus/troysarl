@@ -79,53 +79,79 @@ export default function CarDetail({ car }: { car: Car }) {
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
 
-        {/* JSON‑LD Structured Data */}
+        {/* Schema.org Markup */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Car",
-            name: `${car.brand} ${car.model}`,
-            vehicleModelDate: new Date(car.year).getFullYear().toString(), // Yılı ISO formatında al
-            itemCondition:
-              car.listing_type === "sold"
-                ? "https://schema.org/UsedCondition"
-                : "https://schema.org/NewCondition",
-            numberOfDoors: car.doors,
-            vehicleTransmission:
-              car.transmission === "automatic"
-                ? "AutomaticTransmission"
-                : "ManualTransmission", // Schema.org uyumlu
-            color: car.color,
-            brand: {
-              "@type": "Brand",
-              name: car.brand,
+          {JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://troysarl.com"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Cars",
+                  "item": "https://troysarl.com/cars"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": `${car.brand} ${car.model}`,
+                  "item": canonicalUrl
+                }
+              ]
             },
-            model: car.model,
-            image: car.photos.map((photo) => `https://troysarl.com${photo}`), // Mutlak URL sağla
-            bodyType: car.body_type,
-            vehicleEngine: {
-              "@type": "EngineSpecification",
-              fuelType:
-                car.fuel_type.toLowerCase() === "diesel"
-                  ? "https://schema.org/DieselFuel"
-                  : "https://schema.org/Gasoline", // Doğru fuelType değerleri
-            },
-            vehicleSeatingCapacity: 5,
-            mileageFromOdometer: {
-              "@type": "QuantitativeValue",
-              value: car.mileage,
-              unitCode: "KMT", // KMH -> KMT olarak düzeltildi
-            },
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "EUR",
-              price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
-              availability:
+            {
+              "@context": "https://schema.org",
+              "@type": "Car",
+              name: `${car.brand} ${car.model}`,
+              vehicleModelDate: new Date(car.year).getFullYear().toString(), // Yılı ISO formatında al
+              itemCondition:
                 car.listing_type === "sold"
-                  ? "https://schema.org/OutOfStock"
-                  : "https://schema.org/InStock",
-            },
-          })}
+                  ? "https://schema.org/UsedCondition"
+                  : "https://schema.org/NewCondition",
+              numberOfDoors: car.doors,
+              vehicleTransmission:
+                car.transmission === "automatic"
+                  ? "AutomaticTransmission"
+                  : "ManualTransmission", // Schema.org uyumlu
+              color: car.color,
+              brand: {
+                "@type": "Brand",
+                name: car.brand,
+              },
+              model: car.model,
+              image: car.photos.map((photo) => `https://troysarl.com${photo}`), // Mutlak URL sağla
+              bodyType: car.body_type,
+              vehicleEngine: {
+                "@type": "EngineSpecification",
+                fuelType:
+                  car.fuel_type.toLowerCase() === "diesel"
+                    ? "https://schema.org/DieselFuel"
+                    : "https://schema.org/Gasoline", // Doğru fuelType değerleri
+              },
+              vehicleSeatingCapacity: 5,
+              mileageFromOdometer: {
+                "@type": "QuantitativeValue",
+                value: car.mileage,
+                unitCode: "KMT", // KMH -> KMT olarak düzeltildi
+              },
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "EUR",
+                price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
+                availability:
+                  car.listing_type === "sold"
+                    ? "https://schema.org/OutOfStock"
+                    : "https://schema.org/InStock",
+              },
+            }
+          ])}
         </script>
 
         {/* Open Graph / Facebook */}

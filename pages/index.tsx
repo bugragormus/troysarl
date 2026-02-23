@@ -79,6 +79,18 @@ export default function Home() {
             },
             {
               "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://troysarl.com"
+                }
+              ]
+            },
+            {
+              "@context": "https://schema.org",
               "@type": "LocalBusiness",
               "name": "Troy Cars Lux SARL",
               "image": ogImageUrl,

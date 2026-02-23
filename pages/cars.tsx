@@ -193,63 +193,51 @@ export default function CarsPage() {
         <meta name="twitter:image" content={ogImageUrl} />
         {/* JSON‑LD Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: "Vehicle Catalog",
-            description: metaDescriptions.fr,
-            url: canonicalUrl,
-            image: ogImageUrl,
-            mainEntity: filteredCars.map((car) => ({
-              "@type": "Car",
-              name: `${car.brand} ${car.model}`,
-              vehicleModelDate: new Date(car.year).getFullYear().toString(), // Yılı ISO formatında al
-              itemCondition:
-                car.listing_type === "sold"
-                  ? "https://schema.org/UsedCondition"
-                  : "https://schema.org/NewCondition",
-              numberOfDoors: car.doors,
-              vehicleTransmission:
-                car.transmission === "automatic"
-                  ? "AutomaticTransmission"
-                  : "ManualTransmission", // Schema.org uyumlu
-              color: car.color,
-              brand: {
-                "@type": "Brand",
-                name: car.brand,
-              },
-              model: car.model,
-              image: car.photos.map((photo) => `${photo}`), // Mutlak URL sağla
-              bodyType: car.body_type,
-              vehicleEngine: {
-                "@type": "EngineSpecification",
-                fuelType:
-                  car.fuel_type.toLowerCase() === "diesel"
-                    ? "https://schema.org/DieselFuel"
-                    : "https://schema.org/Gasoline", // Doğru fuelType değerleri
-              },
-              vehicleSeatingCapacity: 5,
-              vehicleIdentificationNumber: "UNKNOWNVIN1234567",
-              mileageFromOdometer: {
-                "@type": "QuantitativeValue",
-                value: car.mileage,
-                unitCode: "KMT", // KMH -> KMT olarak düzeltildi
-              },
-              offers: {
-                "@type": "Offer",
-                priceCurrency: "EUR",
-                price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
-                availability:
-                  car.listing_type === "sold"
-                    ? "https://schema.org/OutOfStock"
-                    : "https://schema.org/InStock",
-              },
-            })),
-          })}
+          {JSON.stringify([
+      {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://troysarl.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Cars",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Premium Luxury & Used Cars Catalog | Troy Cars Lux SARL",
+      "description": metaDescriptions.en,
+      "url": canonicalUrl,
+      "image": ogImageUrl,
+      "mainEntity": filteredCars.map((car) => ({
+        "@type": "Car",
+        "name": `${car.brand} ${car.model} (${car.year})`,
+        "image": car.photos.length > 0 ? `https://troysarl.com${car.photos[0]}` : ogImageUrl,
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "price": Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0,
+          "availability": car.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+        }
+      }))
+    }
+        ])}
         </script>
       </Head>
 
       <div className="container mx-auto p-4" aria-label="Cars">
+        {/* SEO H1 */}
+        <h1 className="sr-only">Premium Luxury and Used Cars in Luxembourg - Troy Cars Lux SARL</h1>
         {/* Filter & Sort Controls */}
         {/* Sort Controls */}
         <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
