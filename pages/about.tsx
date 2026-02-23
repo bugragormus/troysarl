@@ -42,36 +42,39 @@ export default function AboutPage() {
         <meta name="twitter:image" content={ogImageUrl} />
 
         {/* Schema.org Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://troysarl.com"
-                },
-                {
-                  "@type": "ListItem",
-                  "position": 2,
-                  "name": "About Us",
-                  "item": "https://troysarl.com/about"
-                }
-              ]
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "AboutPage",
-              "name": "About Us",
-              "description": metaDescription,
-              "url": canonicalUrl,
-              "image": ogImageUrl
-            }
-          ])}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://troysarl.com"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "About Us",
+                    "item": "https://troysarl.com/about"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "AboutPage",
+                "name": "About Us",
+                "description": metaDescription,
+                "url": canonicalUrl,
+                "image": ogImageUrl
+              }
+            ])
+          }}
+        />
       </Head>
 
       {/* Google Tag Manager */}

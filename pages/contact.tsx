@@ -79,36 +79,39 @@ export default function Contact() {
         <meta name="twitter:image" content={ogImageUrl} />
 
         {/* Schema.org Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://troysarl.com"
-                },
-                {
-                  "@type": "ListItem",
-                  "position": 2,
-                  "name": "Contact",
-                  "item": "https://troysarl.com/contact"
-                }
-              ]
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "ContactPage",
-              "name": "Contact Us",
-              "description": metaDescription,
-              "url": canonicalUrl,
-              "image": ogImageUrl
-            }
-          ])}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://troysarl.com"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Contact",
+                    "item": "https://troysarl.com/contact"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ContactPage",
+                "name": "Contact Us",
+                "description": metaDescription,
+                "url": canonicalUrl,
+                "image": ogImageUrl
+              }
+            ])
+          }}
+        />
       </Head>
 
       {/* Google Tag Manager */}

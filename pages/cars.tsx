@@ -196,47 +196,50 @@ export default function CarsPage() {
         <meta name="twitter:description" content={metaDescriptions.en} />
         <meta name="twitter:image" content={ogImageUrl} />
         {/* JSON‑LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify([
-      {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://troysarl.com"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Cars",
-          "item": canonicalUrl
-        }
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "Premium Luxury & Used Cars Catalog | Troy Cars Lux SARL",
-      "description": metaDescriptions.en,
-      "url": canonicalUrl,
-      "image": ogImageUrl,
-      "mainEntity": filteredCars.map((car) => ({
-        "@type": "Car",
-        "name": `${car.brand} ${car.model} (${car.year})`,
-        "image": car.photos.length > 0 ? `https://troysarl.com${car.photos[0]}` : ogImageUrl,
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "EUR",
-          "price": Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0,
-          "availability": car.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
-        }
-      }))
-    }
-        ])}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://troysarl.com"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Cars",
+                    "item": canonicalUrl
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                "name": "Premium Luxury & Used Cars Catalog | Troy Cars Lux SARL",
+                "description": metaDescriptions.en,
+                "url": canonicalUrl,
+                "image": ogImageUrl,
+                "mainEntity": filteredCars.map((car) => ({
+                  "@type": "Car",
+                  "name": `${car.brand} ${car.model} (${car.year})`,
+                  "image": car.photos.length > 0 ? `https://troysarl.com${car.photos[0]}` : ogImageUrl,
+                  "offers": {
+                    "@type": "Offer",
+                    "priceCurrency": "EUR",
+                    "price": Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0,
+                    "availability": car.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+                  }
+                }))
+              }
+            ])
+          }}
+        />
       </Head>
 
       <div className="container mx-auto p-4" aria-label="Cars">

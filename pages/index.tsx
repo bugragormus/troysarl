@@ -67,69 +67,72 @@ export default function Home() {
         <meta name="twitter:image" content={ogImageUrl} />
 
         {/* Schema.org Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Troy Cars Lux SARL",
-              "url": canonicalUrl,
-              "description": metaDescription,
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": `${canonicalUrl}/cars?search={search_term_string}`,
-                "query-input": "required name=search_term_string"
-              }
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://troysarl.com"
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Troy Cars Lux SARL",
+                "url": canonicalUrl,
+                "description": metaDescription,
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": `${canonicalUrl}/cars?search={search_term_string}`,
+                  "query-input": "required name=search_term_string"
                 }
-              ]
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "name": "Troy Cars Lux SARL",
-              "image": ogImageUrl,
-              "@id": "https://troysarl.com",
-              "url": "https://troysarl.com",
-              "logo": "https://troysarl.com/troysarl-logo.png",
-              "telephone": "+352691121111",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": process.env.NEXT_PUBLIC_ADRESS,
-                "addressLocality": "Luxembourg",
-                "addressCountry": "LU"
               },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": 49.6133,
-                "longitude": 6.1645
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://troysarl.com"
+                  }
+                ]
               },
-              "openingHoursSpecification": {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday"
-                ],
-                "opens": "09:00",
-                "closes": "18:00"
-              },
-              "priceRange": "$$$"
-            }
-          ])}
-        </script>
+              {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": "Troy Cars Lux SARL",
+                "image": ogImageUrl,
+                "@id": "https://troysarl.com",
+                "url": "https://troysarl.com",
+                "logo": "https://troysarl.com/troysarl-logo.png",
+                "telephone": "+352691121111",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": process.env.NEXT_PUBLIC_ADRESS,
+                  "addressLocality": "Luxembourg",
+                  "addressCountry": "LU"
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 49.6133,
+                  "longitude": 6.1645
+                },
+                "openingHoursSpecification": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday"
+                  ],
+                  "opens": "09:00",
+                  "closes": "18:00"
+                },
+                "priceRange": "$$$"
+              }
+            ])
+          }}
+        />
       </Head>
 
 
