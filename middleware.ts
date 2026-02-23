@@ -1,44 +1,48 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(request: NextRequest) {
-  // Türkiye'den erişimi engelle - Vercel X-Vercel-IP-Country header'ı kullan (geo bazen dolu gelmeyebilir)
+const DASHBOARD_PATH = "/super-secret-dashboard-98765";
+const LOGIN_PATH = "/admin-login";
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Türkiye'den erişimi engelle
   const country =
     request.headers.get("x-vercel-ip-country") ??
     (request as NextRequest & { geo?: { country?: string } }).geo?.country;
   if (country === "TR") {
     return new NextResponse(
       "Web sitemiz şu anda bakım çalışması nedeniyle geçici olarak kullanılamıyor.",
-      {
-        status: 503,
-      },
+      { status: 503 }
     );
   }
 
-  // Dashboard için Basic Auth (mevcut mantık)
-  const pathname = request.nextUrl.pathname;
-  if (pathname.startsWith("/super-secret-dashboard-98765")) {
-    const basicAuth = request.headers.get("authorization");
-    if (!basicAuth) {
-      return new Response("Authorization required", {
-        status: 401,
-        headers: { "WWW-Authenticate": 'Basic realm="Secure Area"' },
-      });
-    }
-    const auth = basicAuth.split(" ")[1];
-    const decoded = Buffer.from(auth, "base64").toString();
-    const [username, password] = decoded.split(":");
-    // const allowedIps = ["123.45.67.89", "98.76.54.32"];
-    // const userIp = request.headers.get("x-forwarded-for")?.split(",")[0] || request.ip;
+  // Admin dashboard koruması — JWT cookie kontrolü
+  if (pathname.startsWith(DASHBOARD_PATH)) {
+    const token = request.cookies.get("admin_token")?.value;
 
-    if (
-      username !== process.env.ADMIN_USERNAME ||
-      password !== process.env.ADMIN_PASSWORD
-    ) {
-      return new Response("Invalid credentials", {
-        status: 401,
-        headers: { "WWW-Authenticate": 'Basic realm="Secure Area"' },
-      });
+    if (!token) {
+      // Cookie yok — login sayfasına yönlendir
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = LOGIN_PATH;
+      return NextResponse.redirect(loginUrl);
+    }
+
+    try {
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      await jwtVerify(token, secret);
+      // Token geçerli — devam et
+      return NextResponse.next();
+    } catch {
+      // Token geçersiz veya süresi dolmuş — login sayfasına yönlendir
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = LOGIN_PATH;
+      const response = NextResponse.redirect(loginUrl);
+      // Geçersiz cookie'yi temizle
+      response.cookies.delete("admin_token");
+      return response;
     }
   }
 
@@ -46,7 +50,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Tüm sayfa isteklerinde çalış (geo engeli + dashboard auth)
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],

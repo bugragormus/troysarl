@@ -89,8 +89,6 @@ const featureOptions: { [key: string]: string[] } = {
 };
 
 export default function AdminPanel() {
-  const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
@@ -159,34 +157,25 @@ export default function AdminPanel() {
     carsProcessed: number;
   } | null>(null);
 
-  // Fetch Cars
+  // Fetch Cars — middleware zaten JWT doğruluyor, burada auth kontrolü gereksiz
   useEffect(() => {
     const fetchCars = async () => {
       const { data, error } = await supabase.from("cars").select("*");
-      if (error) console.error("Error:", error);
-      else setCars(data || []);
+      if (error) {
+        console.error("Error:", error);
+        toast.error("Failed to load cars.");
+      } else setCars(data || []);
     };
-    if (isAuthenticated) fetchCars();
-  }, [isAuthenticated]);
+    fetchCars();
+  }, []);
 
-  // Handle Login
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    const response = await fetch("/api/admin-login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-
-    if (response.ok) {
-      toast.success("Login successful!");
-      setIsAuthenticated(true);
-    } else {
-      const data = await response.json();
-      toast.error(data.message || "Incorrect password!");
-    }
+  // Handle Logout
+  const handleLogout = async () => {
+    await fetch("/api/admin-logout", { method: "POST" });
+    window.location.href = "/admin-login";
   };
+
 
   // Fetch Transactions
   const fetchTransactions = async () => {
@@ -280,34 +269,6 @@ export default function AdminPanel() {
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gradient-to-b from-premium-light to-white">
-        <form
-          onSubmit={handleLogin}
-          className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-80 border border-gray-200 dark:border-gray-700"
-        >
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
-            Admin Login
-          </h1>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="block w-full mb-4 p-3 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full transition-transform font-semibold"
-          >
-            Login
-          </button>
-        </form>
-        <Toaster position="top-right" reverseOrder={false} />
-      </div>
-    );
-  }
 
   // Check - Uncheck All
   const handleCheckAll = (category: string, checkAll: boolean) => {
@@ -783,39 +744,22 @@ export default function AdminPanel() {
     }
   };
 
-  // Eğer henüz doğrulanmamışsa, login formunu göster
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:dark:bg-gradient-to-b from-premium-light to-white">
-        <form
-          onSubmit={handleLogin}
-          className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md w-80 border border-gray-200 dark:border-gray-700"
-        >
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
-            Admin Login
-          </h1>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="block w-full mb-4 p-3 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-full transition-transform font-semibold"
-          >
-            Login
-          </button>
-        </form>
-        <Toaster position="top-right" reverseOrder={false} />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white dark:dark:bg-gradient-to-b from-premium-light to-white p-4 transition-colors duration-300">
       <div className="mt-7 max-w-7xl mx-auto">
+        {/* Logout butonu */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Logout
+          </button>
+        </div>
         <button
           onClick={() => {
             setShowDashboard(!showDashboard);
@@ -845,7 +789,7 @@ export default function AdminPanel() {
                 const res = await fetch("/api/migrate-photos", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ password }),
+                  body: JSON.stringify({}),
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
