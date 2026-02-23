@@ -152,6 +152,13 @@ export default function AdminPanel() {
     currentPage * pageSize
   );
 
+  // Migrasyon state
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationResult, setMigrationResult] = useState<{
+    totalMigrated: number;
+    carsProcessed: number;
+  } | null>(null);
+
   // Fetch Cars
   useEffect(() => {
     const fetchCars = async () => {
@@ -336,6 +343,17 @@ export default function AdminPanel() {
     setSelectedFiles(Array.from(e.target.files));
   };
 
+  // Cloudinary URL'inden public_id çıkaran yardımcı fonksiyon
+  const getCloudinaryPublicId = (url: string): string | null => {
+    if (!url.includes("res.cloudinary.com")) return null;
+    const uploadIndex = url.indexOf("/upload/");
+    if (uploadIndex === -1) return null;
+    let path = url.substring(uploadIndex + 8);
+    path = path.replace(/^v\d+\//, ""); // Versiyon prefix'ini kaldır
+    path = path.replace(/\.[^/.]+$/, ""); // Uzantıyı kaldır
+    return path;
+  };
+
   const handleFileUpload = async (isEditing: boolean = false) => {
     if (!selectedFiles.length) return;
     setUploading(true);
@@ -347,12 +365,9 @@ export default function AdminPanel() {
             file.type === "image/heic" ||
             file.name.toLowerCase().endsWith(".heic")
           ) {
-            // Tarayıcı ortamında olduğumuzu kontrol ediyoruz
             if (typeof window !== "undefined") {
-              // Dinamik olarak heic2any'yi içe aktar
               const heic2anyModule = await import("heic2any");
               const heic2any = heic2anyModule.default;
-              // HEIC dosyasını JPEG'e dönüştür
               const blob = await heic2any({ blob: file, toType: "image/jpeg" });
               return new File(
                 [blob as Blob],
@@ -360,22 +375,35 @@ export default function AdminPanel() {
                 { type: "image/jpeg" }
               );
             }
-            // Eğer window undefined ise (sunucu tarafı) dosyayı olduğu gibi döndür
             return file;
           }
-          return file; // Diğer dosya türleri için dönüştürme yapma
+          return file;
         })
       );
 
       const urls = await Promise.all(
         convertedFiles.map(async (file) => {
-          const fileName = `${Date.now()}_${file.name}`;
-          const { data, error } = await supabase.storage
-            .from("car-photos")
-            .upload(fileName, file);
-          if (error) throw error;
-          return supabase.storage.from("car-photos").getPublicUrl(data.path)
-            .data.publicUrl;
+          // Dosyayı base64'e çevir ve Cloudinary API'ye gönder
+          const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+
+          const response = await fetch("/api/upload-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: base64, filename: file.name }),
+          });
+
+          if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || "Upload failed");
+          }
+
+          const { url } = await response.json();
+          return url as string;
         })
       );
 
@@ -401,15 +429,37 @@ export default function AdminPanel() {
     }
   };
 
-  // Delete Photo
+  // Delete Photo (Cloudinary veya Supabase'i destekler)
   const handleDeletePhoto = async (url: string) => {
     if (!confirm("Delete this photo?")) return;
-    const fileName = new URL(url).pathname.split("/").pop();
-    const { error } = await supabase.storage
-      .from("car-photos")
-      .remove([fileName || ""]);
-    if (error) toast.error(`Delete failed: ${error.message}`);
-    else setUploadedUrls((prev) => prev.filter((u) => u !== url));
+
+    const cloudinaryPublicId = getCloudinaryPublicId(url);
+
+    if (cloudinaryPublicId) {
+      // Cloudinary fotoğrafı sil
+      const response = await fetch("/api/delete-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId: cloudinaryPublicId }),
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        toast.error(`Delete failed: ${err.error}`);
+        return;
+      }
+    } else {
+      // Eski Supabase fotoğrafı sil
+      const fileName = new URL(url).pathname.split("/").pop();
+      const { error } = await supabase.storage
+        .from("car-photos")
+        .remove([fileName || ""]);
+      if (error) {
+        toast.error(`Delete failed: ${error.message}`);
+        return;
+      }
+    }
+
+    setUploadedUrls((prev) => prev.filter((u) => u !== url));
   };
 
   // Updating features
@@ -441,31 +491,51 @@ export default function AdminPanel() {
         );
 
         if (deletedPhotos.length > 0) {
-          const filePaths = deletedPhotos
-            .map((url) => {
-              try {
-                const parsedUrl = new URL(url);
-                const fullPath = decodeURIComponent(parsedUrl.pathname);
-                const pathSegments = fullPath.split("/car-photos/");
-                return pathSegments[1] || null;
-              } catch (error) {
-                console.error("URL parse error:", url, error);
-                Sentry.captureException(error);
-                return null;
-              }
-            })
-            .filter(Boolean) as string[];
+          // Cloudinary ve Supabase fotoğraflarını ayır
+          const cloudinaryPhotos = deletedPhotos.filter((url) =>
+            url.includes("res.cloudinary.com")
+          );
+          const supabasePhotos = deletedPhotos.filter(
+            (url) => !url.includes("res.cloudinary.com")
+          );
 
-          if (filePaths.length > 0) {
-            const { error } = await supabase.storage
-              .from("car-photos")
-              .remove(filePaths);
-            if (error) {
-              console.error("Supabase storage remove error:", {
-                filePaths,
-                error,
+          // Cloudinary fotoğraflarını sil
+          await Promise.all(
+            cloudinaryPhotos.map(async (url) => {
+              const publicId = getCloudinaryPublicId(url);
+              if (!publicId) return;
+              await fetch("/api/delete-image", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ publicId }),
               });
-              throw new Error(`Photo deletion failed: ${error.message}`);
+            })
+          );
+
+          // Eski Supabase fotoğraflarını sil
+          if (supabasePhotos.length > 0) {
+            const filePaths = supabasePhotos
+              .map((url) => {
+                try {
+                  const parsedUrl = new URL(url);
+                  const fullPath = decodeURIComponent(parsedUrl.pathname);
+                  const pathSegments = fullPath.split("/car-photos/");
+                  return pathSegments[1] || null;
+                } catch (error) {
+                  console.error("URL parse error:", url, error);
+                  Sentry.captureException(error);
+                  return null;
+                }
+              })
+              .filter(Boolean) as string[];
+
+            if (filePaths.length > 0) {
+              const { error } = await supabase.storage
+                .from("car-photos")
+                .remove(filePaths);
+              if (error) {
+                throw new Error(`Photo deletion failed: ${error.message}`);
+              }
             }
           }
         }
@@ -607,31 +677,51 @@ export default function AdminPanel() {
       if (!car) throw new Error("Car not found");
 
       if (car.photos?.length) {
-        const filePaths = car.photos
-          .map((url) => {
-            try {
-              const parsedUrl = new URL(url);
-              const fullPath = decodeURIComponent(parsedUrl.pathname);
-              const pathSegments = fullPath.split("/car-photos/");
-              return pathSegments[1] || null;
-            } catch (error) {
-              console.error("URL parse error:", url, error);
-              Sentry.captureException(error);
-              return null;
-            }
-          })
-          .filter(Boolean) as string[];
+        // Cloudinary ve Supabase fotoğraflarını ayır
+        const cloudinaryPhotos = car.photos.filter((url) =>
+          url.includes("res.cloudinary.com")
+        );
+        const supabasePhotos = car.photos.filter(
+          (url) => !url.includes("res.cloudinary.com")
+        );
 
-        if (filePaths.length > 0) {
-          const { error } = await supabase.storage
-            .from("car-photos")
-            .remove(filePaths);
-          if (error) {
-            console.error("Supabase storage remove error:", {
-              filePaths,
-              error,
+        // Cloudinary fotoğraflarını sil
+        await Promise.all(
+          cloudinaryPhotos.map(async (url) => {
+            const publicId = getCloudinaryPublicId(url);
+            if (!publicId) return;
+            await fetch("/api/delete-image", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ publicId }),
             });
-            throw new Error(`Photo deletion failed: ${error.message}`);
+          })
+        );
+
+        // Eski Supabase fotoğraflarını sil
+        if (supabasePhotos.length > 0) {
+          const filePaths = supabasePhotos
+            .map((url) => {
+              try {
+                const parsedUrl = new URL(url);
+                const fullPath = decodeURIComponent(parsedUrl.pathname);
+                const pathSegments = fullPath.split("/car-photos/");
+                return pathSegments[1] || null;
+              } catch (error) {
+                console.error("URL parse error:", url, error);
+                Sentry.captureException(error);
+                return null;
+              }
+            })
+            .filter(Boolean) as string[];
+
+          if (filePaths.length > 0) {
+            const { error } = await supabase.storage
+              .from("car-photos")
+              .remove(filePaths);
+            if (error) {
+              throw new Error(`Photo deletion failed: ${error.message}`);
+            }
           }
         }
       }
@@ -737,6 +827,47 @@ export default function AdminPanel() {
             ? "Dashboard'u Kapat"
             : "Satış/Kiralama Kayıtlarını Göster"}
         </button>
+
+        {/* Cloudinary Migrasyon Butonu */}
+        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl">
+          <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">
+            📦 Supabase → Cloudinary Fotoğraf Migrasyonu
+          </p>
+          <p className="text-xs text-amber-600 dark:text-amber-400 mb-3">
+            Eski Supabase fotoğraflarını Cloudinary&apos;e taşır.
+          </p>
+          <button
+            onClick={async () => {
+              if (!confirm("Tüm Supabase fotoğraflarını Cloudinary'e taşımak istiyor musunuz? Bu işlem birkaç dakika sürebilir.")) return;
+              setIsMigrating(true);
+              setMigrationResult(null);
+              try {
+                const res = await fetch("/api/migrate-photos", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ password }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                setMigrationResult({ totalMigrated: data.totalMigrated, carsProcessed: data.carsProcessed });
+                toast.success(`Migrasyon tamamlandı! ${data.totalMigrated} fotoğraf taşındı.`);
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Migrasyon hatası!");
+              } finally {
+                setIsMigrating(false);
+              }
+            }}
+            disabled={isMigrating}
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            {isMigrating ? "⏳ Taşınıyor..." : "🚀 Migrasyonu Başlat"}
+          </button>
+          {migrationResult && (
+            <p className="mt-2 text-xs text-green-700 dark:text-green-400 font-medium">
+              ✅ {migrationResult.carsProcessed} araç işlendi, {migrationResult.totalMigrated} fotoğraf Cloudinary&apos;e taşındı.
+            </p>
+          )}
+        </div>
 
         {showDashboard && (
           <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-lg">

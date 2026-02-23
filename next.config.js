@@ -8,6 +8,10 @@ module.exports = withTM({
         protocol: "https",
         hostname: "qxrbqckbuviqgekopmiu.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
     ],
     minimumCacheTTL: 864000, // 10 gün
   },
