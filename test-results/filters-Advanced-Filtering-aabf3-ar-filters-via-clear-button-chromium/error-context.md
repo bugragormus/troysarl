@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
+- generic [ref=e1]:
   - generic [ref=e4]:
     - banner [ref=e5]:
       - navigation [ref=e6]:
@@ -23,8 +23,9 @@
         - generic "Cars" [ref=e20]:
           - generic [ref=e21]:
             - generic [ref=e23]:
-              - textbox "Search vehicles" [ref=e24]:
+              - textbox "Search vehicles" [active] [ref=e24]:
                 - /placeholder: Search by brand, model or keyword...
+                - text: Mercedes
               - img [ref=e25]
             - generic [ref=e27]:
               - generic [ref=e28]: Showing 0 of 0 vehicles

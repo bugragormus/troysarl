@@ -55,7 +55,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center h-16 w-full">
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center justify-start min-w-0">
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent truncate max-w-[60vw]">
+                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent truncate max-w-[50vw]">
                   <Link href="/cars">Troy Cars</Link>
                 </span>
               </div>
@@ -101,6 +101,14 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Favorites
+                </Link>
+                <Link
+                  href="/contact?infoOnly=true"
+                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
+                    router.pathname === "/contact" && router.query.infoOnly === "true" ? "underline" : ""
+                  }`}
+                >
+                  Contact
                 </Link>
               </div>
               {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
@@ -197,6 +205,15 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Favorites
+                </Link>
+                <Link
+                  href="/contact?infoOnly=true"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
+                    router.pathname === "/contact" && router.query.infoOnly === "true" ? "underline" : ""
+                  }`}
+                >
+                  Contact
                 </Link>
               </div>
             </div>
