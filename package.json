@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next-sitemap",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test:e2e": "playwright test",
@@ -30,8 +30,6 @@
     "lucide-react": "^0.474.0",
     "next": "^15.5.9",
     "next-auth": "^4.24.12",
-    "next-sitemap": "^4.2.3",
-    "next-transpile-modules": "^10.0.1",
     "nodemailer": "^7.0.7",
     "punycode": "^2.3.1",
     "react": "18.3.1",

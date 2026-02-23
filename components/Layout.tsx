@@ -59,17 +59,8 @@ export default function Layout({ children }: LayoutProps) {
                   <Link href="/cars">Troy Cars</Link>
                 </span>
               </div>
-              {/* Desktop Menü */}
-              <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
-                {/*
-                <Link
-                  href="/"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/") ? "underline" : ""
-                  }`}
-                >
-                  Home
-                </Link>  */}
+              {/* Desktop Nav */}
+              <div className="hidden md:flex items-center justify-center flex-1 space-x-8" role="navigation" aria-label="Main Navigation">
                 <Link
                   href="/cars"
                   className={`text-white hover:text-gray-300 transition-colors font-medium ${
@@ -158,18 +149,8 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobil Menü (Açılır Menü) */}
           {isMenuOpen && (
-            <div className="md:hidden bg-indigo-700">
+            <div className="md:hidden bg-indigo-700" id="mobile-menu" role="navigation" aria-label="Mobile Navigation">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {/*
-                <Link
-                  href="/"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/") ? "underline" : ""
-                  }`}
-                >
-                  Home
-                </Link> */}
                 <Link
                   href="/cars"
                   onClick={() => setIsMenuOpen(false)}
@@ -240,12 +221,6 @@ export default function Layout({ children }: LayoutProps) {
               <div>
                 <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
                 <ul className="space-y-2 text-sm">
-                  <li>
-                    {/* 
-                    <Link href="/" className="hover:underline">
-                      Home
-                    </Link> */}
-                  </li>
                   <li>
                     <Link href="/cars" className="hover:underline">
                       Cars
