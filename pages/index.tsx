@@ -5,13 +5,15 @@ import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import Car from "@/types/car";
-import { Heart } from "lucide-react";
+import { Heart, Share2 } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
 import { useFavorites } from "@/hooks/useFavorites";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
+
+  // Use Custom Hook for favorites and sharing
   const { favorites, toggleFavorite } = useFavorites();
 
   useEffect(() => {

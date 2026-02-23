@@ -1,32 +1,66 @@
-// hooks/useFavorites.ts
 import { useState, useEffect } from "react";
+import Car from "@/types/car";
 import toast from "react-hot-toast";
-
-const STORAGE_KEY = "favoriteCars";
+import * as Sentry from "@sentry/react";
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<string[]>([]);
 
-  // LocalStorage'dan yükle (sadece client tarafında)
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    setFavorites(saved);
+    try {
+      const savedFavorites = localStorage.getItem("favorites");
+      if (savedFavorites) {
+        setFavorites(JSON.parse(savedFavorites));
+      }
+    } catch (error) {
+      console.error("Error loading favorites from localStorage", error);
+    }
   }, []);
 
   const toggleFavorite = (carId: string) => {
-    setFavorites((prev) => {
-      const updated = prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      if (prev.includes(carId))
-        toast.error("The car has been removed from favorites.");
-      else toast.success("The car has been added to favorites.");
-      return updated;
-    });
+    try {
+      const newFavorites = favorites.includes(carId)
+        ? favorites.filter((id) => id !== carId)
+        : [...favorites, carId];
+        
+      setFavorites(newFavorites);
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      
+      if (favorites.includes(carId)) {
+        toast.error("Removed from favorites", { icon: "😢" });
+      } else {
+        toast.success("Added to favorites!", { icon: "❤️" });
+      }
+    } catch (error) {
+      console.error("Error toggling favorite", error);
+      toast.error("Failed to update favorites");
+    }
   };
 
-  const isFavorite = (carId: string) => favorites.includes(carId);
+  const handleShare = async (car: Car) => {
+    const url = `${window.location.origin}/cars/${car.id}`;
+    const text = `Check out this ${car.brand} ${car.model} on Troy Cars!`;
 
-  return { favorites, toggleFavorite, isFavorite };
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Troy Cars - Vehicle Details",
+          text: text,
+          url: url,
+        });
+        toast.success("Eylem paylaşıldı!");
+      } else {
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        toast.success("Link panoya kopyalandı!");
+      }
+    } catch (error: any) {
+      if (error.name !== "AbortError") {
+        console.error("Error sharing:", error);
+        Sentry.captureException(error);
+        toast.error("Paylaşım sırasında bir hata oluştu.");
+      }
+    }
+  };
+
+  return { favorites, toggleFavorite, handleShare };
 }

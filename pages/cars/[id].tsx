@@ -56,20 +56,7 @@ export default function CarDetail({ car }: { car: Car }) {
     );
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: `${car.brand} ${car.model}`,
-          text: `Check out this car: ${car.brand} ${car.model}`,
-          url: window.location.href,
-        })
-        .then(() => console.log("Successfully shared!"))
-        .catch((error) => console.log("Error sharing:", error));
-    } else {
-      alert("Share functionality is not supported on this device.");
-    }
-  };
+  const { handleShare } = useFavorites();
 
   // SEO Meta Verileri
   const metaTitle =
@@ -205,7 +192,7 @@ export default function CarDetail({ car }: { car: Car }) {
 
             {/* Share Butonu */}
             <button
-              onClick={handleShare}
+              onClick={() => handleShare(car)}
               className="p-3 rounded-full shadow-lg backdrop-blur-md bg-black/30 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 "
               title="Share this car"
             >

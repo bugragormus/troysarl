@@ -13,6 +13,7 @@ import Image from "next/image";
 import Car from "@/types/car";
 import { format } from "date-fns";
 import clsx from "clsx";
+import { useFavorites } from "@/hooks/useFavorites";
 
 type Props = {
   car: Car;
@@ -99,22 +100,7 @@ export default function CarCard({
   isFavorite,
   className = "",
 }: Props) {
-  // Share function
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: `${car.brand} ${car.model}`,
-          text: `Check out this car: ${car.brand} ${car.model}`,
-          url: `${window.location.origin}/cars/${car.id}`,
-        })
-        .then(() => console.log("Successfully shared!"))
-        .catch((error) => console.log("Error sharing:", error));
-    } else {
-      // Fallback for browsers that don't support `navigator.share`
-      alert("Share functionality is not supported on this device.");
-    }
-  };
+  const { handleShare } = useFavorites();
 
   return (
     <article
@@ -168,7 +154,7 @@ export default function CarCard({
           isFavorite={isFavorite}
           onFavoriteToggle={onFavoriteToggle}
           onRemove={onRemove}
-          onShare={handleShare} // Passing the share handler to the button
+          onShare={() => handleShare(car)} // Passing the share handler to the button
         />
       </div>
 
