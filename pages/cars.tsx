@@ -6,6 +6,7 @@ import Car from "@/types/car";
 import { Filter, ArrowDown, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import CarCard from "@/components/CarCard";
+import CarSkeleton from "@/components/CarSkeleton";
 import {
   bodyTypeOptions,
   transmissionOptions,
@@ -531,23 +532,41 @@ export default function CarsPage() {
         </div>
 
         {/* Araç Listesi */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCars.map((car) => (
-            <article
-              key={car.id}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
-              itemScope
-              itemType="https://schema.org/Car"
-            >
-              <CarCard
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <CarSkeleton key={i} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-16 text-red-500 dark:text-red-400">
+            <p className="text-lg font-semibold">Failed to load vehicles.</p>
+            <p className="text-sm mt-2">Please try refreshing the page.</p>
+          </div>
+        ) : filteredCars.length === 0 ? (
+          <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+            <p className="text-lg font-semibold">No vehicles found.</p>
+            <p className="text-sm mt-2">Try adjusting your filters.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCars.map((car) => (
+              <article
                 key={car.id}
-                car={car}
-                onFavoriteToggle={toggleFavorite}
-                isFavorite={favorites.includes(car.id)}
-              />
-            </article>
-          ))}
-        </div>
+                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
+                itemScope
+                itemType="https://schema.org/Car"
+              >
+                <CarCard
+                  key={car.id}
+                  car={car}
+                  onFavoriteToggle={toggleFavorite}
+                  isFavorite={favorites.includes(car.id)}
+                />
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

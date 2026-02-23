@@ -158,17 +158,7 @@ export default function CarDetail({ car }: { car: Car }) {
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content={ogImageUrl} />
 
-        {/* Schema.org Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: "Vehicle Catalog",
-            description: metaDescription,
-            url: canonicalUrl,
-            image: ogImageUrl,
-          })}
-        </script>
+
       </Head>
 
       <div className="max-w-6xl mx-auto p-6">

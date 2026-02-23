@@ -1494,7 +1494,7 @@ export default function AdminPanel() {
                     />
                     <input
                       type="date"
-                      value={editingCar.manufactureDate}
+                      value={editingCar.year}
                       onChange={(e) => setManufactureDate(e.target.value)}
                       className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
