@@ -89,10 +89,11 @@ export default function ContactForm({
     <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
       <form onSubmit={handleSubmit} className="space-y-6" data-captcha="true">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Full Name*
           </label>
           <input
+            id="fullName"
             type="text"
             required
             value={formData.name}
@@ -103,10 +104,11 @@ export default function ContactForm({
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email*
             </label>
             <input
+              id="email"
               type="email"
               required
               value={formData.email}
@@ -117,10 +119,11 @@ export default function ContactForm({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone*
             </label>
             <input
+              id="phone"
               type="tel"
               required
               value={formData.phone}
@@ -133,10 +136,11 @@ export default function ContactForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Message*
           </label>
           <textarea
+            id="message"
             rows={4}
             required
             value={formData.message}
