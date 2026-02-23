@@ -160,14 +160,14 @@ export default function CarsPage() {
 
   // SEO Meta Verileri
   const metaTitles = {
-    en: "Buy Quality Used Cars in Luxembourg | Troy Cars SARL | Affordable Prices",
-    fr: "Acheter des Voitures d'Occasion au Luxembourg | Luxembourg cars | Luxembourg car sale",
-    de: "Gebrauchtwagen in Luxemburg kaufen | Troy Cars SARL | Günstige Preise",
+    en: "Quality Used Cars & Luxury Vehicles in Luxembourg | Troy Cars Lux SARL",
+    fr: "Voitures d'Occasion et Luxe au Luxembourg | Troy Cars Lux SARL | Vente Automobile",
+    de: "Gebrauchtwagen & Luxusautos in Luxemburg kaufen | Troy Cars Lux SARL",
   };
   const metaDescriptions = {
-    en: "Find your next car at Troy Cars! Browse affordable used cars in Luxembourg. Financing options available. Visit us today!",
-    fr: "Trouvez votre prochaine voiture chez Troy Cars! Découvrez des voitures d'occasion de qualité au Luxembourg. Options de financement disponibles.",
-    de: "Finden Sie Ihr nächstes Auto bei Troy Cars! Entdecken Sie hochwertige Gebrauchtwagen in Luxemburg. Finanzierungsoptionen verfügbar.",
+    en: "Find your next car at Troy Cars Lux SARL! Browse affordable used cars and luxury vehicles in Luxembourg. Financing options available. Visit us today!",
+    fr: "Trouvez votre prochaine voiture chez Troy Cars Lux SARL! Découvrez des voitures d'occasion de qualité et de luxe au Luxembourg. Options de financement disponibles.",
+    de: "Finden Sie Ihr nächstes Auto bei Troy Cars Lux SARL! Entdecken Sie hochwertige Gebrauchtwagen und Luxusautos in Luxemburg. Finanzierungsoptionen verfügbar.",
   };
   const canonicalUrl = "https://troysarl.com/cars";
   const ogImageUrl = "https://troysarl.com/og-cars.jpg";
@@ -179,17 +179,17 @@ export default function CarsPage() {
     >
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
-        <title>{metaTitles.fr}</title>
-        <meta name="description" content={metaDescriptions.fr} />
+        <title>{`${metaTitles.en} | ${metaTitles.fr}`}</title>
+        <meta name="description" content={`${metaDescriptions.en} ${metaDescriptions.fr}`} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={metaTitles.fr} />
-        <meta property="og:description" content={metaDescriptions.fr} />
+        <meta property="og:title" content={metaTitles.en} />
+        <meta property="og:description" content={metaDescriptions.en} />
         <meta property="og:image" content={ogImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={metaTitles.fr} />
-        <meta name="twitter:description" content={metaDescriptions.fr} />
+        <meta name="twitter:title" content={metaTitles.en} />
+        <meta name="twitter:description" content={metaDescriptions.en} />
         <meta name="twitter:image" content={ogImageUrl} />
         {/* JSON‑LD Structured Data */}
         <script type="application/ld+json">

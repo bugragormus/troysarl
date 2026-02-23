@@ -34,9 +34,9 @@ export default function Home() {
 
   // SEO Meta Verileri
   const metaTitle =
-    "Troy Cars - Premium Luxury & Used Cars in Luxembourg | Troy Cars SARL | Troysarl Luxembourg";
+    "Troy Cars Lux SARL | Premium Luxury & Used Cars Luxembourg | Voitures d'occasion haut de gamme | Gebrauchtwagen Luxemburg";
   const metaDescription =
-    "Explore certified luxury vehicles and premium used cars at Troysarl. Luxembourg's trusted automotive partner with 200-point quality checks.";
+    "Premium used and luxury cars for sale in Luxembourg. Troy Cars Lux SARL offers certified vehicles with 200-point checks. Voitures d'occasion et de luxe au Luxembourg. Gebrauchtwagen und Luxusautos in Luxemburg.";
   const canonicalUrl = "https://troysarl.com";
   const ogImageUrl = "https://troysarl.com/og-home.jpg";
 
@@ -64,19 +64,54 @@ export default function Home() {
 
         {/* Schema.org Markup */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "Troysarl",
-            url: canonicalUrl,
-            description: metaDescription,
-            image: ogImageUrl,
-            potentialAction: {
-              "@type": "SearchAction",
-              target: `${canonicalUrl}/cars?search={search_term_string}`,
-              "query-input": "required name=search_term_string",
+          {JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Troy Cars Lux SARL",
+              "url": canonicalUrl,
+              "description": metaDescription,
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": `${canonicalUrl}/cars?search={search_term_string}`,
+                "query-input": "required name=search_term_string"
+              }
             },
-          })}
+            {
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "Troy Cars Lux SARL",
+              "image": ogImageUrl,
+              "@id": "https://troysarl.com",
+              "url": "https://troysarl.com",
+              "telephone": "+352691121111", // Placeholder or from env if available
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": process.env.NEXT_PUBLIC_ADRESS,
+                "addressLocality": "Luxembourg",
+                "addressCountry": "LU"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 49.6133,
+                "longitude": 6.1645
+              },
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday"
+                ],
+                "opens": "09:00",
+                "closes": "18:00"
+              },
+              "priceRange": "$$$"
+            }
+          ])}
         </script>
       </Head>
 
@@ -100,8 +135,8 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow-lg">
-            Redefining Automotive Excellence
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+            Troy Cars Lux SARL - Premium Vehicles in Luxembourg
           </h1>
           <Link
             href="/cars"

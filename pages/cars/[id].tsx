@@ -59,11 +59,9 @@ export default function CarDetail({ car }: { car: Car }) {
   const { handleShare } = useFavorites();
 
   // SEO Meta Verileri
-  const metaTitle =
-    "Luxury and Second-Hand Vehicles for Sale or Rent | Troysarl | Luxembourg | Véhicules de luxe et d'occasion à vendre ou à louer | Troysarl | Luxembourg | Luxus- und Gebrauchtfahrzeuge zum Verkauf oder zur Miete | Troysarl | Luxemburg";
+  const metaTitle = `${car.brand} ${car.model} (${new Date(car.year).getFullYear()}) | Troy Cars Lux SARL Luxembourg`;
 
-  const metaDescription =
-    "Explore our extensive collection of luxury and second-hand vehicles for sale or rent. We offer a wide range of vehicles, including sedans, SUVs, and sports cars, with flexible rental plans available. Découvrez notre vaste collection de véhicules de luxe et d'occasion à vendre ou à louer. Nous proposons une large gamme de véhicules, y compris des berlines, des SUV et des voitures de sport, avec des plans de location flexibles. Entdecken Sie unsere umfangreiche Sammlung von Luxus- und Gebrauchtfahrzeugen zum Verkauf oder zur Miete. Wir bieten eine breite Palette von Fahrzeugen, darunter Limousinen, SUVs und Sportwagen, mit flexiblen Mietplänen.";
+  const metaDescription = `Check out this ${car.brand} ${car.model} at Troy Cars Lux SARL. Premium used vehicles in Luxembourg, fully certified. Voitures d'occasion au Luxembourg. Gebrauchtwagen Luxemburg.`;
 
   const canonicalUrl = "https://troysarl.com/cars/" + car.id;
   const ogImageUrl = "https://troysarl.com/og-cars" + car.id + ".jpg";
@@ -77,9 +75,7 @@ export default function CarDetail({ car }: { car: Car }) {
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
-        <title>
-          {metaTitle} {car.brand} {car.model} | Troysarl
-        </title>
+        <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
 
@@ -262,7 +258,7 @@ export default function CarDetail({ car }: { car: Car }) {
                     <Image
                       loading="lazy"
                       src={photo}
-                      alt={`${car.brand} ${car.model} for ${car.listing_type} in Luxembourg`}
+                      alt={`${car.brand} ${car.model} for ${car.listing_type} in Luxembourg - Troy Cars Lux SARL`}
                       layout="fill"
                       objectFit="contain"
                       className="transition-transform duration-300 "

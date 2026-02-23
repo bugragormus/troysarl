@@ -44,11 +44,9 @@ export default function Contact() {
   };
 
   // SEO Meta Verileri - Contact Us
-  const metaTitle =
-    "Contact Us - Troy Cars Lux Sarl - Premium Used Cars in Luxembourg 🇱🇺 | Contactez-nous - Troy Cars Lux Sarl - Voitures d'occasion haut de gamme au Luxembourg 🇱🇺 | Kontaktieren Sie uns - Troy Cars Lux Sarl - Premium-Gebrauchtwagen in Luxemburg 🇱🇺";
+  const metaTitle = "Contact Troy Cars Lux SARL | Luxembourg Premium Car Showroom | Contactez-nous | Kontakt";
 
-  const metaDescription =
-    "We are here to help you. Reach out to us and we will get back to you as soon as possible. Nous sommes là pour vous aider. Contactez-nous et nous vous répondrons dans les plus brefs délais. Wir sind hier, um Ihnen zu helfen. Kontaktieren Sie uns und wir werden Ihnen so schnell wie möglich antworten.";
+  const metaDescription = "Get in touch with Troy Cars Lux SARL in Luxembourg. Visit our showroom, call us, or send an inquiry. Premium used car dealer. Contactez notre équipe au Luxembourg. Kontaktieren Sie uns in Luxemburg.";
 
   const canonicalUrl = "https://troysarl.com/contact";
   const ogImageUrl = "https://troysarl.com/og-contact.jpg";
