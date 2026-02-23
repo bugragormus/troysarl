@@ -48,6 +48,10 @@ export default function Home() {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
+        <link rel="alternate" href={canonicalUrl} hrefLang="en-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -96,7 +100,8 @@ export default function Home() {
               "image": ogImageUrl,
               "@id": "https://troysarl.com",
               "url": "https://troysarl.com",
-              "telephone": "+352691121111", // Placeholder or from env if available
+              "logo": "https://troysarl.com/troysarl-logo.png",
+              "telephone": "+352691121111",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": process.env.NEXT_PUBLIC_ADRESS,

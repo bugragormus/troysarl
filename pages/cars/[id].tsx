@@ -78,6 +78,11 @@ export default function CarDetail({ car }: { car: Car }) {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
+        {/* Hreflang Tags for Luxembourg Multilingual Support */}
+        <link rel="alternate" href={canonicalUrl} hrefLang="en-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
 
         {/* Schema.org Markup */}
         <script type="application/ld+json">
@@ -141,15 +146,17 @@ export default function CarDetail({ car }: { car: Car }) {
                 value: car.mileage,
                 unitCode: "KMT", // KMH -> KMT olarak düzeltildi
               },
-              offers: {
+              "offers": {
                 "@type": "Offer",
-                priceCurrency: "EUR",
-                price: Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0, // Sayısal değer garantisi
-                availability:
+                "priceCurrency": "EUR",
+                ...(Number(String(car.price).replace(/[^0-9.-]+/g, "")) > 0 && {
+                  "price": Number(String(car.price).replace(/[^0-9.-]+/g, ""))
+                }),
+                "availability":
                   car.listing_type === "sold"
                     ? "https://schema.org/OutOfStock"
-                    : "https://schema.org/InStock",
-              },
+                    : "https://schema.org/InStock"
+              }
             }
           ])}
         </script>

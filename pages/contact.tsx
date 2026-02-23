@@ -60,6 +60,10 @@ export default function Contact() {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
+        <link rel="alternate" href={canonicalUrl} hrefLang="en-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />

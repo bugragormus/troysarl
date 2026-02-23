@@ -182,6 +182,10 @@ export default function CarsPage() {
         <title>{`${metaTitles.en} | ${metaTitles.fr}`}</title>
         <meta name="description" content={`${metaDescriptions.en} ${metaDescriptions.fr}`} />
         <link rel="canonical" href={canonicalUrl} />
+        <link rel="alternate" href={canonicalUrl} hrefLang="en-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
+        <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={metaTitles.en} />
