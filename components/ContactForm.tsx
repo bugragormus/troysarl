@@ -7,7 +7,7 @@ type Props = {
   carBrand: string;
   carModel: string;
   listingType: "sale" | "rental" | "reserved" | "sold";
-  carYear?: number;
+  carYear?: string;
   carMileage?: number;
   carColor?: string;
   isExclusive?: boolean;

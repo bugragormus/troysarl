@@ -6,36 +6,14 @@ import Car from "@/types/car";
 import { Filter, ArrowDown, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import CarCard from "@/components/CarCard";
-import Script from "next/script";
+import {
+  bodyTypeOptions,
+  transmissionOptions,
+  doorOptions,
+  colorOptions,
+} from "@/lib/constants";
+import { useFavorites } from "@/hooks/useFavorites";
 
-const bodyTypeOptions = [
-  "Sedan",
-  "Coupe",
-  "Hatchback",
-  "Pickup",
-  "Off-Road",
-  "Sport",
-  "Van",
-  "Convertible",
-  "Crossover",
-  "SUV",
-  "Station Wagon",
-  "Muscle",
-  "Roadster",
-  "Cabriolet",
-  "Compact",
-];
-const transmissionOptions = ["Automatic", "Manual", "Semi-Automatic"];
-const doorOptions = ["3", "4", "5"];
-const colorOptions = [
-  "White",
-  "Black",
-  "Gray",
-  "Silver",
-  "Red",
-  "Blue",
-  "Other",
-];
 
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -43,7 +21,7 @@ export default function CarsPage() {
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState("desc");
   const [showFilters, setShowFilters] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     listingType: "all",
@@ -119,26 +97,8 @@ export default function CarsPage() {
     };
 
     fetchCars();
-
-    const savedFavorites = JSON.parse(
-      localStorage.getItem("favoriteCars") || "[]"
-    );
-    setFavorites(savedFavorites);
   }, [filters]);
 
-  const toggleFavorite = (carId: string) => {
-    let updatedFavorites = [...favorites];
-    if (updatedFavorites.includes(carId)) {
-      updatedFavorites = updatedFavorites.filter((id) => id !== carId);
-      toast.error("The car has been removed from favorites.");
-    } else {
-      updatedFavorites.push(carId);
-      toast.success("The car has been added to favorites.");
-    }
-
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
-  };
 
   const filteredCars = cars
     .filter((car) => {
@@ -287,19 +247,6 @@ export default function CarsPage() {
           })}
         </script>
       </Head>
-
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-        `}
-      </Script>
 
       <div className="container mx-auto p-4" aria-label="Cars">
         {/* Filter & Sort Controls */}

@@ -11,8 +11,8 @@ import clsx from "clsx";
 import Car from "@/types/car";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
-import Script from "next/script";
 import ContactForm from "@/components/ContactForm";
+import { useFavorites } from "@/hooks/useFavorites";
 
 // Modal stil ayarları
 Modal.setAppElement("#__next");
@@ -36,29 +36,10 @@ const modalStyles = {
 };
 
 export default function CarDetail({ car }: { car: Car }) {
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
-
-  // Favorites: localStorage'dan yükle (client-side only)
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("favoriteCars") || "[]");
-    setFavorites(saved);
-  }, []);
-
-  const toggleFavorite = (carId: string) => {
-    setFavorites((prev) => {
-      const updated = prev.includes(carId)
-        ? prev.filter((id) => id !== carId)
-        : [...prev, carId];
-      localStorage.setItem("favoriteCars", JSON.stringify(updated));
-      if (prev.includes(carId))
-        toast.error("The car has been removed from favorites.");
-      else toast.success("The car has been added to favorites.");
-      return updated;
-    });
-  };
 
   const handleImageClick = (index: number) => {
     setActiveImageIndex(index);
@@ -189,20 +170,6 @@ export default function CarDetail({ car }: { car: Car }) {
           })}
         </script>
       </Head>
-
-      {/* Google Tag Manager */}
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-        `}
-      </Script>
 
       <div className="max-w-6xl mx-auto p-6">
         {/* Başlık Alanı */}

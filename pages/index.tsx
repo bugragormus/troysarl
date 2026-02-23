@@ -8,11 +8,11 @@ import Car from "@/types/car";
 import { Heart } from "lucide-react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
-import Script from "next/script";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function Home() {
   const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     const fetchFeaturedCars = async () => {
@@ -22,32 +22,13 @@ export default function Home() {
         .eq("is_hidden", false)
         .order("created_at", { ascending: false })
         .limit(3);
-
-      if (error) console.error("Error:", error);
-      else setFeaturedCars(data || []);
+      if (error) {
+        console.error("Error:", error);
+        toast.error("Failed to load vehicles.");
+      } else setFeaturedCars(data || []);
     };
-
     fetchFeaturedCars();
-
-    const savedFavorites = JSON.parse(
-      localStorage.getItem("favoriteCars") || "[]"
-    );
-    setFavorites(savedFavorites);
   }, []);
-
-  const toggleFavorite = (carId: string) => {
-    let updatedFavorites = [...favorites];
-    if (updatedFavorites.includes(carId)) {
-      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
-      toast.error("The car has been removed from favorites.");
-    } else {
-      updatedFavorites.push(carId); // Favorilere ekle
-      toast.success("The car has been added to favorites.");
-    }
-
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
-  };
 
   // SEO Meta Verileri
   const metaTitle =
@@ -98,19 +79,6 @@ export default function Home() {
       </Head>
 
 
-      {/* Google Analytics Scriptleri */}
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-        `}
-      </Script>
 
       {/* Hero Section */}
       <section

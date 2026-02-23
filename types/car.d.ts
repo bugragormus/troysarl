@@ -3,8 +3,7 @@ interface Car {
   id: string;
   brand: string;
   model: string;
-  manufactureDate: number;
-  year: number;
+  year: string; // ISO date string from DB, e.g. "2023-05-01"
   price: number;
   fuel_type: string;
   photos: string[];
@@ -17,11 +16,8 @@ interface Car {
   doors: number;
   features: {
     [key: string]: string[];
-
     safety: string[];
-
     comfort: string[];
-
     entertainment: string[];
   };
   description: string;
