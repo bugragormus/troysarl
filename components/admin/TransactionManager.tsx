@@ -15,9 +15,9 @@ const DetailItem = ({
   value: string | number;
   className?: string;
 }) => (
-  <div className="flex justify-between items-center py-1">
-    <span className="text-gray-600 dark:text-gray-400">{label}:</span>
-    <span className={`font-medium dark:text-gray-200 ${className || ""}`}>
+  <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
+    <span className="text-gray-500 dark:text-gray-400 text-sm">{label}:</span>
+    <span className={`font-semibold text-gray-900 dark:text-gray-200 ${className || ""}`}>
       {value}
     </span>
   </div>
@@ -25,9 +25,10 @@ const DetailItem = ({
 
 type TransactionManagerProps = {
   cars: Car[];
+  onSuccess?: () => void;
 };
 
-export default function TransactionManager({ cars }: TransactionManagerProps) {
+export default function TransactionManager({ cars, onSuccess }: TransactionManagerProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [selectedCarId, setSelectedCarId] = useState("");
   const [customerFullname, setCustomerFullname] = useState("");
@@ -118,6 +119,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
         setStartDate("");
         setEndDate("");
         toast.success("İşlem başarıyla eklendi!");
+        if (onSuccess) onSuccess();
       }
     } catch (error) {
       console.error("Hata:", error);
@@ -139,6 +141,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
 
       setTransactions((prev) => prev.filter((t) => t.id !== id));
       toast.success("İşlem silindi.");
+      if (onSuccess) onSuccess();
     } catch (error) {
       toast.error("Silme işlemi başarısız!");
       Sentry.captureException(error);
@@ -146,8 +149,9 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 dark:text-white">
+    <div className="bg-white dark:bg-gray-800/40 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 backdrop-blur-sm transition-colors duration-300">
+      <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2">
+        <span className="w-2 h-8 bg-blue-600 rounded-full"></span>
         İşlem Kayıtları
       </h2>
 
@@ -158,7 +162,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
           <select
             value={selectedCarId}
             onChange={(e) => setSelectedCarId(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             required
           >
             <option value="">Araba Seçin*</option>
@@ -176,7 +180,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
             onChange={(e) =>
               setTransactionType(e.target.value as "rental" | "sale")
             }
-            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
           >
             <option value="rental">Kiralama</option>
             <option value="sale">Satış</option>
@@ -188,7 +192,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
             placeholder="Müşteri Adı*"
             value={customerFullname}
             onChange={(e) => setCustomerFullname(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             required
           />
 
@@ -197,7 +201,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
             placeholder="Telefon Numarası*"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+            className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             required
           />
 
@@ -212,7 +216,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Başlangıç Tarihi*"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
 
@@ -229,7 +233,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               >
                 <option value="nakit">Nakit</option>
@@ -242,7 +246,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Satıcı Adı"
                 value={sellerName}
                 onChange={(e) => setSellerName(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
 
               <input
@@ -250,7 +254,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Toplam Fiyat (€)*"
                 value={totalPrice || ""}
                 onChange={(e) => setTotalPrice(Number(e.target.value))}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
             </div>
@@ -267,7 +271,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Şasi No"
                 value={chassisNumber}
                 onChange={(e) => setChassisNumber(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
 
               <input
@@ -275,7 +279,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Alım Tarihi"
                 value={purchaseDate}
                 onChange={(e) => setPurchaseDate(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
 
               <input
@@ -283,7 +287,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Alış Tutarı (€)"
                 value={purchaseAmount || ""}
                 onChange={(e) => setPurchaseAmount(Number(e.target.value))}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
 
               <input
@@ -291,7 +295,7 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                 placeholder="Alış Fatura No"
                 value={invoiceNumber}
                 onChange={(e) => setInvoiceNumber(e.target.value)}
-                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
             </div>
           </div>
@@ -308,13 +312,13 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
       {/* İşlem Listesi */}
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-gray-100 dark:bg-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700/50">
             <tr>
-              <th className="p-3 text-left">Araba</th>
-              <th className="p-3 text-left">Şasi No</th>
-              <th className="p-3 text-left">Satış Tarihi</th>
-              <th className="p-3 text-left">Kar Miktarı</th>
-              <th className="p-3 text-left">İşlemler</th>
+              <th className="p-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Araba</th>
+              <th className="p-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Şasi No</th>
+              <th className="p-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Satış Tarihi</th>
+              <th className="p-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Kar Miktarı</th>
+              <th className="p-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">İşlemler</th>
             </tr>
           </thead>
           <tbody>
@@ -327,26 +331,26 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
                   key={t.id}
                   className="border-t dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
-                  <td className="p-3">
+                  <td className="p-4 text-gray-900 dark:text-gray-200">
                     {car ? `${car.brand} ${car.model}` : "Silinmiş Araç"}
                   </td>
-                  <td className="p-3">{t.chassis_number || "-"}</td>
-                  <td className="p-3">
+                  <td className="p-4 text-gray-600 dark:text-gray-400 font-mono text-sm">{t.chassis_number || "-"}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-400">
                     {new Date(t.start_date).toLocaleDateString()}
                   </td>
-                  <td className="p-3 font-semibold text-green-600">
+                  <td className="p-4 font-bold text-green-600 dark:text-green-400">
                     €{profit.toLocaleString()}
                   </td>
-                  <td className="p-3 space-x-2">
+                  <td className="p-4 space-x-2">
                     <button
                       onClick={() => setSelectedTransaction(t)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      className="px-4 py-2 bg-blue-600/10 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all text-sm font-bold"
                     >
-                      Detayları Göster
+                      Detaylar
                     </button>
                     <button
                       onClick={() => handleDeleteTransaction(t.id)}
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                      className="px-4 py-2 bg-red-600/10 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-600 hover:text-white transition-all text-sm font-bold"
                     >
                       Sil
                     </button>
@@ -359,8 +363,8 @@ export default function TransactionManager({ cars }: TransactionManagerProps) {
       </div>
       {/* Detay Popup */}
       {selectedTransaction && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[200]">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transition-all animate-in zoom-in duration-300">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-2xl font-bold dark:text-white">
                 İşlem Detayları

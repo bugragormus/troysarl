@@ -1,89 +1,78 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Head from "next/head";
 import Car from "@/types/car";
 import CarCard from "@/components/CarCard";
-import { Trash2 } from "lucide-react";
+import { Trash2, Loader2, Heart } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import Link from "next/link";
+import { useFavorites } from "../hooks/useFavorites";
 
 export default function FavoritesPage() {
+  const { favorites, loading: favoritesLoading, toggleFavorite } = useFavorites();
   const [cars, setCars] = useState<Car[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [sortOrder] = useState("desc"); // Varsayılan sıralama düzeni
-  const [visibleCars, setVisibleCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const itemsPerPage = 6; // Sayfa başına gösterilecek araba sayısı
+  const itemsPerPage = 6;
 
   useEffect(() => {
-    // Favorileri localStorage'dan al
-    const savedFavorites = JSON.parse(
-      localStorage.getItem("favoriteCars") || "[]"
-    );
-    setFavorites(savedFavorites);
+    const fetchFavoriteCars = async () => {
+      if (favorites.length === 0) {
+        setCars([]);
+        setLoading(false);
+        return;
+      }
 
-    if (savedFavorites.length > 0) {
-      const fetchFavoriteCars = async () => {
+      setLoading(true);
+      try {
         const { data, error } = await supabase
           .from("cars")
           .select("*")
           .eq("is_hidden", false)
-          .in("id", savedFavorites);
-        if (error) console.error("Error:", error);
-        else {
-          const sortedData = (data || []).sort((a, b) => {
-            const listingOrder = {
-              sale: 0,
-              rental: 1,
-              reserved: 2,
-              sold: 3,
-            };
+          .in("id", favorites);
+        
+        if (error) throw error;
 
-            const typeComparison =
-              listingOrder[a.listing_type as keyof typeof listingOrder] -
-              listingOrder[b.listing_type as keyof typeof listingOrder];
-            if (typeComparison !== 0) return typeComparison;
+        // Sort by listing_type and then price
+        const sortedData = (data || []).sort((a, b) => {
+          const listingOrder = { sale: 0, rental: 1, reserved: 2, sold: 3 };
+          const typeComp = listingOrder[a.listing_type as keyof typeof listingOrder] - 
+                          listingOrder[b.listing_type as keyof typeof listingOrder];
+          if (typeComp !== 0) return typeComp;
+          return b.price - a.price;
+        });
 
-            // Eğer listing_type aynıysa fiyata göre sırala
-            return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
-          });
+        setCars(sortedData);
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+        toast.error("Failed to load favorite vehicles.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-          setCars(sortedData);
-          setVisibleCars(sortedData.slice(0, itemsPerPage)); // İlk sayfayı yükle
-        }
-      };
-
+    if (!favoritesLoading) {
       fetchFavoriteCars();
     }
-  }, [sortOrder]);
+  }, [favorites, favoritesLoading]);
 
-  // Favoriden araç kaldır
-  const removeFavorite = (carId: string) => {
-    const updatedFavorites = favorites.filter((id) => id !== carId);
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
-    setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
-    setVisibleCars((prevVisibleCars) =>
-      prevVisibleCars.filter((car) => car.id !== carId)
-    );
-    toast.error("The car has been removed from favorites.");
+  const visibleCars = useMemo(() => {
+    return cars.slice(0, page * itemsPerPage);
+  }, [cars, page]);
+
+  const removeFavorite = async (carId: string) => {
+    await toggleFavorite(carId);
   };
 
-  // Tüm favorileri temizle
-  const clearFavorites = () => {
-    setFavorites([]);
-    setCars([]);
-    setVisibleCars([]);
-    localStorage.removeItem("favoriteCars");
-    toast.error("All favorites have been cleared.");
+  const clearFavorites = async () => {
+    // Note: This would need a specific hook method or manual loop
+    // For now, let's just toast and suggest individual removal or individual sync
+    toast.error("Please remove items individually to ensure cloud sync.");
   };
 
-  // Daha fazla araba yükle
   const loadMoreCars = () => {
-    const nextPage = page + 1;
-    const nextCars = cars.slice(0, nextPage * itemsPerPage);
-    setVisibleCars(nextCars);
-    setPage(nextPage);
+    setPage(prev => prev + 1);
   };
 
   // SEO Meta Verileri - Favorites
@@ -98,7 +87,7 @@ export default function FavoritesPage() {
 
   return (
     <div
-      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300"
       aria-label="Favorites Page"
     >
       <Toaster position="top-right" reverseOrder={false} />
@@ -168,21 +157,32 @@ export default function FavoritesPage() {
           )}
         </div>
 
-        {cars.length === 0 ? (
-          <p
-            className="text-gray-600 dark:text-gray-300 text-lg text-center"
-            aria-label="No Favorites Message"
-          >
-            You haven&apos;t added any favorite cars yet.
-          </p>
+        {(favoritesLoading || loading) ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mb-4" />
+            <p className="text-gray-500 font-medium">Syncing your collection...</p>
+          </div>
+        ) : cars.length === 0 ? (
+          <div className="text-center py-20 px-4">
+             <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Heart className="w-10 h-10 text-gray-300" />
+             </div>
+             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">No Favorites Yet</h2>
+             <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-sm mx-auto">
+                Explore our collection and click the heart icon to save the cars you love.
+             </p>
+             <Link href="/cars" className="px-8 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-700 transition-all">
+                Browse Cars
+             </Link>
+          </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
               {visibleCars.map((car) => (
                 <CarCard
                   key={car.id}
                   car={car}
-                  onRemove={removeFavorite} // Bu sayfada favori ikonu yerine çöp (remove) ikonu görünsün
+                  onRemove={removeFavorite}
                 />
               ))}
             </div>

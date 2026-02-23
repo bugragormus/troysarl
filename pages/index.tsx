@@ -41,7 +41,7 @@ export default function Home() {
   const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}

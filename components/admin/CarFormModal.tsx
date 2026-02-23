@@ -376,7 +376,7 @@ export default function CarFormModal({
   };
 
   const formContent = (
-    <div className={inline ? "bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700" : "bg-white dark:bg-gray-800 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative"}>
+    <div className={inline ? "bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700" : "bg-white dark:bg-gray-800 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl transition-colors duration-300"}>
       {!inline && (
         <button
           onClick={onClose}
@@ -389,7 +389,7 @@ export default function CarFormModal({
       )}
 
       <div className={inline ? "" : "p-8"}>
-        <h2 className={inline ? "text-xl font-bold mb-6 dark:text-white" : "text-2xl font-bold mb-6 text-gray-800 dark:text-white"}>
+        <h2 className={inline ? "text-xl font-bold mb-6 text-gray-900 dark:text-white" : "text-2xl font-bold mb-6 text-gray-900 dark:text-white"}>
           {isEditing ? "Araç Düzenle" : "YENİ ARAÇ EKLE"}
         </h2>
 
@@ -400,7 +400,7 @@ export default function CarFormModal({
                 placeholder="Marka*"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
               <input
@@ -408,7 +408,7 @@ export default function CarFormModal({
                 placeholder="Model*"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
               <input
@@ -416,7 +416,7 @@ export default function CarFormModal({
                 placeholder="Yıl*"
                 value={manufactureDate}
                 onChange={(e) => setManufactureDate(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
               <input
@@ -424,7 +424,7 @@ export default function CarFormModal({
                 placeholder="Fiyat (€)*"
                 value={price || ""}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 required
               />
               <input
@@ -432,12 +432,12 @@ export default function CarFormModal({
                 placeholder="Kilometre"
                 value={mileage || ""}
                 onChange={(e) => setMileage(Number(e.target.value))}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               />
               <select
                 value={bodyType}
                 onChange={(e) => setBodyType(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 {bodyTypeOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -446,7 +446,7 @@ export default function CarFormModal({
               <select
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 {colorOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -455,7 +455,7 @@ export default function CarFormModal({
               <select
                 value={transmission}
                 onChange={(e) => setTransmission(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 {transmissionOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -464,7 +464,7 @@ export default function CarFormModal({
               <select
                 value={doors.toString()}
                 onChange={(e) => setDoors(Number(e.target.value))}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 {doorOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -473,7 +473,7 @@ export default function CarFormModal({
               <select
                 value={fuelType}
                 onChange={(e) => setFuelType(e.target.value)}
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 {fuelTypeOptions.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -484,7 +484,7 @@ export default function CarFormModal({
                 onChange={(e) =>
                   setListingType(e.target.value as "sale" | "rental" | "reserved" | "sold")
                 }
-                className="p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
               >
                 <option value="sale">Sale</option>
                 <option value="rental">Rental</option>
@@ -492,15 +492,15 @@ export default function CarFormModal({
                 <option value="sold">Sold</option>
               </select>
 
-              <div className="flex items-center space-x-3 p-3 border rounded dark:bg-gray-700 dark:border-gray-600">
+              <div className="flex items-center space-x-3 p-3 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
                 <input
                   type="checkbox"
                   id="exclusiveCar"
                   checked={isExclusive}
                   onChange={(e) => setIsExclusive(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:border-gray-600"
+                  className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:border-gray-600 transition-all"
                 />
-                <label htmlFor="exclusiveCar" className="text-gray-700 dark:text-gray-200 font-medium cursor-pointer">
+                <label htmlFor="exclusiveCar" className="text-gray-900 dark:text-gray-200 font-medium cursor-pointer">
                   Exclusive Car (Show "Contact Us", Hide Price)
                 </label>
               </div>
@@ -510,12 +510,12 @@ export default function CarFormModal({
               placeholder="Description (Optional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white h-32"
+              className="w-full p-4 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white h-32 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
             />
 
             {/* Cloudinary Upload Section */}
-            <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-xl bg-gray-50 dark:bg-gray-800">
-              <h3 className="font-bold mb-4 dark:text-white">Fotoğraflar* (Cloudinary CDN)</h3>
+            <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 transition-colors">
+              <h3 className="font-bold mb-4 text-gray-900 dark:text-white">Fotoğraflar* (Cloudinary CDN)</h3>
               
               <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
                 <input
@@ -567,7 +567,7 @@ export default function CarFormModal({
 
             {/* Features Categories */}
             <div className="space-y-6">
-              <h3 className="font-bold text-xl border-b pb-2 dark:text-gray-200 dark:border-gray-700">Araç Donanımları</h3>
+              <h3 className="font-bold text-xl border-b pb-2 text-gray-900 dark:text-gray-200 dark:border-gray-700">Araç Donanımları</h3>
               {Object.keys(featureOptions).map((category) => (
                 <div key={category} className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
                   <div className="flex justify-between items-center mb-4">
@@ -633,7 +633,7 @@ export default function CarFormModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center p-4">
       {formContent}
     </div>
   );

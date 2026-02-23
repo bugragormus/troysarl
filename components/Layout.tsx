@@ -2,6 +2,8 @@ import { ReactNode, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import CookieConsentBanner from "./CookieConsentBanner";
+import { useAuth } from "../hooks/useAuth";
+import { User as UserIcon, LogIn } from "lucide-react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +14,7 @@ export default function Layout({ children }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [showWelcomeBubble, setShowWelcomeBubble] = useState(false);
+  const { user, profile } = useAuth();
 
   // LocalStorage'dan tema durumunu oku
   useEffect(() => {
@@ -48,66 +51,73 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className={`min-h-screen flex flex-col ${darkMode ? "dark" : ""}`}>
-      <div className="dark:bg-gray-900 dark:text-gray-100">
+      <div className="dark:bg-[#0a0a0a] dark:text-gray-100 flex-grow flex flex-col">
         {/* Modern Header */}
-        <header className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
-          <nav className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="flex items-center h-16 w-full">
+        <header className="sticky top-0 z-[100] w-full border-b border-white/10 bg-white/70 dark:bg-black/40 backdrop-blur-md transition-all duration-300">
+          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
               {/* Logo */}
-              <div className="flex-shrink-0 flex items-center justify-start min-w-0">
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent truncate max-w-[50vw]">
-                  <Link href="/cars">Troy Cars</Link>
-                </span>
+              <div className="flex-shrink-0">
+                <Link href="/cars" className="group flex items-center transition-transform active:scale-95">
+                  <span className="text-2xl sm:text-3xl font-[900] tracking-tighter text-gray-900 dark:text-white uppercase">
+                    Troy<span className="text-blue-600 dark:text-blue-500">Cars</span>
+                  </span>
+                </Link>
               </div>
               {/* Desktop Nav */}
-              <div className="hidden md:flex items-center justify-center flex-1 space-x-8" role="navigation" aria-label="Main Navigation">
-                <Link
-                  href="/cars"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/cars") ? "underline" : ""
-                  }`}
-                >
-                  Cars
-                </Link>
-                <Link
-                  href="/appointments"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/appointments") ? "underline" : ""
-                  }`}
-                >
-                  Appointment
-                </Link>
-                <Link
-                  href="/about"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/about") ? "underline" : ""
-                  }`}
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="/favorites"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    isActive("/favorites") ? "underline" : ""
-                  }`}
-                >
-                  Favorites
-                </Link>
-                <Link
-                  href="/contact?infoOnly=true"
-                  className={`text-white hover:text-gray-300 transition-colors font-medium ${
-                    router.pathname === "/contact" && router.query.infoOnly === "true" ? "underline" : ""
-                  }`}
-                >
-                  Contact
-                </Link>
+              <div className="hidden md:flex items-center justify-center flex-1 space-x-1" role="navigation" aria-label="Main Navigation">
+                {[
+                  { name: 'Cars', href: '/cars' },
+                  { name: 'Appointment', href: '/appointments' },
+                  { name: 'About Us', href: '/about' },
+                  { name: 'Favorites', href: '/favorites' },
+                  { name: 'Contact', href: '/contact' },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 relative group
+                      ${isActive(item.href) 
+                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-600/10" 
+                        : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-white/5"
+                      }`}
+                  >
+                    {item.name}
+                    {isActive(item.href) && (
+                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full"></span>
+                    )}
+                  </Link>
+                ))}
+
+                {/* Auth Menu - Desktop */}
+                <div className="pl-4 border-l border-gray-200 dark:border-white/10 ml-4 flex items-center">
+                  {user ? (
+                    <Link
+                      href="/profile"
+                      className="flex items-center space-x-2 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 px-4 py-2 rounded-xl transition-all border border-transparent hover:border-blue-500/30 group"
+                    >
+                      <UserIcon className="w-4 h-4 text-gray-700 dark:text-gray-300 group-hover:text-blue-600 transition-colors" />
+                      <span className="text-gray-700 dark:text-gray-200 text-sm font-bold truncate max-w-[100px]">
+                        {profile?.full_name?.split(' ')[0] || 'Account'}
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/auth"
+                      className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-95 group"
+                    >
+                      <LogIn className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                      <span className="text-sm font-bold">Login/Register</span>
+                    </Link>
+                  )}
+                </div>
               </div>
               {/* Sağ Taraf: Tema Toggle ve Mobil Menü Butonu */}
               <div className="flex items-center justify-end flex-shrink-0 ml-auto">
                 {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
-                  className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors mr-2 sm:mr-4"
+                  className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-all shadow-sm border border-transparent hover:border-blue-500/30 mr-2 sm:mr-4"
                   aria-label="Toggle Dark Mode"
                 >
                   {darkMode ? "🌙" : "🌞"}
@@ -116,11 +126,11 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="md:hidden">
                   <button
                     onClick={toggleMenu}
-                    className="p-2 rounded-md focus:outline-none bg-white/20 hover:bg-white/30 transition-colors"
+                    className="p-2.5 rounded-xl focus:outline-none bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-all border border-transparent hover:border-blue-500/30"
                     aria-label="Toggle Menu"
                   >
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="w-6 h-6"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -149,53 +159,50 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Mobil Menü (Açılır Menü) */}
           {isMenuOpen && (
-            <div className="md:hidden bg-indigo-700" id="mobile-menu" role="navigation" aria-label="Mobile Navigation">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                <Link
-                  href="/cars"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/cars") ? "underline" : ""
-                  }`}
-                >
-                  Cars
-                </Link>
-                <Link
-                  href="/contact"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/contact") ? "underline" : ""
-                  }`}
-                >
-                  Appointment
-                </Link>
-                <Link
-                  href="/about"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/about") ? "underline" : ""
-                  }`}
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="/favorites"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    isActive("/favorites") ? "underline" : ""
-                  }`}
-                >
-                  Favorites
-                </Link>
-                <Link
-                  href="/contact?infoOnly=true"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-600 ${
-                    router.pathname === "/contact" && router.query.infoOnly === "true" ? "underline" : ""
-                  }`}
-                >
-                  Contact
-                </Link>
+            <div className="md:hidden bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-gray-100 dark:border-white/5 animate-in slide-in-from-top-2 duration-300 origin-top overflow-hidden" id="mobile-menu" role="navigation" aria-label="Mobile Navigation">
+              <div className="px-4 pt-4 pb-8 space-y-1.5 focus:outline-none">
+                {[
+                  { name: 'Cars', href: '/cars' },
+                  { name: 'About Us', href: '/about' },
+                  { name: 'Favorites', href: '/favorites' },
+                  { name: 'Contact', href: '/contact' },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block px-4 py-3 rounded-2xl text-base font-bold transition-all
+                      ${isActive(item.href)
+                        ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5"
+                      }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+
+                {/* Auth Menu - Mobile */}
+                <div className="pt-6 mt-6 border-t border-gray-100 dark:border-white/5">
+                  {user ? (
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center space-x-3 px-5 py-4 rounded-2xl bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white border border-transparent shadow-sm"
+                    >
+                      <UserIcon className="w-5 h-5 text-blue-600" />
+                      <span className="font-black">{profile?.full_name || 'My Account'}</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/auth"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center justify-center space-x-2 w-full py-4 rounded-2xl bg-blue-600 text-white font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all"
+                    >
+                      <LogIn className="w-5 h-5" />
+                      <span>Login / Register</span>
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -204,107 +211,87 @@ export default function Layout({ children }: LayoutProps) {
         {/* Ana İçerik */}
         <main className="flex-grow">{children}</main>
 
-        {/* Footer */}
-        <footer className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-10">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {/* Marka & Hakkında */}
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Troy Cars Lux SARL</h3>
-                <p className="text-sm text-gray-200">
-                  Premium vehicle experience with an exclusive collection of
-                  luxury and used cars.
+        {/* Premium Footer */}
+        <footer className="relative border-t border-gray-100 dark:border-white/5 bg-white/40 dark:bg-black/20 backdrop-blur-xl">
+          <div className="max-w-7xl mx-auto px-6 py-20">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-24">
+              {/* Brand & About */}
+              <div className="col-span-1 md:col-span-1">
+                <Link href="/cars" className="inline-block mb-6">
+                  <span className="text-2xl font-[900] tracking-tighter text-gray-900 dark:text-white uppercase">
+                    Troy<span className="text-blue-600 dark:text-blue-500">Cars</span>
+                  </span>
+                </Link>
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-xs">
+                  Redefining the premium vehicle experience with an exclusive collection of luxury automobiles. Excellence in every detail.
                 </p>
               </div>
 
-              {/* Hızlı Linkler */}
+              {/* Quick Links */}
               <div>
-                <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
-                <ul className="space-y-2 text-sm">
-                  <li>
-                    <Link href="/cars" className="hover:underline">
-                      Cars
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/about" className="hover:underline">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/contact" className="hover:underline">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/careers" className="hover:underline">
-                      Careers
-                    </Link>
-                  </li>
+                <h4 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-6">Navigation</h4>
+                <ul className="space-y-4">
+                  {[
+                    { label: 'Inventory', href: '/cars' },
+                    { label: 'About Us', href: '/about' },
+                    { label: 'Contact', href: '/contact' },
+                    { label: 'Careers', href: '/careers' }
+                  ].map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition-colors duration-200 flex items-center group">
+                        <span className="w-0 group-hover:w-2 h-[2px] bg-blue-600 mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              {/* Cookie & Privacy Policy */}
+              {/* Legal & Privacy */}
               <div>
-                <h4 className="text-lg font-semibold mb-3">Legal & Privacy</h4>
-                <ul className="space-y-2 text-sm">
+                <h4 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-6">Legal</h4>
+                <ul className="space-y-4">
                   <li>
-                    <Link href="/privacy-policy" className="hover:underline">
+                    <Link href="/privacy-policy" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition-colors duration-200">
                       Privacy Policy
                     </Link>
                   </li>
                   <li>
-                    <Link href="/settings" className="hover:underline">
+                    <Link href="/settings" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition-colors duration-200">
                       Cookie Settings
                     </Link>
                   </li>
                 </ul>
               </div>
 
-              {/* İletişim Bilgileri */}
+              {/* Contact Info */}
               <div>
-                <h4 className="text-lg font-semibold mb-3">Appointment</h4>
-                <ul className="space-y-2 text-sm">
-                  <li>Email: {process.env.NEXT_PUBLIC_EMAIL}</li>
-                  <li>Address: {process.env.NEXT_PUBLIC_ADRESS}</li>
-                </ul>
-                {/* Sosyal Medya İkonları (Opsiyonel) 
-                <div className="flex space-x-4 mt-4">
-                  <a
-                    href="#"
-                    className="hover:text-gray-300"
-                    aria-label="Facebook"
-                  >
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.25c-1.23 0-1.61.76-1.61 1.54v1.85h2.74l-.44 2.89h-2.3v6.99C18.34 21.12 22 16.99 22 12z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="hover:text-gray-300"
-                    aria-label="Twitter"
-                  >
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                      <path d="M22.46 6c-.77.35-1.6.59-2.46.69a4.26 4.26 0 001.88-2.35 8.48 8.48 0 01-2.7 1.03 4.24 4.24 0 00-7.24 3.87 12.04 12.04 0 01-8.74-4.43 4.23 4.23 0 001.31 5.65 4.18 4.18 0 01-1.92-.53v.05a4.25 4.25 0 003.4 4.16 4.3 4.3 0 01-1.91.07 4.25 4.25 0 003.96 2.95A8.5 8.5 0 012 18.57a12 12 0 006.29 1.84c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.35-.02-.53A8.36 8.36 0 0022.46 6z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="hover:text-gray-300"
-                    aria-label="Instagram"
-                  >
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                      <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z" />
-                    </svg>
-                  </a>
-                </div> */}
+                <h4 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-6">Inquiries</h4>
+                <div className="space-y-4">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-400 uppercase tracking-tighter mb-1">Email</span>
+                    <a href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`} className="text-gray-900 dark:text-white text-sm font-semibold hover:text-blue-600 transition-colors">
+                      {process.env.NEXT_PUBLIC_EMAIL}
+                    </a>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-400 uppercase tracking-tighter mb-1">Location</span>
+                    <span className="text-gray-900 dark:text-white text-sm font-semibold">
+                      {process.env.NEXT_PUBLIC_ADRESS}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Alt Bilgi */}
-            <div className="mt-8 border-t border-indigo-500 pt-4 text-center text-xs text-gray-200">
-              &copy; {new Date().getFullYear()} Troy Cars Lux SARL. All Rights
-              Reserved.
+            {/* Bottom Copyright */}
+            <div className="mt-20 pt-8 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <div>&copy; {new Date().getFullYear()} Troy Cars Lux SARL.</div>
+              <div className="flex items-center gap-6">
+                <span>Switzerland</span>
+                <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+                <span>Exclusive Collection</span>
+              </div>
             </div>
           </div>
         </footer>

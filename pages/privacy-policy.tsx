@@ -4,7 +4,7 @@ import Script from "next/script";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300">
+    <div className="bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300">
       <div className="container mx-auto p-6 max-w-4xl ">
         <Head>
           <title>Privacy Policy - Troysarl</title>

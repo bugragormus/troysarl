@@ -55,15 +55,16 @@ export default function CarList({
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-      <h2 className="text-xl md:text-2xl font-bold mb-6 text-gray-800 dark:text-white pb-3 border-b border-gray-200 dark:border-gray-700">
+    <div className="bg-white/40 dark:bg-gray-800/40 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 backdrop-blur-sm transition-colors duration-300">
+      <h2 className="text-xl md:text-2xl font-bold mb-6 text-gray-900 dark:text-white pb-3 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+        <span className="w-2 h-8 bg-indigo-600 rounded-full"></span>
         Mevcut Araçlar ({cars.length})
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {cars.map((car) => (
           <div
             key={car.id}
-            className={`border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow hover:shadow-xl transition-all duration-300 relative ${
+            className={`border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden bg-white dark:bg-gray-900/60 shadow-sm hover:shadow-xl transition-all duration-300 relative group/card font-sans ${
               car.is_hidden ? "opacity-60 grayscale-[50%]" : ""
             }`}
           >
@@ -114,7 +115,7 @@ export default function CarList({
             </div>
 
             <div className="p-5">
-              <h3 className="font-bold text-lg mb-1 dark:text-white line-clamp-1 group-hover:text-blue-500 transition-colors">
+              <h3 className="font-bold text-lg mb-1 text-gray-900 dark:text-white line-clamp-1 group-hover/card:text-blue-600 dark:group-hover/card:text-blue-400 transition-colors">
                 {car.brand} {car.model}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
@@ -130,7 +131,7 @@ export default function CarList({
                       e.target.value as "sale" | "rental" | "reserved" | "sold"
                     )
                   }
-                  className="w-full p-2 text-sm border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="w-full p-2.5 text-sm border border-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 >
                   <option value="sale">Set to Sale</option>
                   <option value="rental">Set to Rental</option>

@@ -72,7 +72,7 @@ export default function CarDetail({ car }: { car: Car }) {
 
   return (
     <div
-      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300"
       aria-label="Car Detail Page"
     >
       <Toaster position="top-right" reverseOrder={false} />

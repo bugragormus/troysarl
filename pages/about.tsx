@@ -15,7 +15,7 @@ const ogImageUrl = "https://troysarl.com/about-bg.jpg";
 export default function AboutPage() {
   return (
     <div
-      className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300"
+      className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300"
       aria-label="About Page"
     >
       <Head>

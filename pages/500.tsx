@@ -1,15 +1,14 @@
 import Link from "next/link";
 import Head from "next/head";
-import Layout from "../components/Layout";
 
 export default function Custom500() {
   return (
-    <Layout>
+    <>
       <Head>
         <title>500 - Server Error | Troy Cars Lux SARL</title>
         <meta name="robots" content="noindex, follow" />
       </Head>
-      <div className="min-h-[70vh] flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300">
         <div className="text-center max-w-md mx-auto">
           <div className="relative mb-8">
             <h1 className="text-9xl font-extrabold text-red-600/20 dark:text-red-500/10 select-none">
@@ -44,6 +43,6 @@ export default function Custom500() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

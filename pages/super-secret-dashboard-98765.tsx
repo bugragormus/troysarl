@@ -6,131 +6,147 @@ import TransactionManager from "@/components/admin/TransactionManager";
 import CarFormModal from "@/components/admin/CarFormModal";
 import CarList from "@/components/admin/CarList";
 import { useCars } from "@/hooks/useCars";
-
-
+import { useAdminData } from "@/hooks/useAdminData";
+import AdminLayout from "@/components/admin/AdminLayout";
+import OverviewDashboard from "@/components/admin/OverviewDashboard";
+import UserManagement from "@/components/admin/UserManagement";
+import { HardDrive, RefreshCcw } from "lucide-react";
 
 export default function AdminPanel() {
-
+  const [activeTab, setActiveTab] = useState("overview");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
 
-  const [showDashboard, setShowDashboard] = useState(false);
+  // Stats & Master Data
+  const { stats, profiles, cars: allCars, hotLeads, loading: adminLoading, fetchAdminData } = useAdminData();
 
-  // Use Centralized Data Layer Hook
+  // Inventory Management
   const { 
     cars, 
-    setCars, 
     fetchCars, 
     removeCar, 
     toggleVisibility, 
     updateListingType 
   } = useCars(true);
 
-  // Migrasyon state
+  // Migration state
   const [isMigrating, setIsMigrating] = useState(false);
-  const [migrationResult, setMigrationResult] = useState<{
-    totalMigrated: number;
-    carsProcessed: number;
-  } | null>(null);
 
-  // Fetch Cars on Mount
   useEffect(() => {
     fetchCars();
-  }, [fetchCars]);
+    fetchAdminData();
+  }, [fetchCars, fetchAdminData]);
 
-
-  // Handle Logout
   const handleLogout = async () => {
     await fetch("/api/admin-logout", { method: "POST" });
     window.location.href = "/admin-login";
   };
 
-
-  // Custom handlers to pass to CarList
   const handleEditClick = (car: Car) => {
     setEditingCar(car);
     setIsFormOpen(true);
   };
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case "overview":
+        return <OverviewDashboard stats={stats} profiles={profiles} cars={allCars} hotLeads={hotLeads} />;
+      case "inventory":
+        return (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold">Inventory Management</h2>
+                <p className="text-gray-400 text-sm">Update listings, manage photos, and toggle visibility.</p>
+              </div>
+              <button 
+                onClick={() => setIsFormOpen(true)}
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-600/20"
+              >
+                + New Arrival
+              </button>
+            </div>
+
+            <CarList
+              cars={cars}
+              onEdit={handleEditClick}
+              onDelete={async (id) => {
+                  await removeCar(id);
+                  fetchAdminData();
+              }}
+              onToggleVisibility={toggleVisibility}
+              onUpdateListingType={updateListingType}
+            />
+          </div>
+        );
+      case "transactions":
+        return (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <TransactionManager 
+                cars={cars} 
+                onSuccess={() => fetchAdminData()} 
+            />
+          </div>
+        );
+      case "users":
+        return <UserManagement profiles={profiles} />;
+      case "settings":
+        return (
+          <div className="max-w-2xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div>
+              <h2 className="text-2xl font-bold underline decoration-blue-500 decoration-4 underline-offset-8">System Settings</h2>
+            </div>
+            
+            <div className="bg-amber-500/5 border border-amber-500/20 rounded-3xl p-8 space-y-4">
+              <div className="flex items-center space-x-3 text-amber-500">
+                <HardDrive size={24} />
+                <h3 className="text-lg font-bold">Maintenance: Photo Migration</h3>
+              </div>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Migrate legacy Supabase storage photos to Cloudinary CDN for better performance and global delivery.
+              </p>
+              <button
+                onClick={async () => {
+                  if (!confirm("Start image migration? This cannot be undone.")) return;
+                  setIsMigrating(true);
+                  try {
+                    const res = await fetch("/api/migrate-photos", { method: "POST" });
+                    if (!res.ok) throw new Error("Migration failed");
+                    toast.success("Migration complete!");
+                  } catch (err: any) {
+                    toast.error(err.message);
+                  } finally {
+                    setIsMigrating(false);
+                  }
+                }}
+                disabled={isMigrating}
+                className="flex items-center px-6 py-3 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold rounded-xl transition-all"
+              >
+                <RefreshCcw size={18} className={`mr-2 ${isMigrating && 'animate-spin'}`} />
+                {isMigrating ? "Migrating Data..." : "Run CDN Migration"}
+              </button>
+            </div>
+
+            <div className="bg-gray-900/50 border border-gray-800 rounded-3xl p-8">
+                <h3 className="text-lg font-bold mb-4">Admin Security</h3>
+                <p className="text-gray-400 text-sm mb-6">Current session will expire in 24 hours. For security, always logout after use.</p>
+                <div className="p-4 bg-gray-800/50 rounded-2xl border border-gray-700/50 text-xs font-mono text-gray-500">
+                    System Version: 2.1.0-STABLE<br/>
+                    Last Build: {new Date().toLocaleDateString()}<br/>
+                    Node Environment: production
+                </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-white dark:dark:bg-gradient-to-b from-premium-light to-white p-4 transition-colors duration-300">
-      <div className="mt-7 max-w-7xl mx-auto">
-        {/* Logout butonu */}
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Logout
-          </button>
-        </div>
-        <button
-          onClick={() => setShowDashboard(!showDashboard)}
-          className="mb-4 bg-purple-500 text-white px-4 py-2 rounded"
-        >
-          {showDashboard
-            ? "Dashboard'u Kapat"
-            : "Satış/Kiralama Kayıtlarını Göster"}
-        </button>
-
-        {/* Cloudinary Migrasyon Butonu */}
-        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl">
-          <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">
-            📦 Supabase → Cloudinary Fotoğraf Migrasyonu
-          </p>
-          <p className="text-xs text-amber-600 dark:text-amber-400 mb-3">
-            Eski Supabase fotoğraflarını Cloudinary&apos;e taşır.
-          </p>
-          <button
-            onClick={async () => {
-              if (!confirm("Tüm Supabase fotoğraflarını Cloudinary'e taşımak istiyor musunuz? Bu işlem birkaç dakika sürebilir.")) return;
-              setIsMigrating(true);
-              setMigrationResult(null);
-              try {
-                const res = await fetch("/api/migrate-photos", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({}),
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                setMigrationResult({ totalMigrated: data.totalMigrated, carsProcessed: data.carsProcessed });
-                toast.success(`Migrasyon tamamlandı! ${data.totalMigrated} fotoğraf taşındı.`);
-              } catch (err) {
-                toast.error(err instanceof Error ? err.message : "Migrasyon hatası!");
-              } finally {
-                setIsMigrating(false);
-              }
-            }}
-            disabled={isMigrating}
-            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
-          >
-            {isMigrating ? "⏳ Taşınıyor..." : "🚀 Migrasyonu Başlat"}
-          </button>
-          {migrationResult && (
-            <p className="mt-2 text-xs text-green-700 dark:text-green-400 font-medium">
-              ✅ {migrationResult.carsProcessed} araç işlendi, {migrationResult.totalMigrated} fotoğraf Cloudinary&apos;e taşındı.
-            </p>
-          )}
-        </div>
-
-        {showDashboard && <TransactionManager cars={cars} />}
-      </div>
-      <div className="mt-7 max-w-7xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">
-          Admin Dashboard
-        </h1>
-
-        <div className="mb-8">
-          <CarFormModal
-            inline={true}
-            onSuccess={fetchCars}
-          />
-        </div>
+    <AdminLayout activeTab={activeTab} setActiveTab={setActiveTab} handleLogout={handleLogout}>
+      <div className="relative">
+        {renderContent()}
 
         <CarFormModal
           isOpen={isFormOpen}
@@ -139,18 +155,14 @@ export default function AdminPanel() {
             setEditingCar(null);
           }}
           carToEdit={editingCar}
-          onSuccess={fetchCars}
+          onSuccess={() => {
+              fetchCars();
+              fetchAdminData();
+          }}
         />
-
-        <CarList
-          cars={cars}
-          onEdit={handleEditClick}
-          onDelete={removeCar}
-          onToggleVisibility={toggleVisibility}
-          onUpdateListingType={updateListingType}
-        />
+        
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
-      <Toaster position="top-right" reverseOrder={false} />
-    </div>
+    </AdminLayout>
   );
 }

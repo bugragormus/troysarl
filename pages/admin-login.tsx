@@ -41,7 +41,7 @@ export default function AdminLogin() {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <Toaster position="top-right" />
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gradient-to-br from-premium-light to-premium-dark">
         <div className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-8">
           <div className="mb-8 text-center">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-800 mb-4">
