@@ -64,7 +64,10 @@ export default function CarDetail({ car }: { car: Car }) {
   const metaDescription = `Check out this ${car.brand} ${car.model} at Troy Cars Lux SARL. Premium used vehicles in Luxembourg, fully certified. Voitures d'occasion au Luxembourg. Gebrauchtwagen Luxemburg.`;
 
   const canonicalUrl = "https://troysarl.com/cars/" + car.id;
-  const ogImageUrl = "https://troysarl.com/og-cars" + car.id + ".jpg";
+  const ogImageUrl =
+    car?.photos?.length > 0
+      ? `https://troysarl.com${car.photos[0]}`
+      : "https://troysarl.com/troysarl-logo.png";
 
 
   return (

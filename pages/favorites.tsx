@@ -94,7 +94,7 @@ export default function FavoritesPage() {
     "Browse and manage your favorite cars. Troy Cars Lux Sarl offers premium used cars in Luxembourg. 🇱🇺 Consultez et gérez vos voitures préférées. Troy Cars Lux Sarl propose des voitures d'occasion haut de gamme au Luxembourg. 🇱🇺 Durchsuchen und verwalten Sie Ihre Lieblingsautos. Troy Cars Lux Sarl bietet Premium-Gebrauchtwagen in Luxemburg an. 🇱🇺";
 
   const canonicalUrl = "https://troysarl.com/favorites";
-  const ogImageUrl = "https://troysarl.com/og-favorites.jpg";
+  const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
 
   return (
     <div

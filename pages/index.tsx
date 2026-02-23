@@ -38,7 +38,7 @@ export default function Home() {
   const metaDescription =
     "Premium used and luxury cars for sale in Luxembourg. Troy Cars Lux SARL offers certified vehicles with 200-point checks. Voitures d'occasion et de luxe au Luxembourg. Gebrauchtwagen und Luxusautos in Luxemburg.";
   const canonicalUrl = "https://troysarl.com";
-  const ogImageUrl = "https://troysarl.com/og-home.jpg";
+  const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">

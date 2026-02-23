@@ -10,7 +10,7 @@ import Script from "next/script";
   const metaDescription = "Get in touch with Troy Cars Lux SARL in Luxembourg. Visit our showroom, call us, or send an inquiry. Premium used car dealer. Contactez notre équipe de vente. Kontaktieren Sie unser Verkaufsteam in Luxemburg.";
 
 const canonicalUrl = "https://troysarl.com/about";
-const ogImageUrl = "https://troysarl.com/og-about.jpg";
+const ogImageUrl = "https://troysarl.com/about-bg.jpg"; 
 
 export default function AboutPage() {
   return (

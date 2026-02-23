@@ -170,7 +170,7 @@ export default function CarsPage() {
     de: "Finden Sie Ihr nächstes Auto bei Troy Cars Lux SARL! Entdecken Sie hochwertige Gebrauchtwagen und Luxusautos in Luxemburg. Finanzierungsoptionen verfügbar.",
   };
   const canonicalUrl = "https://troysarl.com/cars";
-  const ogImageUrl = "https://troysarl.com/og-cars.jpg";
+  const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
 
   return (
     <div

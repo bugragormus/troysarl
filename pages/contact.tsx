@@ -49,7 +49,7 @@ export default function Contact() {
   const metaDescription = "Get in touch with Troy Cars Lux SARL in Luxembourg. Visit our showroom, call us, or send an inquiry. Premium used car dealer. Contactez notre équipe au Luxembourg. Kontaktieren Sie uns in Luxemburg.";
 
   const canonicalUrl = "https://troysarl.com/contact";
-  const ogImageUrl = "https://troysarl.com/og-contact.jpg";
+  const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
   return (
     <div
       className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"

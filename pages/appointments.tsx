@@ -84,7 +84,7 @@ export default function CareersPage() {
     "Book an appointment with Troy Cars for vehicle services and consultations. Schedule your visit today! Troy Cars is a Luxembourg-based second-hand vehicle trading company committed to reliability and high-quality service. Prenez rendez-vous avec Troy Cars pour des services automobiles et des consultations. Planifiez votre visite dès aujourd'hui ! Troy Cars est une entreprise luxembourgeoise spécialisée dans le commerce de véhicules d'occasion, opérant avec un engagement envers la fiabilité et un service de haute qualité. Vereinbaren Sie einen Termin mit Troy Cars für Fahrzeugdienstleistungen und Beratungen. Planen Sie noch heute Ihren Besuch! Troy Cars ist ein in Luxemburg ansässiges Unternehmen für den Handel mit Gebrauchtfahrzeugen, das mit einem Engagement für Zuverlässigkeit und hochwertigen Service arbeitet.";
 
   const canonicalUrl = "https://troysarl.com/appointments";
-  const ogImageUrl = "https://troysarl.com/og-appointments.jpg";
+  const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
 
   return (
     <div
