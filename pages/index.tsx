@@ -61,26 +61,6 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Toaster position="top-right" reverseOrder={false} />
       <Head>
-        <Head>
-          {/* Temel SEO Etiketleri */}
-          <title>{metaTitle}</title>
-          <meta name="description" content={metaDescription} />
-          <link rel="canonical" href={canonicalUrl} />
-
-          {/* Open Graph / Facebook */}
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content={canonicalUrl} />
-          <meta property="og:title" content={metaTitle} />
-          <meta property="og:description" content={metaDescription} />
-          <meta property="og:image" content={ogImageUrl} />
-
-          {/* Twitter */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={metaTitle} />
-          <meta name="twitter:description" content={metaDescription} />
-          <meta name="twitter:image" content={ogImageUrl} />
-        </Head>
-
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
@@ -116,6 +96,7 @@ export default function Home() {
           })}
         </script>
       </Head>
+
 
       {/* Google Analytics Scriptleri */}
       <Script

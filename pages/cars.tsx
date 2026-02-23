@@ -39,7 +39,9 @@ const colorOptions = [
 
 export default function CarsPage() {
   const [cars, setCars] = useState<Car[]>([]);
-  const [sortOrder, setSortOrder] = useState("desc"); // varsayılan: yüksekten düşüğe
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState("desc");
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,13 +63,59 @@ export default function CarsPage() {
 
   useEffect(() => {
     const fetchCars = async () => {
-      const { data, error } = await supabase
+      setIsLoading(true);
+      setError(null);
+
+      let query = supabase
         .from("cars")
         .select("*")
         .eq("is_hidden", false);
 
-      if (error) console.error("Error:", error);
-      else setCars(data || []);
+      // Listing type
+      if (filters.listingType !== "all") {
+        query = query.eq("listing_type", filters.listingType);
+      }
+
+      // Body type
+      if (filters.bodyType) query = query.eq("body_type", filters.bodyType);
+
+      // Fuel type
+      if (filters.fuelType) query = query.eq("fuel_type", filters.fuelType);
+
+      // Transmission
+      if (filters.transmission_type)
+        query = query.eq("transmission", filters.transmission_type);
+
+      // Doors
+      if (filters.doors) query = query.eq("doors", Number(filters.doors));
+
+      // Color
+      if (filters.color) query = query.ilike("color", filters.color);
+
+      // Price range
+      if (filters.minPrice) query = query.gte("price", Number(filters.minPrice));
+      if (filters.maxPrice) query = query.lte("price", Number(filters.maxPrice));
+
+      // Mileage range
+      if (filters.minMileage) query = query.gte("mileage", Number(filters.minMileage));
+      if (filters.maxMileage) query = query.lte("mileage", Number(filters.maxMileage));
+
+      // Year range — veritabanında ISO date string olarak tutuluyor
+      if (filters.minYear)
+        query = query.gte("year", `${filters.minYear}-01-01`);
+      if (filters.maxYear)
+        query = query.lte("year", `${filters.maxYear}-12-31`);
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error:", error);
+        setError("Failed to load vehicles. Please try again.");
+        toast.error("Failed to load vehicles.");
+      } else {
+        setCars(data || []);
+      }
+      setIsLoading(false);
     };
 
     fetchCars();
@@ -76,7 +124,7 @@ export default function CarsPage() {
       localStorage.getItem("favoriteCars") || "[]"
     );
     setFavorites(savedFavorites);
-  }, []);
+  }, [filters]);
 
   const toggleFavorite = (carId: string) => {
     let updatedFavorites = [...favorites];
@@ -95,42 +143,9 @@ export default function CarsPage() {
   const filteredCars = cars
     .filter((car) => {
       const matchesSearch =
+        !searchTerm ||
         car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
         car.model.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesListingType =
-        filters.listingType === "all" ||
-        car.listing_type === filters.listingType ||
-        (filters.listingType === "reserved" && car.listing_type === "reserved");
-
-      const matchesBodyType =
-        !filters.bodyType || car.body_type === filters.bodyType;
-      const matchesFuelType =
-        !filters.fuelType || car.fuel_type === filters.fuelType;
-
-      const matchesPrice =
-        (!filters.minPrice || car.price >= Number(filters.minPrice)) &&
-        (!filters.maxPrice || car.price <= Number(filters.maxPrice));
-
-      // İlk olarak car.year'i tam yıl sayısına çeviriyoruz
-      const carYear = new Date(car.year).getFullYear();
-
-      // Input'lardan gelen değerleri kontrol edip, boşsa undefined yapıyoruz
-      const minYear = filters.minYear.trim()
-        ? Number(filters.minYear)
-        : undefined;
-      const maxYear = filters.maxYear.trim()
-        ? Number(filters.maxYear)
-        : undefined;
-
-      // Son olarak, karşılaştırmayı carYear üzerinden yapıyoruz
-      const matchesYear =
-        (minYear === undefined || carYear >= minYear) &&
-        (maxYear === undefined || carYear <= maxYear);
-
-      const matchesMileage =
-        (!filters.minMileage || car.mileage >= Number(filters.minMileage)) &&
-        (!filters.maxMileage || car.mileage <= Number(filters.maxMileage));
 
       const matchesFeatures =
         filters.features.length === 0 ||
@@ -138,30 +153,7 @@ export default function CarsPage() {
           Object.values(car.features).flat().includes(feature)
         );
 
-      const matchesTransmission =
-        !filters.transmission_type ||
-        car.transmission === filters.transmission_type;
-
-      const matchesDoors =
-        !filters.doors || car.doors === Number(filters.doors);
-
-      const matchesColor =
-        !filters.color ||
-        car.color.toLowerCase() === filters.color.toLowerCase();
-
-      return (
-        matchesSearch &&
-        matchesListingType &&
-        matchesBodyType &&
-        matchesFuelType &&
-        matchesPrice &&
-        matchesYear &&
-        matchesMileage &&
-        matchesFeatures &&
-        matchesTransmission &&
-        matchesDoors &&
-        matchesColor
-      );
+      return matchesSearch && matchesFeatures;
     })
     .sort((a, b) => {
       // 1. Önce exclusive araçları en üste al

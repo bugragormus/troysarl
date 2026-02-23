@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { supabase } from "../../lib/supabaseClient";
 import Head from "next/head";
 import Image from "next/image";
@@ -12,6 +12,7 @@ import Car from "@/types/car";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import ContactForm from "@/components/ContactForm";
 
 // Modal stil ayarları
 Modal.setAppElement("#__next");
@@ -34,94 +35,57 @@ const modalStyles = {
   },
 };
 
-export default function CarDetail() {
+export default function CarDetail({ car }: { car: Car }) {
   const [favorites, setFavorites] = useState<string[]>([]);
-  const router = useRouter();
-  const { id } = router.query;
-  const [car, setCar] = useState<Car | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [consents, setConsents] = useState({
-    financing: false,
-    privacy: false,
-  });
+
+  // Favorites: localStorage'dan yükle (client-side only)
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("favoriteCars") || "[]");
+    setFavorites(saved);
+  }, []);
+
+  const toggleFavorite = (carId: string) => {
+    setFavorites((prev) => {
+      const updated = prev.includes(carId)
+        ? prev.filter((id) => id !== carId)
+        : [...prev, carId];
+      localStorage.setItem("favoriteCars", JSON.stringify(updated));
+      if (prev.includes(carId))
+        toast.error("The car has been removed from favorites.");
+      else toast.success("The car has been added to favorites.");
+      return updated;
+    });
+  };
+
   const handleImageClick = (index: number) => {
     setActiveImageIndex(index);
     setIsModalOpen(true);
   };
   const handlePrev = () => {
     setActiveImageIndex((prev) =>
-      prev > 0 ? prev - 1 : car ? car.photos.length - 1 : 0
+      prev > 0 ? prev - 1 : car.photos.length - 1
     );
   };
   const handleNext = () => {
     setActiveImageIndex((prev) =>
-      car && prev < car.photos.length - 1 ? prev + 1 : 0
+      prev < car.photos.length - 1 ? prev + 1 : 0
     );
-  };
-  useEffect(() => {
-    if (id) {
-      const fetchCar = async () => {
-        const { data, error } = await supabase
-          .from("cars")
-          .select("*")
-          .eq("id", id)
-          .eq("is_hidden", false)
-          .single();
-        if (error) {
-          console.error(error);
-          router.push("/404");
-        } else {
-          setCar(data);
-        }
-      };
-      fetchCar();
-
-      const savedFavorites = JSON.parse(
-        localStorage.getItem("favoriteCars") || "[]"
-      );
-      setFavorites(savedFavorites);
-    }
-  }, [id, router]); // Added `router` to the dependency array
-
-  const toggleFavorite = (carId: string) => {
-    let updatedFavorites = [...favorites];
-
-    if (updatedFavorites.includes(carId)) {
-      updatedFavorites = updatedFavorites.filter((id) => id !== carId); // Favoriden çıkar
-      toast.error("The car has been removed from favorites.");
-    } else {
-      updatedFavorites.push(carId); // Favorilere ekle
-      toast.success("The car has been added to favorites.");
-    }
-
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteCars", JSON.stringify(updatedFavorites));
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator
         .share({
-          title: `${car?.brand || "Unknown Brand"} ${
-            car?.model || "Unknown Model"
-          }`,
-          text: `Check out this car: ${car?.brand || "Unknown Brand"} ${
-            car?.model || "Unknown Model"
-          }`,
-          url: window.location.href, // You can link to the car's detail page or anywhere relevant
+          title: `${car.brand} ${car.model}`,
+          text: `Check out this car: ${car.brand} ${car.model}`,
+          url: window.location.href,
         })
         .then(() => console.log("Successfully shared!"))
         .catch((error) => console.log("Error sharing:", error));
     } else {
-      // Fallback for browsers that don't support `navigator.share`
       alert("Share functionality is not supported on this device.");
     }
   };
@@ -133,40 +97,10 @@ export default function CarDetail() {
   const metaDescription =
     "Explore our extensive collection of luxury and second-hand vehicles for sale or rent. We offer a wide range of vehicles, including sedans, SUVs, and sports cars, with flexible rental plans available. Découvrez notre vaste collection de véhicules de luxe et d'occasion à vendre ou à louer. Nous proposons une large gamme de véhicules, y compris des berlines, des SUV et des voitures de sport, avec des plans de location flexibles. Entdecken Sie unsere umfangreiche Sammlung von Luxus- und Gebrauchtfahrzeugen zum Verkauf oder zur Miete. Wir bieten eine breite Palette von Fahrzeugen, darunter Limousinen, SUVs und Sportwagen, mit flexiblen Mietplänen.";
 
-  const canonicalUrl = "https://troysarl.com/cars/" + id;
-  const ogImageUrl = "https://troysarl.com/og-cars" + id + ".jpg";
+  const canonicalUrl = "https://troysarl.com/cars/" + car.id;
+  const ogImageUrl = "https://troysarl.com/og-cars" + car.id + ".jpg";
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!consents.privacy) {
-      toast.error("You must accept the privacy policy to continue");
-      return;
-    }
-    const response = await fetch(
-      `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          consents,
-          car_id: id,
-          car_model: `${car?.brand} ${car?.model}`,
-          listing_type: car?.listing_type,
-          car_year: car?.year,
-          car_km: car?.mileage,
-          car_color: car?.color,
-        }),
-      }
-    );
-    if (response.ok) {
-      toast.success("Your request has been submitted successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      setShowContactForm(false);
-    }
-  };
-  if (!car)
-    return <div className="container mx-auto p-4 text-center">Loading...</div>;
+
   return (
     <div
       className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-white transition-colors duration-300"
@@ -521,127 +455,21 @@ export default function CarDetail() {
                 </div>
               )}
             </div>
-            {/* İletişim Formu (Sadece Rental İlanları İçin) */}
+            {/* İletişim Formu (Rental için) */}
             {showContactForm && car.listing_type === "rental" && (
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                  data-captcha="true"
-                >
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Full Name*
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Email*
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Phone*
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Message*
-                    </label>
-                    <textarea
-                      rows={4}
-                      required
-                      value={formData.message}
-                      onChange={(e) =>
-                        setFormData({ ...formData, message: e.target.value })
-                      }
-                      className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                      placeholder="Your rental details, preferred dates, etc."
-                    ></textarea>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
-                      <input
-                        type="checkbox"
-                        checked={consents.financing}
-                        onChange={(e) =>
-                          setConsents({
-                            ...consents,
-                            financing: e.target.checked,
-                          })
-                        }
-                        className="rounded text-blue-600 dark:bg-gray-700"
-                      />
-                      <span className="text-sm">
-                        I would like to be contacted for a financing offer
-                      </span>
-                    </label>
-                    <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
-                      <input
-                        type="checkbox"
-                        required
-                        checked={consents.privacy}
-                        onChange={(e) =>
-                          setConsents({
-                            ...consents,
-                            privacy: e.target.checked,
-                          })
-                        }
-                        className="rounded text-blue-600 dark:bg-gray-700"
-                      />
-                      <span className="text-sm">
-                        I accept the{" "}
-                        <a
-                          href="/privacy-policy"
-                          className="text-green-500 hover:underline"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          privacy policy
-                        </a>
-                      </span>
-                    </label>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full py-4 rounded-full bg-green-600 text-white font-bold shadow-lg hover:bg-green-700 transition-colors"
-                  >
-                    Request Rental Information
-                  </button>
-                </form>
-              </div>
+              <ContactForm
+                carId={car.id}
+                carBrand={car.brand}
+                carModel={car.model}
+                listingType={car.listing_type}
+                carYear={car.year}
+                carMileage={car.mileage}
+                carColor={car.color}
+                onClose={() => setShowContactForm(false)}
+              />
             )}
-            {/* İletişim Formu (Exclusive ve Sale/Reserved için) */}
-            {car.listing_type === "sale" || car.listing_type === "reserved" || car.is_exclusive ? (
+            {/* Randevu / İletişim Butonu (Sale ve Reserved için) */}
+            {(car.listing_type === "sale" || car.listing_type === "reserved") &&
               !car.is_exclusive && (
                 <div className="space-y-6 text-center">
                   <button
@@ -651,129 +479,23 @@ export default function CarDetail() {
                     {showContactForm ? "Close Form" : "Make an Appointment"}
                   </button>
                 </div>
-              )
-            ) : null}
-            {/* İletişim Formu (Sadece Satılık İlanları İçin) */}
+              )}
+            {/* İletişim Formu (Sale, Reserved, Exclusive için) */}
             {showContactForm &&
               (car.listing_type === "sale" ||
                 car.listing_type === "reserved" ||
                 car.is_exclusive) && (
-                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="space-y-6"
-                    data-captcha="true"
-                  >
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Full Name*
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Email*
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({ ...formData, email: e.target.value })
-                          }
-                          className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Phone*
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={formData.phone}
-                          onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value })
-                          }
-                          className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Message*
-                      </label>
-                      <textarea
-                        rows={4}
-                        required
-                        value={formData.message}
-                        onChange={(e) =>
-                          setFormData({ ...formData, message: e.target.value })
-                        }
-                        className="w-full p-3 mt-1 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-green-500"
-                        placeholder="Your preferred dates, etc."
-                      ></textarea>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
-                        <input
-                          type="checkbox"
-                          checked={consents.financing}
-                          onChange={(e) =>
-                            setConsents({
-                              ...consents,
-                              financing: e.target.checked,
-                            })
-                          }
-                          className="rounded text-blue-600 dark:bg-gray-700"
-                        />
-                        <span className="text-sm">
-                          I would like to be contacted for a financing offer
-                        </span>
-                      </label>
-                      <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
-                        <input
-                          type="checkbox"
-                          required
-                          checked={consents.privacy}
-                          onChange={(e) =>
-                            setConsents({
-                              ...consents,
-                              privacy: e.target.checked,
-                            })
-                          }
-                          className="rounded text-blue-600 dark:bg-gray-700"
-                        />
-                        <span className="text-sm">
-                          I accept the{" "}
-                          <a
-                            href="/privacy-policy"
-                            className="text-green-500 hover:underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            privacy policy
-                          </a>
-                        </span>
-                      </label>
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full py-4 rounded-lg bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-900 font-medium shadow-md transition-all duration-300"
-                    >
-                      Send Appointment Request
-                    </button>
-                  </form>
-                </div>
+                <ContactForm
+                  carId={car.id}
+                  carBrand={car.brand}
+                  carModel={car.model}
+                  listingType={car.listing_type}
+                  isExclusive={car.is_exclusive}
+                  carYear={car.year}
+                  carMileage={car.mileage}
+                  carColor={car.color}
+                  onClose={() => setShowContactForm(false)}
+                />
               )}
             {/* Specifications */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -888,3 +610,44 @@ export default function CarDetail() {
     </div>
   );
 }
+
+// --- SSG ---
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const { data: cars } = await supabase
+    .from("cars")
+    .select("id")
+    .eq("is_hidden", false);
+
+  const paths = (cars || []).map((car) => ({
+    params: { id: car.id.toString() },
+  }));
+
+  return {
+    paths,
+    // 'blocking': Yeni eklenen araçlar ilk ziyarette sunucu tarafında render edilir
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const id = params?.id as string;
+
+  const { data: car, error } = await supabase
+    .from("cars")
+    .select("*")
+    .eq("id", id)
+    .eq("is_hidden", false)
+    .single();
+
+  if (error || !car) {
+    return { notFound: true };
+  }
+
+  return {
+    props: { car },
+    // ISR: Her 60 saniyede bir yeniden generate et (fiyat/status değişiklikleri için)
+    revalidate: 60,
+  };
+};
+
