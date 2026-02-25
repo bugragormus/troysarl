@@ -75,7 +75,6 @@ export default function CarDetail({ car }: { car: Car }) {
       className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300"
       aria-label="Car Detail Page"
     >
-      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         {/* Temel SEO Etiketleri */}
         <title>{metaTitle}</title>

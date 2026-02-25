@@ -68,7 +68,6 @@ export default function ResetPasswordPage() {
       <Head>
         <title>Set New Password | Troy Cars Lux SARL</title>
       </Head>
-      <Toaster position="top-right" />
       
       <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gradient-to-br from-premium-light to-premium-dark transition-colors duration-500">
         <div className="w-full max-w-md">

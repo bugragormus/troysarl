@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import Script from "next/script";
 import { AuthProvider } from "../hooks/useAuth";
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -23,6 +24,13 @@ export default function App({ Component, pageProps }: AppProps) {
           `}
         </Script>
         <SpeedInsights />
+        <Toaster 
+          position="top-right" 
+          toastOptions={{
+            style: { zIndex: 999999 },
+          }}
+          containerStyle={{ zIndex: 999999 }}
+        />
         <Component {...pageProps} />
       </Layout>
     </AuthProvider>

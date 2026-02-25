@@ -177,7 +177,6 @@ export default function CarsPage() {
       className="min-h-screen bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300"
       aria-label="Vehicle Catalog"
     >
-      <Toaster position="top-right" reverseOrder={false} />
       <Head>
         <title>{`${metaTitles.en} | ${metaTitles.fr}`}</title>
         <meta name="description" content={`${metaDescriptions.en} ${metaDescriptions.fr}`} />

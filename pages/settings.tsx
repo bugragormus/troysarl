@@ -44,7 +44,6 @@ export default function SettingsPage() {
 
   return (
     <div className="bg-white dark:bg-gradient-to-b from-premium-light to-premium-dark transition-colors duration-300">
-      <Toaster position="top-right" reverseOrder={false} />
       <div className="container mx-auto p-6 max-w-4xl">
         <Head>
           <title>Cookie Settings - Troysarl</title>
