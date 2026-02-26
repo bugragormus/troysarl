@@ -41,7 +41,7 @@ export default function NewsIndex() {
         <meta property="og:type" content="blog" />
       </Head>
 
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-bg dark:to-[#0a0a0a] min-h-screen py-24 transition-colors duration-300">
+      <div className="bg-gradient-to-br from-gray-50 to-gray-200/50 dark:from-[#050505] dark:to-[#111] min-h-screen py-24 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16 animate-in fade-in slide-in-from-bottom-6 duration-700">
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">

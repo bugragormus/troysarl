@@ -70,7 +70,6 @@ export default function Layout({ children }: LayoutProps) {
                   { name: 'Cars', href: '/cars' },
                   { name: 'Appointment', href: '/appointments' },
                   { name: 'About Us', href: '/about' },
-                  { name: 'News & Reviews', href: '/news' },
                   { name: 'Favorites', href: '/favorites' },
                   { name: 'Contact', href: '/contact' },
                 ].map((item) => (
@@ -165,7 +164,6 @@ export default function Layout({ children }: LayoutProps) {
                 {[
                   { name: 'Cars', href: '/cars' },
                   { name: 'About Us', href: '/about' },
-                  { name: 'News & Reviews', href: '/news' },
                   { name: 'Favorites', href: '/favorites' },
                   { name: 'Contact', href: '/contact' },
                 ].map((item) => (

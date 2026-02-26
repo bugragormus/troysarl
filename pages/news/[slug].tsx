@@ -142,7 +142,7 @@ export default function BlogPostDetail({ post }: { post: any }) {
         />
       </Head>
 
-      <div className="bg-gray-50 dark:bg-[#0a0a0a] min-h-screen py-10 transition-colors duration-300">
+      <div className="bg-gradient-to-br from-gray-50 to-gray-200/50 dark:from-[#050505] dark:to-[#111] min-h-screen py-10 transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-6">
           <Link href="/news" className="inline-flex items-center text-blue-600 dark:text-blue-400 font-bold hover:underline mb-12 group">
             <ArrowLeft size={18} className="mr-2 group-hover:-translate-x-1 transition-transform" />
