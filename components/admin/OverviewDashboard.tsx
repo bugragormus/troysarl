@@ -166,7 +166,7 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
         "Customer ID": p.id,
         "Full Name": p.full_name || "Unknown",
         "Phone Number": p.phone || "Not Provided",
-        "Registration Date": p.created_at ? new Date(p.created_at).toLocaleDateString() : "N/A",
+        "Last Updated": p.updated_at ? new Date(p.updated_at).toLocaleDateString() : "N/A",
         "Marketing Consent": p.marketing_consent ? "YES (VIP)" : "NO",
         "Price Drop Alerts": p.price_drop_alerts ? "YES" : "NO",
         "New Arrival Alerts": p.new_arrival_alerts ? "YES" : "NO"

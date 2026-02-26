@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const [carsRes, transRes, profRes, favRes, viewsRes] = await Promise.all([
       supabase.from("cars").select("*"),
       supabase.from("transactions").select("*"),
-      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("profiles").select("*").order("updated_at", { ascending: false }),
       supabase.from("user_favorites").select("car_id"),
       supabase.from("page_views").select("car_id")
     ]);

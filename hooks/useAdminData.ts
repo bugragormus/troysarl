@@ -19,7 +19,7 @@ export interface UserProfile {
   marketing_consent: boolean;
   price_drop_alerts: boolean;
   new_arrival_alerts: boolean;
-  created_at: string;
+  updated_at: string;
 }
 
 export interface FavoriteStat {
