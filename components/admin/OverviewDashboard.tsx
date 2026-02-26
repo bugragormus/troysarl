@@ -5,7 +5,8 @@ import CarType from "@/types/car";
 import { Transaction } from "@/types/transaction";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 interface OverviewDashboardProps {
   stats: AdminStats;
@@ -87,14 +88,35 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
     }
   };
 
-  const handleExportData = () => {
+  const handleExportData = async () => {
     if (cars.length === 0 && profiles.length === 0 && transactions.length === 0) {
       toast.error("No data available to export.");
       return;
     }
 
     try {
-      const wb = XLSX.utils.book_new();
+      const wb = new ExcelJS.Workbook();
+      wb.creator = 'Troy Cars SARL';
+      wb.created = new Date();
+
+      // Helper function to add structured data to a worksheet
+      const addDataToSheet = (worksheet: ExcelJS.Worksheet, data: any[]) => {
+        if (data.length === 0) return;
+        const headers = Object.keys(data[0]);
+        worksheet.addRow(headers);
+        // Style headers
+        worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2937' } };
+        
+        data.forEach(rowItem => {
+          worksheet.addRow(Object.values(rowItem));
+        });
+        
+        // Auto-fit columns
+        worksheet.columns.forEach((column: Partial<ExcelJS.Column>) => {
+          column.width = 20;
+        });
+      };
 
       // Sheet 1: Inventory & Analytics
       const inventoryData = cars.map(car => {
@@ -113,8 +135,8 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
           "Created Date": car.created_at ? new Date(car.created_at).toLocaleDateString() : "N/A"
         };
       });
-      const wsInventory = XLSX.utils.json_to_sheet(inventoryData);
-      XLSX.utils.book_append_sheet(wb, wsInventory, "Inventory & Traffic");
+      const wsInventory = wb.addWorksheet("Inventory & Traffic");
+      addDataToSheet(wsInventory, inventoryData);
 
       // Sheet 2: Financials & Sales
       const financialData = transactions.map(t => {
@@ -136,8 +158,8 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
           "Transaction Date": t.start_date ? new Date(t.start_date).toLocaleDateString() : "N/A"
         };
       });
-      const wsFinancials = XLSX.utils.json_to_sheet(financialData);
-      XLSX.utils.book_append_sheet(wb, wsFinancials, "Financials & Sales");
+      const wsFinancials = wb.addWorksheet("Financials & Sales");
+      addDataToSheet(wsFinancials, financialData);
 
       // Sheet 3: CRM & Marketing
       const crmData = profiles.map(p => ({
@@ -149,17 +171,20 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
         "Price Drop Alerts": p.price_drop_alerts ? "YES" : "NO",
         "New Arrival Alerts": p.new_arrival_alerts ? "YES" : "NO"
       }));
-      const wsCRM = XLSX.utils.json_to_sheet(crmData);
-      XLSX.utils.book_append_sheet(wb, wsCRM, "CRM & Marketing");
+      const wsCRM = wb.addWorksheet("CRM & Marketing");
+      addDataToSheet(wsCRM, crmData);
 
       // Export the workbook
+      const buffer = await wb.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       const fileName = `Troy_Cars_Executive_Report_${new Date().toISOString().split('T')[0]}.xlsx`;
-      XLSX.writeFile(wb, fileName);
+      
+      saveAs(blob, fileName);
       
       toast.success("Executive Multi-Sheet Report exported successfully.");
     } catch (error) {
-       console.error("Export Error:", error);
-       toast.error("An error occurred while exporting the report.");
+      console.error("Export error:", error);
+      toast.error("Failed to generate export file.");
     }
   };
 
