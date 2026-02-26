@@ -11,7 +11,8 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import OverviewDashboard from "@/components/admin/OverviewDashboard";
 import UserManagement from "@/components/admin/UserManagement";
 import ContentManager from "@/components/admin/ContentManager";
-import { HardDrive, RefreshCcw } from "lucide-react";
+import LeadInsights from "@/components/admin/LeadInsights";
+import { HardDrive, RefreshCcw, LineChart } from "lucide-react";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -93,6 +94,8 @@ export default function AdminPanel() {
         );
       case "users":
         return <UserManagement profiles={profiles} />;
+      case "insights":
+        return <LeadInsights />;
       case "settings":
         return (
           <div className="max-w-2xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -109,24 +112,11 @@ export default function AdminPanel() {
                 Migrate legacy Supabase storage photos to Cloudinary CDN for better performance and global delivery.
               </p>
               <button
-                onClick={async () => {
-                  if (!confirm("Start image migration? This cannot be undone.")) return;
-                  setIsMigrating(true);
-                  try {
-                    const res = await fetch("/api/migrate-photos", { method: "POST" });
-                    if (!res.ok) throw new Error("Migration failed");
-                    toast.success("Migration complete!");
-                  } catch (err: any) {
-                    toast.error(err.message);
-                  } finally {
-                    setIsMigrating(false);
-                  }
-                }}
-                disabled={isMigrating}
-                className="flex items-center px-6 py-3 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold rounded-xl transition-all"
+                disabled={true}
+                className="flex items-center px-6 py-3 bg-gray-600 cursor-not-allowed opacity-50 text-white font-bold rounded-xl transition-all"
               >
-                <RefreshCcw size={18} className={`mr-2 ${isMigrating && 'animate-spin'}`} />
-                {isMigrating ? "Migrating Data..." : "Run CDN Migration"}
+                <RefreshCcw size={18} className="mr-2" />
+                Migration Completed
               </button>
             </div>
 
