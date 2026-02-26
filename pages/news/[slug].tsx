@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { format } from "date-fns";
-import { Calendar, User, ArrowLeft, Share, MapPin, Share2 } from "lucide-react";
+import { Calendar, User, ArrowLeft, Share, MapPin, Share2, Eye } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Sentry from "@sentry/react";
@@ -83,6 +84,23 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
 export default function BlogPostDetail({ post }: { post: any }) {
   const router = useRouter();
+  const [viewCount, setViewCount] = useState(post.views_count || 0);
+
+  useEffect(() => {
+    if (post.slug) {
+      // Track view
+      fetch("/api/track-blog-view", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: post.slug }),
+      }).then(res => {
+          if (res.ok) {
+              // Optionally update locally to show immediate feedback if needed
+              // setViewCount(prev => prev + 1);
+          }
+      });
+    }
+  }, [post.slug]);
 
   if (router.isFallback) {
     return <div className="min-h-screen flex items-center justify-center font-bold text-2xl text-gray-500">Loading Article...</div>;
@@ -182,6 +200,10 @@ export default function BlogPostDetail({ post }: { post: any }) {
               <span className="flex items-center bg-gray-100/80 dark:bg-gray-800/50 px-4 py-2 rounded-full border border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300">
                 <User size={14} className="mr-2" />
                 {authorName}
+              </span>
+              <span className="flex items-center bg-gray-100/80 dark:bg-gray-800/50 px-4 py-2 rounded-full border border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300">
+                <Eye size={14} className="mr-2" />
+                {post.views_count || 0} views
               </span>
             </div>
 

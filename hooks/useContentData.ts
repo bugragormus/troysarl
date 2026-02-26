@@ -15,6 +15,7 @@ export interface BlogPost {
   keywords: string;
   published_at: string;
   created_at: string;
+  views_count?: number;
 }
 
 export function useContentData() {
