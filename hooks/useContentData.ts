@@ -24,13 +24,11 @@ export function useContentData() {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setPosts(data || []);
+      const response = await fetch('/api/admin-content');
+      if (!response.ok) throw new Error("Failed to load blog posts");
+      
+      const data = await response.json();
+      setPosts(data.posts || []);
     } catch (error: any) {
       console.error("Error fetching posts:", error);
       toast.error("Failed to load blog posts");
@@ -41,44 +39,26 @@ export function useContentData() {
 
   const savePost = async (post: Partial<BlogPost>) => {
     try {
-      const { data: userAuth } = await supabase.auth.getUser();
+      const response = await fetch('/api/admin-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+      });
       
-      const postData = {
-        ...post,
-        author_id: userAuth?.user?.id,
-        updated_at: new Date().toISOString()
-      };
-
-      if (post.status === "published" && !post.published_at) {
-        postData.published_at = new Date().toISOString();
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save post");
       }
-
-      let error;
-      if (post.id) {
-        const { error: updateError } = await supabase
-          .from("blog_posts")
-          .update(postData)
-          .eq("id", post.id);
-        error = updateError;
-      } else {
-        const { error: insertError } = await supabase
-          .from("blog_posts")
-          .insert([postData]);
-        error = insertError;
-      }
-
-      if (error) throw error;
+      
       toast.success(`Post ${post.id ? 'updated' : 'created'} successfully!`);
       await fetchPosts();
       return true;
     } catch (error: any) {
       console.error("Failed to save post:", error);
-      // More specific error handling for unique slugs
-      if (error.code === '23505' && error.message.includes('slug')) {
-         toast.error("This SEO slug is already in use. Please choose another.");
-      } else {
-         toast.error(error.message || "Failed to save post.");
-      }
+      toast.error(error.message || "Failed to save post.");
       return false;
     }
   };
@@ -86,14 +66,19 @@ export function useContentData() {
   const deletePost = async (id: string) => {
     if (!confirm("Are you sure you want to permanently delete this post?")) return false;
     try {
-      const { error } = await supabase.from("blog_posts").delete().eq("id", id);
-      if (error) throw error;
+      const response = await fetch(`/api/admin-content?id=${id}`, {
+        method: 'DELETE'
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Deletion failed");
+      
       toast.success("Post deleted.");
       await fetchPosts();
       return true;
     } catch (error: any) {
       console.error("Failed to delete:", error);
-      toast.error("Deletion failed");
+      toast.error(error.message || "Deletion failed");
       return false;
     }
   };

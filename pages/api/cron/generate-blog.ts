@@ -109,7 +109,7 @@ export default async function handler(
         const { data: existing } = await supabase.from("blog_posts").select("id").eq("slug", finalSlug).maybeSingle();
         if (existing) finalSlug = `${finalSlug}-${Math.random().toString(36).substring(2, 6)}`;
 
-        return supabase.from("blog_posts").insert({
+        const { error: insertError } = await supabase.from("blog_posts").insert({
             title: post.title,
             slug: finalSlug,
             content: post.content,
@@ -119,6 +119,11 @@ export default async function handler(
             status: "draft", // Leave as draft for admin approval
             updated_at: new Date().toISOString(),
         });
+        
+        if (insertError) {
+          console.error(`Failed to insert post [${finalSlug}]:`, insertError);
+          throw new Error(`Database insert failed: ${insertError.message}`);
+        }
     };
 
     // 4. Save to Database
