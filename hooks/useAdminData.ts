@@ -27,6 +27,11 @@ export interface FavoriteStat {
   count: number;
 }
 
+export interface PageViewStat {
+  car_id: string;
+  count: number;
+}
+
 export function useAdminData() {
   const [stats, setStats] = useState<AdminStats>({
     totalCars: 0,
@@ -39,6 +44,7 @@ export function useAdminData() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
   const [hotLeads, setHotLeads] = useState<FavoriteStat[]>([]);
+  const [trendingTraffic, setTrendingTraffic] = useState<PageViewStat[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAdminData = useCallback(async () => {
@@ -66,6 +72,13 @@ export function useAdminData() {
       
       if (favError) throw favError;
 
+      // 5. Fetch Page Views for "Trending Traffic"
+      const { data: pageViewsData, error: viewsError } = await supabase
+        .from("page_views")
+        .select("car_id");
+      
+      if (viewsError) throw viewsError;
+
       const typedCars = (carsData || []) as Car[];
       const typedTrans = (transactions || []) as Transaction[];
       const typedProfiles = (userProfiles || []) as UserProfile[];
@@ -87,6 +100,19 @@ export function useAdminData() {
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
 
+      // Aggregate page views
+      const viewCounts: { [key: string]: number } = {};
+      pageViewsData?.forEach(v => {
+        if (v.car_id) {
+          viewCounts[v.car_id] = (viewCounts[v.car_id] || 0) + 1;
+        }
+      });
+
+      const sortedTraffic = Object.entries(viewCounts)
+        .map(([car_id, count]) => ({ car_id, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
       setStats({
         totalCars: typedCars.length,
         liveListings: typedCars.filter(c => c.listing_type !== 'sold').length,
@@ -99,6 +125,7 @@ export function useAdminData() {
       setProfiles(typedProfiles);
       setCars(typedCars);
       setHotLeads(sortedLeads);
+      setTrendingTraffic(sortedTraffic);
     } catch (error) {
       console.error("Admin data fetch error:", error);
     } finally {
@@ -111,6 +138,7 @@ export function useAdminData() {
     profiles,
     cars,
     hotLeads,
+    trendingTraffic,
     loading,
     fetchAdminData
   };

@@ -1,5 +1,5 @@
-import { TrendingUp, Car, DollarSign, Users, Briefcase, Activity, Flame, Download, Send, ShieldCheck, Zap } from "lucide-react";
-import { AdminStats, UserProfile, FavoriteStat } from "@/hooks/useAdminData";
+import { TrendingUp, Car, Users, Briefcase, Activity, Flame, Download, Send, ShieldCheck, Zap, Eye } from "lucide-react";
+import { AdminStats, UserProfile, FavoriteStat, PageViewStat } from "@/hooks/useAdminData";
 import CarType from "@/types/car";
 import toast from "react-hot-toast";
 
@@ -8,9 +8,10 @@ interface OverviewDashboardProps {
   profiles: UserProfile[];
   cars: CarType[];
   hotLeads: FavoriteStat[];
+  trendingTraffic: PageViewStat[];
 }
 
-export default function OverviewDashboard({ stats, profiles, cars, hotLeads }: OverviewDashboardProps) {
+export default function OverviewDashboard({ stats, profiles, cars, hotLeads, trendingTraffic }: OverviewDashboardProps) {
   const cards = [
     { label: "Total Inventory", value: stats.totalCars, icon: Car, color: "blue" },
     { label: "Live Listings", value: stats.liveListings, icon: Activity, color: "green" },
@@ -134,47 +135,92 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads }: O
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Hot Leads / Performance */}
-        <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-            <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
-                <Flame size={20} className="text-orange-500 mr-3" />
-                Hot Leads: Most Favorited
-            </h3>
-            
-            <div className="space-y-4">
-              {hotLeads.length > 0 ? (
-                hotLeads.map((lead, idx) => {
-                  const car = cars.find(c => c.id === lead.car_id);
-                  return (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 rounded-xl bg-gray-700 overflow-hidden relative">
-                           {car?.photos?.[0] ? (
-                             <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
-                           ) : (
-                             <Car size={20} className="absolute inset-0 m-auto text-gray-500" />
-                           )}
+        {/* Left Column: Analytics (Hot Leads + Traffic) */}
+        <div className="space-y-6">
+            <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                    <Flame size={20} className="text-orange-500 mr-3" />
+                    Hot Leads: Most Favorited
+                </h3>
+                
+                <div className="space-y-4">
+                  {hotLeads.length > 0 ? (
+                    hotLeads.map((lead, idx) => {
+                      const car = cars.find(c => c.id === lead.car_id);
+                      return (
+                        <div key={idx} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 rounded-xl bg-gray-700 overflow-hidden relative">
+                               {car?.photos?.[0] ? (
+                                 <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
+                               ) : (
+                                 <Car size={20} className="absolute inset-0 m-auto text-gray-500" />
+                               )}
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-800 dark:text-gray-200">
+                                {car ? `${car.brand} ${car.model}` : "Unknown Car"}
+                              </p>
+                              <p className="text-xs text-gray-500">Inventory ID: {lead.car_id.slice(0, 8)}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center text-orange-400 font-bold">
+                            <TrendingUp size={14} className="mr-2" />
+                            {lead.count} Likes
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-bold text-gray-800 dark:text-gray-200">
-                            {car ? `${car.brand} ${car.model}` : "Unknown Car"}
-                          </p>
-                          <p className="text-xs text-gray-500">Inventory ID: {lead.car_id.slice(0, 8)}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center text-orange-400 font-bold">
-                        <TrendingUp size={14} className="mr-2" />
-                        {lead.count} Likes
-                      </div>
+                      );
+                    })
+                  ) : (
+                    <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 italic">
+                       No favorites recorded yet.
                     </div>
-                  );
-                })
-              ) : (
-                <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 italic">
-                   No favorites recorded yet.
+                  )}
                 </div>
-              )}
+            </div>
+
+            <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+                    <Eye size={20} className="text-blue-500 mr-3" />
+                    Trending Traffic: Most Viewed
+                </h3>
+                
+                <div className="space-y-4">
+                  {trendingTraffic.length > 0 ? (
+                    trendingTraffic.map((view, idx) => {
+                      const car = cars.find(c => c.id === view.car_id);
+                      return (
+                        <div key={idx} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 rounded-xl bg-gray-700 overflow-hidden relative">
+                               {car?.photos?.[0] ? (
+                                 <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
+                               ) : (
+                                 <Car size={20} className="absolute inset-0 m-auto text-gray-500" />
+                               )}
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-800 dark:text-gray-200">
+                                {car ? `${car.brand} ${car.model}` : "Unknown Car"}
+                              </p>
+                              <p className="text-xs text-gray-500">Inventory ID: {view.car_id.slice(0, 8)}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center text-blue-400 font-bold tracking-tight">
+                            <Eye size={16} className="mr-2" />
+                            {view.count} Views
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 italic">
+                       No views recorded yet.
+                    </div>
+                  )}
+                </div>
             </div>
         </div>
         

@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
 import ContactForm from "@/components/ContactForm";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useAuth } from "@/hooks/useAuth";
 
 // Modal stil ayarları
 Modal.setAppElement("#__next");
@@ -36,6 +37,7 @@ const modalStyles = {
 };
 
 export default function CarDetail({ car }: { car: Car }) {
+  const { user } = useAuth();
   const { favorites, toggleFavorite } = useFavorites();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +47,20 @@ export default function CarDetail({ car }: { car: Car }) {
     setActiveImageIndex(index);
     setIsModalOpen(true);
   };
+
+  // Track page view once when the component mounts
+  useEffect(() => {
+    if (!car?.id) return;
+    
+    fetch('/api/track-view', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        carId: car.id,
+        userId: user?.id || null
+      })
+    }).catch(err => console.error("Tracking error:", err));
+  }, [car?.id, user?.id]);
   const handlePrev = () => {
     setActiveImageIndex((prev) =>
       prev > 0 ? prev - 1 : car.photos.length - 1
