@@ -2,22 +2,28 @@ import Head from "next/head";
 import { format } from "date-fns";
 import { Calendar, User, ArrowLeft, Share, MapPin, Share2 } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
 import * as Sentry from "@sentry/react";
 import toast from "react-hot-toast";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize admin client strictly for server-side Next.js functions
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 // Fetching paths for static generation
 export async function getStaticPaths() {
   try {
-    const { data: posts, error } = await supabase
+    const { data: posts, error } = await supabaseAdmin
       .from("blog_posts")
       .select("slug")
       .eq("status", "published");
 
     if (error) throw error;
 
-    const paths = posts.map((post) => ({
+    const paths = (posts || []).map((post) => ({
       params: { slug: post.slug },
     }));
 
@@ -31,26 +37,40 @@ export async function getStaticPaths() {
 // Fetching dynamic content
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   try {
-    const { data: post, error } = await supabase
+    const { data: post, error } = await supabaseAdmin
       .from("blog_posts")
-      .select(`
-        *,
-        author:author_id (
-            email,
-            raw_user_meta_data
-        )
-      `)
+      .select("*")
       .eq("slug", params.slug)
       .eq("status", "published")
       .single();
 
     if (error || !post) {
+       console.error(`Post [${params.slug}] Fetch Error:`, error);
        return { notFound: true };
+    }
+
+    // Attempt to manually fetch author details if an author_id exists
+    let authorData = null;
+    if (post.author_id) {
+       try {
+           const { data: userAuth } = await supabaseAdmin.auth.admin.getUserById(post.author_id);
+           if (userAuth && userAuth.user) {
+               authorData = {
+                   email: userAuth.user.email,
+                   raw_user_meta_data: userAuth.user.user_metadata
+               };
+           }
+       } catch (err) {
+           console.error("DEBUG News: Failed to fetch author metadata:", err);
+       }
     }
 
     return {
       props: {
-        post,
+        post: {
+            ...post,
+            author: authorData
+        }
       },
       revalidate: 60, // Revalidate every minute
     };
