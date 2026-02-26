@@ -10,6 +10,7 @@ import { useAdminData } from "@/hooks/useAdminData";
 import AdminLayout from "@/components/admin/AdminLayout";
 import OverviewDashboard from "@/components/admin/OverviewDashboard";
 import UserManagement from "@/components/admin/UserManagement";
+import ContentManager from "@/components/admin/ContentManager";
 import { HardDrive, RefreshCcw } from "lucide-react";
 
 export default function AdminPanel() {
@@ -79,6 +80,8 @@ export default function AdminPanel() {
             />
           </div>
         );
+      case "content":
+        return <ContentManager />;
       case "transactions":
         return (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">

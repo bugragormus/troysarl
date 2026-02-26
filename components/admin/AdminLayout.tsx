@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { LayoutDashboard, Car, Receipt, Users, Settings, LogOut, ChevronLeft, ChevronRight, Menu } from "lucide-react";
+import { LayoutDashboard, Car, Receipt, Users, Settings, LogOut, ChevronLeft, ChevronRight, Menu, PenTool } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -17,6 +17,7 @@ export default function AdminLayout({ children, activeTab, setActiveTab, handleL
   const menuItems = [
     { id: "overview", label: "Dashboard", icon: LayoutDashboard },
     { id: "inventory", label: "Inventory", icon: Car },
+    { id: "content", label: "Content", icon: PenTool },
     { id: "transactions", label: "Transactions", icon: Receipt },
     { id: "users", label: "Users", icon: Users },
     { id: "settings", label: "Settings", icon: Settings },
