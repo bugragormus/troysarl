@@ -84,15 +84,21 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads }: O
     toast.success("Inventory report exported as CSV (Excel compatible).");
   };
 
-  const handleSystemCheck = () => {
-    toast.promise(
-      new Promise((resolve) => setTimeout(resolve, 1500)),
-      {
-        loading: 'Checking system integrity...',
-        success: 'System healthy. All services operational.',
-        error: 'System check failed.',
+  const handleSystemCheck = async () => {
+    const toastId = toast.loading('Pinging database and checking core services...');
+    
+    try {
+      const response = await fetch('/api/system-health');
+      const data = await response.json();
+      
+      if (response.ok && data.status === "healthy") {
+        toast.success(`System operational. Latency: ${data.responseTimeMs}ms`, { id: toastId });
+      } else {
+        throw new Error(data.message || "Health check failed");
       }
-    );
+    } catch (error: any) {
+      toast.error(`System anomaly detected: ${error.message}`, { id: toastId });
+    }
   };
 
   return (
