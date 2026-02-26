@@ -2,18 +2,21 @@ import { useState } from "react";
 import { TrendingUp, Car, Users, Briefcase, Activity, Flame, Download, Send, ShieldCheck, Zap, Eye, X } from "lucide-react";
 import { AdminStats, UserProfile, FavoriteStat, PageViewStat } from "@/hooks/useAdminData";
 import CarType from "@/types/car";
+import { Transaction } from "@/types/transaction";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
+import * as XLSX from "xlsx";
 
 interface OverviewDashboardProps {
   stats: AdminStats;
   profiles: UserProfile[];
   cars: CarType[];
+  transactions: Transaction[];
   hotLeads: FavoriteStat[];
   trendingTraffic: PageViewStat[];
 }
 
-export default function OverviewDashboard({ stats, profiles, cars, hotLeads, trendingTraffic }: OverviewDashboardProps) {
+export default function OverviewDashboard({ stats, profiles, cars, transactions, hotLeads, trendingTraffic }: OverviewDashboardProps) {
   const cards = [
     { label: "Total Inventory", value: stats.totalCars, icon: Car, color: "blue" },
     { label: "Live Listings", value: stats.liveListings, icon: Activity, color: "green" },
@@ -21,8 +24,10 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
     { label: "Marketing Leads", value: stats.marketingOptInCount, icon: Briefcase, color: "indigo" },
   ];
 
-  // Internal state for Newsletter Modal
+  // Internal state for Modals
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
+  const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
+  const [analyticsTab, setAnalyticsTab] = useState<'favorites' | 'views'>('views');
   const [isSending, setIsSending] = useState(false);
   const [newsletterSubject, setNewsletterSubject] = useState("Troy Cars SARL - Exclusive New Arrivals & VIP Offers");
   const [newsletterBody, setNewsletterBody] = useState(
@@ -83,40 +88,79 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
   };
 
   const handleExportData = () => {
-    if (cars.length === 0) {
-      toast.error("No inventory data to export.");
+    if (cars.length === 0 && profiles.length === 0 && transactions.length === 0) {
+      toast.error("No data available to export.");
       return;
     }
 
-    // Creating CSV header
-    const headers = ["ID", "Brand", "Model", "Year", "Price", "Mileage", "Listing Type", "Created At"];
-    
-    // Mapping cars to CSV rows
-    const rows = cars.map(car => [
-      car.id,
-      `"${car.brand}"`,
-      `"${car.model}"`,
-      car.year,
-      car.price,
-      car.mileage,
-      car.listing_type,
-      car.created_at ? new Date(car.created_at).toLocaleDateString() : "N/A"
-    ]);
+    try {
+      const wb = XLSX.utils.book_new();
 
-    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    
-    const exportFileDefaultName = `troy_cars_inventory_${new Date().toISOString().split('T')[0]}.csv`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', url);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-    
-    // Cleanup
-    URL.revokeObjectURL(url);
-    toast.success("Inventory report exported as CSV (Excel compatible).");
+      // Sheet 1: Inventory & Analytics
+      const inventoryData = cars.map(car => {
+        const traffic = trendingTraffic.find(t => t.car_id === car.id)?.count || 0;
+        const favorites = hotLeads.find(h => h.car_id === car.id)?.count || 0;
+        return {
+          "Car ID": car.id,
+          "Brand": car.brand,
+          "Model": car.model,
+          "Year": car.year,
+          "Status": car.listing_type.toUpperCase(),
+          "Listing Price (€)": car.price,
+          "Mileage (km)": car.mileage,
+          "Total Views": traffic,
+          "Total Favorites": favorites,
+          "Created Date": car.created_at ? new Date(car.created_at).toLocaleDateString() : "N/A"
+        };
+      });
+      const wsInventory = XLSX.utils.json_to_sheet(inventoryData);
+      XLSX.utils.book_append_sheet(wb, wsInventory, "Inventory & Traffic");
+
+      // Sheet 2: Financials & Sales
+      const financialData = transactions.map(t => {
+        const car = cars.find(c => c.id === t.car_id);
+        const buyPrice = t.purchase_amount || 0;
+        const sellPrice = t.total_price || 0;
+        const profit = sellPrice - buyPrice;
+        
+        return {
+          "Transaction ID": t.id,
+          "Type": t.transaction_type.toUpperCase(),
+          "Car": car ? `${car.brand} ${car.model}` : t.car_id,
+          "Customer Name": t.customer_fullname,
+          "Customer Phone": t.phone_number,
+          "Purchase Price (€)": buyPrice,
+          "Sale/Rental Revenue (€)": sellPrice,
+          "Net Profit (€)": profit,
+          "Payment Method": t.payment_method,
+          "Transaction Date": t.start_date ? new Date(t.start_date).toLocaleDateString() : "N/A"
+        };
+      });
+      const wsFinancials = XLSX.utils.json_to_sheet(financialData);
+      XLSX.utils.book_append_sheet(wb, wsFinancials, "Financials & Sales");
+
+      // Sheet 3: CRM & Marketing
+      const crmData = profiles.map(p => ({
+        "Customer ID": p.id,
+        "Full Name": p.full_name || "Unknown",
+        "Phone Number": p.phone || "Not Provided",
+        "Registration Date": p.created_at ? new Date(p.created_at).toLocaleDateString() : "N/A",
+        "Marketing Consent": p.marketing_consent ? "YES (VIP)" : "NO",
+        "Price Drop Alerts": p.price_drop_alerts ? "YES" : "NO",
+        "New Arrival Alerts": p.new_arrival_alerts ? "YES" : "NO"
+      }));
+      const wsCRM = XLSX.utils.json_to_sheet(crmData);
+      XLSX.utils.book_append_sheet(wb, wsCRM, "CRM & Marketing");
+
+      // Export the workbook
+      const fileName = `Troy_Cars_Executive_Report_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      
+      toast.success("Executive Multi-Sheet Report exported successfully.");
+    } catch (error) {
+       console.error("Export Error:", error);
+       toast.error("An error occurred while exporting the report.");
+    }
   };
 
   const handleSystemCheck = async () => {
@@ -137,6 +181,7 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
   };
 
   return (
+    <>
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -168,19 +213,25 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column: Analytics (Hot Leads + Traffic) */}
-        <div className="space-y-6">
-            <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Left Column: Hot Leads */}
+        <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
-                    <Flame size={20} className="text-orange-500 mr-3" />
-                    Hot Leads: Most Favorited
-                </h3>
+                <div className="flex items-center justify-between mb-6">
+                   <h3 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+                       <Flame size={20} className="text-orange-500 mr-3" />
+                       Hot Leads: Most Favorited
+                   </h3>
+                   <button 
+                     onClick={() => { setAnalyticsTab('favorites'); setIsAnalyticsModalOpen(true); }}
+                     className="text-sm font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                   >
+                     View All
+                   </button>
+                </div>
                 
                 <div className="space-y-4">
-                  {hotLeads.length > 0 ? (
-                    hotLeads.map((lead, idx) => {
+                  {hotLeads.slice(0, 5).map((lead, idx) => {
                       const car = cars.find(c => c.id === lead.car_id);
                       return (
                         <div key={idx} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all">
@@ -205,34 +256,43 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
                           </div>
                         </div>
                       );
-                    })
-                  ) : (
-                    <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 italic">
+                    })}
+                  {hotLeads.length === 0 && (
+                    <div className="h-48 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-3xl text-gray-400 dark:text-gray-600 italic">
+                       <Flame size={32} className="mb-2 opacity-20" />
                        No favorites recorded yet.
                     </div>
                   )}
                 </div>
             </div>
-
-            <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
+            
+            {/* Right Column: Trending Traffic */}
+            <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
-                    <Eye size={20} className="text-blue-500 mr-3" />
-                    Trending Traffic: Most Viewed
-                </h3>
+                <div className="flex items-center justify-between mb-6">
+                   <h3 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+                       <Eye size={20} className="text-blue-500 mr-3" />
+                       Trending Traffic
+                   </h3>
+                   <button 
+                     onClick={() => { setAnalyticsTab('views'); setIsAnalyticsModalOpen(true); }}
+                     className="text-sm font-semibold text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                   >
+                     View All
+                   </button>
+                </div>
                 
                 <div className="space-y-4">
-                  {trendingTraffic.length > 0 ? (
-                    trendingTraffic.map((view, idx) => {
+                  {trendingTraffic.slice(0, 5).map((view, idx) => {
                       const car = cars.find(c => c.id === view.car_id);
                       return (
                         <div key={idx} className="flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all">
                           <div className="flex items-center space-x-4">
-                            <div className="w-10 h-10 rounded-xl bg-gray-700 overflow-hidden relative">
+                            <div className="w-10 h-10 rounded-xl bg-gray-700 overflow-hidden relative border border-gray-200 dark:border-gray-600">
                                {car?.photos?.[0] ? (
                                  <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
                                ) : (
-                                 <Car size={20} className="absolute inset-0 m-auto text-gray-500" />
+                                 <Car size={20} className="absolute inset-0 m-auto text-gray-400" />
                                )}
                             </div>
                             <div>
@@ -248,9 +308,10 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
                           </div>
                         </div>
                       );
-                    })
-                  ) : (
-                    <div className="h-48 flex items-center justify-center border-2 border-dashed border-gray-800 rounded-3xl text-gray-600 italic">
+                    })}
+                  {trendingTraffic.length === 0 && (
+                    <div className="h-48 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-3xl text-gray-400 dark:text-gray-600 italic">
+                       <Eye size={32} className="mb-2 opacity-20" />
                        No views recorded yet.
                     </div>
                   )}
@@ -258,14 +319,14 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
             </div>
         </div>
         
-        {/* Action Hub */}
+        {/* Action Hub - Moved Below Analytics */}
         <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
             <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
                 <Zap size={20} className="text-emerald-500 mr-3" />
                 Quick Actions Hub
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <button 
                   onClick={handleSendNewsletter}
                   className="p-6 bg-gray-50/50 dark:bg-gray-800/50 hover:bg-blue-600/10 dark:hover:bg-blue-600/20 hover:border-blue-500/50 rounded-3xl border border-gray-100 dark:border-gray-700/50 text-sm font-bold transition-all text-gray-600 dark:text-gray-300 flex flex-col items-center justify-center gap-3 group/btn hover:text-blue-600 dark:hover:text-blue-400 shadow-sm overflow-hidden"
@@ -301,8 +362,8 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
                 <span className="font-bold">Pro Tip:</span> Newsletters are sent via the Resend API. Exported reports are in universal JSON format compatible with Excel.
               </p>
             </div>
+            </div>
         </div>
-      </div>
 
       {/* Newsletter Dispatch Modal */}
       <Modal
@@ -400,6 +461,146 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
           </div>
         </div>
       </Modal>
-    </div>
+
+      {/* Analytics Expanded Modal */}
+      <Modal
+        isOpen={isAnalyticsModalOpen}
+        onRequestClose={() => setIsAnalyticsModalOpen(false)}
+        className="outline-none"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(4px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          },
+          content: {
+            position: "relative",
+            background: "transparent",
+            inset: "auto",
+            border: "none",
+            padding: 0,
+            width: "100%",
+            maxWidth: "800px",
+            maxHeight: "90vh",
+          }
+        }}
+      >
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[85vh] animate-in zoom-in-95 duration-200">
+          <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30 flex-shrink-0">
+            <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+              <Activity className="mr-3 text-indigo-500" size={24} />
+              Detailed Analytics Report
+            </h2>
+            <button 
+              onClick={() => setIsAnalyticsModalOpen(false)}
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="flex border-b border-gray-100 dark:border-gray-800 bg-gray-50/20 dark:bg-gray-900 flex-shrink-0">
+            <button
+              onClick={() => setAnalyticsTab('views')}
+              className={`flex-1 py-4 text-sm font-bold flex items-center justify-center transition-colors ${analyticsTab === 'views' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+            >
+              <Eye size={18} className="mr-2" />
+              Traffic & Views ({trendingTraffic.length})
+            </button>
+            <button
+              onClick={() => setAnalyticsTab('favorites')}
+              className={`flex-1 py-4 text-sm font-bold flex items-center justify-center transition-colors ${analyticsTab === 'favorites' ? 'text-orange-600 border-b-2 border-orange-600 bg-orange-50/50 dark:bg-orange-900/20' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+            >
+              <Flame size={18} className="mr-2" />
+              Hot Leads & Favorites ({hotLeads.length})
+            </button>
+          </div>
+          
+          <div className="p-6 overflow-y-auto flex-grow bg-gray-50/30 dark:bg-gray-900/20">
+            <div className="space-y-3">
+              {analyticsTab === 'views' && trendingTraffic.map((item, idx) => {
+                const car = cars.find(c => c.id === item.car_id);
+                return (
+                  <div key={idx} className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-gray-400 font-bold w-6 text-center">{idx + 1}</span>
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 overflow-hidden relative border border-gray-200 dark:border-gray-600">
+                         {car?.photos?.[0] ? (
+                           <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
+                         ) : (
+                           <Car size={20} className="absolute inset-0 m-auto text-gray-400" />
+                         )}
+                      </div>
+                      <div>
+                        <p className="font-bold text-gray-900 dark:text-white">
+                          {car ? `${car.brand} ${car.model}` : "Unknown Car"}
+                        </p>
+                        <div className="flex items-center mt-1 space-x-3 text-xs">
+                           <span className="text-gray-500">{car?.year}</span>
+                           <span className="text-gray-300 dark:text-gray-600">•</span>
+                           <span className="text-green-600 dark:text-green-400 font-medium">€{car?.price?.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center text-blue-600 dark:text-blue-400 font-bold text-lg">
+                        <Eye size={16} className="mr-2" />
+                        {item.count}
+                      </div>
+                      <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mt-1">Total Views</span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {analyticsTab === 'favorites' && hotLeads.map((item, idx) => {
+                const car = cars.find(c => c.id === item.car_id);
+                return (
+                  <div key={idx} className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-gray-400 font-bold w-6 text-center">{idx + 1}</span>
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 overflow-hidden relative border border-gray-200 dark:border-gray-600">
+                         {car?.photos?.[0] ? (
+                           <img src={car.photos[0]} alt="Car" className="w-full h-full object-cover" />
+                         ) : (
+                           <Car size={20} className="absolute inset-0 m-auto text-gray-400" />
+                         )}
+                      </div>
+                      <div>
+                        <p className="font-bold text-gray-900 dark:text-white">
+                          {car ? `${car.brand} ${car.model}` : "Unknown Car"}
+                        </p>
+                        <div className="flex items-center mt-1 space-x-3 text-xs">
+                           <span className="text-gray-500">{car?.year}</span>
+                           <span className="text-gray-300 dark:text-gray-600">•</span>
+                           <span className="text-green-600 dark:text-green-400 font-medium">€{car?.price?.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center text-orange-500 dark:text-orange-400 font-bold text-lg">
+                        <Flame size={16} className="mr-2" />
+                        {item.count}
+                      </div>
+                      <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mt-1">Favorites Saved</span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {(analyticsTab === 'views' && trendingTraffic.length === 0) || (analyticsTab === 'favorites' && hotLeads.length === 0) ? (
+                 <div className="py-20 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+                    <Activity size={48} className="mb-4 opacity-20" />
+                    <p className="text-lg font-medium">No analytics data found yet.</p>
+                 </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }

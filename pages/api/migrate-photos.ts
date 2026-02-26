@@ -36,10 +36,18 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Basit admin şifre koruması
-  const { password } = req.body;
-  if (password !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: "Unauthorized" });
+  // Admin authentication via jwt token
+  const token = req.cookies.admin_token;
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized. Missing admin token." });
+  }
+
+  try {
+    const jwt = await import("jose");
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    await jwt.jwtVerify(token, secret);
+  } catch (error) {
+    return res.status(401).json({ error: "Unauthorized. Invalid token." });
   }
 
   try {

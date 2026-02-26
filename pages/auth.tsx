@@ -43,8 +43,15 @@ export default function AuthPage() {
         if (error) throw error;
         toast.success("Welcome back!");
         router.push("/cars");
-      } else {
-        const { data, error } = await supabase.auth.signUp({
+      } else { // This 'else' block corresponds to 'register' view
+        // Enforce strong password policy locally to give better UX
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        if (!passwordRegex.test(formData.password)) {
+          throw new Error("Password must be at least 6 characters and contain a mix of uppercase, lowercase, numbers, and symbols.");
+        }
+
+        // 3. Attempt Signup
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
@@ -55,12 +62,25 @@ export default function AuthPage() {
             },
           },
         });
-        if (error) throw error;
+        
+        // Supabase returns a soft success (data.user but fake identities) if email exists and email confirmations are ON.
+        // If email confirmations are OFF, it returns error code 'user_already_exists'.
+        if (signUpError) {
+            if (signUpError.message.includes('already registered') || signUpError.message.includes('already exists')) {
+                throw new Error("This email is already registered. Please log in instead.");
+            }
+            throw signUpError;
+        }
+
+        // If data.user exists but identities is empty, it means the user already exists! (Supabase privacy feature)
+        if (signUpData?.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+           throw new Error("This email is already registered. Please log in instead.");
+        }
         
         // Profiles tablosu trigger ile oluşmazsa manuel ekleme (fail-safe)
-        if (data.user) {
+        if (signUpData.user) {
           await supabase.from("profiles").upsert({
-            id: data.user.id,
+            id: signUpData.user.id,
             full_name: formData.fullName,
             phone: formData.phone,
             marketing_consent: formData.marketingConsent,

@@ -13,7 +13,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@next-auth/prisma-adapter": "^1.0.7",
-    "@sentry/nextjs": "^8.54.0",
+    "@sentry/nextjs": "^10.40.0",
     "@supabase/supabase-js": "^2.48.1",
     "@tailwindcss/typography": "^0.5.16",
     "@types/dompurify": "^3.0.5",
@@ -42,12 +42,13 @@
     "react-modal": "^3.16.3",
     "react-responsive-carousel": "^3.2.23",
     "requirements": "^2.0.2",
-    "resend": "^6.9.2"
+    "resend": "^6.9.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.58.2",
-    "@sentry/react": "^9.22.0",
+    "@sentry/react": "^10.40.0",
     "@swc/core": "^1.15.13",
     "@swc/jest": "^0.2.39",
     "@testing-library/jest-dom": "^6.9.1",

@@ -19,7 +19,7 @@ export default function AdminPanel() {
   const [editingCar, setEditingCar] = useState<Car | null>(null);
 
   // Stats & Master Data
-  const { stats, profiles, cars: allCars, hotLeads, trendingTraffic, loading: adminLoading, fetchAdminData } = useAdminData();
+  const { stats, profiles, cars: allCars, transactions, hotLeads, trendingTraffic, loading: adminLoading, fetchAdminData } = useAdminData();
 
   // Inventory Management
   const { 
@@ -51,7 +51,7 @@ export default function AdminPanel() {
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
-        return <OverviewDashboard stats={stats} profiles={profiles} cars={allCars} hotLeads={hotLeads} trendingTraffic={trendingTraffic} />;
+        return <OverviewDashboard stats={stats} profiles={profiles} cars={allCars} transactions={transactions} hotLeads={hotLeads} trendingTraffic={trendingTraffic} />;
       case "inventory":
         return (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
