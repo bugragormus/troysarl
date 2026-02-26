@@ -305,11 +305,14 @@ export default function CarFormModal({
           }
         }
 
+        const newPriceNum = Number(price);
+        const oldPriceNum = carToEdit.price;
+
         await carService.updateCar(carToEdit.id, {
           brand,
           model,
           year: manufactureDate,
-          price: Number(price),
+          price: newPriceNum,
           mileage: mileage ? Number(mileage) : undefined,
           body_type: bodyType,
           color,
@@ -322,6 +325,25 @@ export default function CarFormModal({
           photos: uploadedUrls,
           features: compiledFeatures as any,
         });
+
+        // Trigger price drop alert if the price went down
+        if (newPriceNum < oldPriceNum) {
+          fetch("/api/trigger-price-alert", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              carId: carToEdit.id, 
+              oldPrice: oldPriceNum, 
+              newPrice: newPriceNum, 
+              brand, 
+              model 
+            })
+          }).then(res => res.json()).then(data => {
+            if (data.dispatchedEmails > 0) {
+              toast.success(`Price drop alert sent to ${data.dispatchedEmails} users!`, { icon: "🔥" });
+            }
+          }).catch(err => console.error("Price alert trigger error:", err));
+        }
 
         toast.success("Araç başarıyla güncellendi!");
       } else {

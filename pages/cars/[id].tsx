@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Carousel } from "react-responsive-carousel";
 import Modal from "react-modal";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Heart, Share } from "lucide-react";
+import { CheckCircle, Share, Phone, Mail, Car as CarIcon, MapPin, Gauge, Heart, Info, ArrowLeft, ArrowRight, X, User, Fuel, Shield, Search, Flame } from "lucide-react";
 import clsx from "clsx";
 import Car from "@/types/car";
 import { format } from "date-fns";
@@ -37,7 +37,7 @@ const modalStyles = {
 };
 
 export default function CarDetail({ car }: { car: Car }) {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { favorites, toggleFavorite } = useFavorites();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -250,6 +250,16 @@ export default function CarDetail({ car }: { car: Car }) {
             </button>
           </div>
         </header>
+
+        {/* Price Alert Badge Container */}
+        {favorites.includes(car?.id || "") && profile?.price_drop_alerts && (
+          <div className="mb-8 flex items-center justify-end animate-in fade-in slide-in-from-top-2">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 text-red-600 dark:text-red-400 px-4 py-2 rounded-2xl shadow-sm backdrop-blur-sm">
+              <Flame size={16} className="animate-pulse" />
+              <span className="text-sm font-bold">Price Drop Alert Active</span>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Sol Sütun: Resim Galerisi */}
