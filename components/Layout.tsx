@@ -289,7 +289,6 @@ export default function Layout({ children }: LayoutProps) {
             <div className="mt-20 pt-8 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
               <div>&copy; {new Date().getFullYear()} Troy Cars Lux SARL.</div>
               <div className="flex items-center gap-6">
-                <span>Switzerland</span>
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
                 <span>Exclusive Collection</span>
               </div>
