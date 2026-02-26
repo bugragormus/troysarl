@@ -34,14 +34,14 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
   const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
   const [analyticsTab, setAnalyticsTab] = useState<'favorites' | 'views'>('views');
   const [isSending, setIsSending] = useState(false);
-  const [newsletterSubject, setNewsletterSubject] = useState("Troy Cars SARL - Exclusive New Arrivals & VIP Offers");
+  const [newsletterSubject, setNewsletterSubject] = useState("Troy Cars LUX SARL - Vehicle Updates");
   const [newsletterBody, setNewsletterBody] = useState(
-    "Hello!\n\n" +
-    "We have some exciting new luxury vehicles in our collection that we thought you'd love to see.\n\n" +
-    "Check out our latest inventory here: https://troysarl.com/cars\n\n" +
-    "If you're interested in a private viewing or have any questions about a specific model, feel free to contact us at info@troysarl.com.\n\n" +
+    "Hello,\n\n" +
+    "We've updated our collection with some new arrivals that might interest you.\n\n" +
+    "You can view our current inventory here: https://troysarl.com/cars\n\n" +
+    "If you have any questions or would like to arrange a viewing, please contact us at info@troysarl.com.\n\n" +
     "Best regards,\n" +
-    "Ufuk - Troy Cars SARL"
+    "Troy Cars LUX SARL"
   );
 
   // Action Handlers

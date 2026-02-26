@@ -99,27 +99,23 @@ export function generateVipEmailHtml(subject: string, mainContent: string): stri
   <div class="container">
     <div class="header">
       <h1>TROY CARS LUX SARL</h1>
-      <p>Excellence in Motion</p>
+      <p>Vehicle Updates</p>
     </div>
     
     <div class="content">
-      <div style="text-align: center;">
-        <span class="vip-badge">Exclusive VIP Member</span>
-      </div>
-      
       ${formattedContent}
       
       <div class="button-container">
-        <a href="https://troysarl.com/cars" class="button">Discover New Arrivals</a>
+        <a href="https://troysarl.com/cars" class="button">View Inventory</a>
       </div>
     </div>
     
     <div class="footer">
-      <p><strong>Troy Cars SARL - Luxury Automotive Group</strong></p>
-      <p>Boutique Showroom • Exclusive Collection</p>
+      <p><strong>Troy Cars SARL</strong></p>
+      <p>Premium Vehicle Selection</p>
       <p style="margin-top: 15px;">&copy; ${new Date().getFullYear()} Troy Cars SARL. All rights reserved.</p>
       <p style="font-size: 10px; color: #cccccc; margin-top: 20px;">
-        You are receiving this because you are a valued VIP member of Troy Cars SARL.
+        You are receiving this because you subscribed to updates from Troy Cars LUX SARL.
       </p>
     </div>
   </div>
