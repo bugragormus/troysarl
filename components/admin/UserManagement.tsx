@@ -84,7 +84,8 @@ export default function UserManagement({ profiles }: UserManagementProps) {
                   <td className="px-6 py-4">
                     <div className="flex items-center text-sm text-gray-400">
                       <Calendar size={14} className="mr-2 text-gray-500" />
-                      {new Date(profile.created_at).toLocaleDateString()}
+                      {profile.created_at ? new Date(profile.created_at).toLocaleDateString() : 
+                       profile.updated_at ? new Date(profile.updated_at).toLocaleDateString() : "N/A"}
                     </div>
                   </td>
                 </tr>

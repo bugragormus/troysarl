@@ -28,7 +28,8 @@ async function sync() {
            id: user.id,
            full_name: user.user_metadata?.full_name || user.email?.split('@')[0],
            phone: user.user_metadata?.phone || null,
-           marketing_consent: user.user_metadata?.marketing_consent || false
+           marketing_consent: user.user_metadata?.marketing_consent || false,
+           created_at: user.created_at
         });
         if (insertErr) console.error("Insert error:", insertErr);
         else synced++;

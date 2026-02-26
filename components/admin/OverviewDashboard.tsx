@@ -17,6 +17,10 @@ interface OverviewDashboardProps {
   trendingTraffic: PageViewStat[];
 }
 
+if (typeof window !== "undefined") {
+   Modal.setAppElement("#__next");
+}
+
 export default function OverviewDashboard({ stats, profiles, cars, transactions, hotLeads, trendingTraffic }: OverviewDashboardProps) {
   const cards = [
     { label: "Total Inventory", value: stats.totalCars, icon: Car, color: "blue" },
