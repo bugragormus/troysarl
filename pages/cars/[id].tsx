@@ -126,7 +126,7 @@ export default function CarDetail({ car }: { car: Car }) {
                   {
                     "@type": "ListItem",
                     "position": 3,
-                    "name": `${car.brand} ${car.model}`,
+                    "name": car ? `${car.brand} ${car.model}` : "Car Detail",
                     "item": canonicalUrl
                   }
                 ]
@@ -134,48 +134,35 @@ export default function CarDetail({ car }: { car: Car }) {
               {
                 "@context": "https://schema.org",
                 "@type": "Car",
-                "name": `${car.brand} ${car.model}`,
-                "vehicleModelDate": new Date(car.year).getFullYear().toString(),
-                "itemCondition":
-                  car.listing_type === "sold"
-                    ? "https://schema.org/UsedCondition"
-                    : "https://schema.org/NewCondition",
-                "numberOfDoors": car.doors,
-                "vehicleTransmission":
-                  car.transmission === "automatic"
-                    ? "AutomaticTransmission"
-                    : "ManualTransmission",
-                "color": car.color,
+                "name": car ? `${car.brand} ${car.model}` : "Premium Car",
+                "vehicleModelDate": car?.year ? new Date(car.year).getFullYear().toString() : "",
+                "itemCondition": car?.listing_type === "sold" ? "https://schema.org/UsedCondition" : "https://schema.org/NewCondition",
+                "numberOfDoors": car?.doors || 4,
+                "vehicleTransmission": car?.transmission === "automatic" ? "AutomaticTransmission" : "ManualTransmission",
+                "color": car?.color || "Unknown",
                 "brand": {
                   "@type": "Brand",
-                  "name": car.brand,
+                  "name": car?.brand || "Unknown",
                 },
-                "model": car.model,
-                "image": car.photos.map((photo) => `https://troysarl.com${photo}`),
-                "bodyType": car.body_type,
+                "model": car?.model || "Unknown",
+                "image": car?.photos ? car.photos.map((photo) => `https://troysarl.com${photo}`) : [],
+                "bodyType": car?.body_type || "Unknown",
                 "vehicleEngine": {
                   "@type": "EngineSpecification",
-                  "fuelType":
-                    car.fuel_type.toLowerCase() === "diesel"
-                      ? "https://schema.org/DieselFuel"
-                      : "https://schema.org/Gasoline",
+                  "fuelType": car?.fuel_type?.toLowerCase() === "diesel" ? "https://schema.org/DieselFuel" : "https://schema.org/Gasoline",
                 },
                 "vehicleSeatingCapacity": 5,
                 "mileageFromOdometer": {
                   "@type": "QuantitativeValue",
-                  "value": car.mileage,
+                  "value": car?.mileage || 0,
                   "unitCode": "KMT",
                 },
                 "offers": {
                   "@type": "Offer",
                   "priceCurrency": "EUR",
-                  ...(Number(String(car.price).replace(/[^0-9.-]+/g, "")) > 0 && {
-                    "price": Number(String(car.price).replace(/[^0-9.-]+/g, ""))
-                  }),
-                  "availability":
-                    car.listing_type === "sold"
-                      ? "https://schema.org/OutOfStock"
-                      : "https://schema.org/InStock"
+                  "price": car?.price ? Number(String(car.price).replace(/[^0-9.-]+/g, "")) : 0,
+                  "availability": car?.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+                  "url": canonicalUrl
                 }
               }
             ])
@@ -194,8 +181,6 @@ export default function CarDetail({ car }: { car: Car }) {
         <meta name="twitter:title" content={metaTitle} />
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content={ogImageUrl} />
-
-
       </Head>
 
       <div className="max-w-6xl mx-auto p-6">

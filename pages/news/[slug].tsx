@@ -162,39 +162,43 @@ export default function BlogPostDetail({ post }: { post: any }) {
         />
       </Head>
 
-      <div className="bg-gradient-to-br from-gray-50 to-gray-200/50 dark:from-[#050505] dark:to-[#111] min-h-screen py-10 transition-colors duration-300">
-        <div className="max-w-4xl mx-auto px-6">
-          <Link href="/news" className="inline-flex items-center text-blue-600 dark:text-blue-400 font-bold hover:underline mb-12 group">
+      <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-premium-light dark:to-premium-dark py-32 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto px-6 lg:px-16 py-12 lg:py-16 bg-white/80 dark:bg-gray-900/60 backdrop-blur-2xl rounded-[3rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-none border border-white/60 dark:border-gray-700/50 mb-20 relative overflow-hidden">
+          
+          {/* Decorative Background Blob */}
+          <div className="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+
+          <Link href="/news" className="relative z-10 inline-flex items-center text-blue-600 dark:text-blue-400 font-bold hover:text-blue-700 dark:hover:text-blue-300 mb-12 group transition-colors">
             <ArrowLeft size={18} className="mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to News
           </Link>
 
-          <header className="mb-12 border-b border-gray-200 dark:border-gray-800 pb-10">
-            <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">
-              <span className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 px-3 py-1.5 rounded-full">
+          <header className="relative z-10 mb-12 border-b border-gray-200/50 dark:border-gray-800/80 pb-10">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-8">
+              <span className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/20 px-4 py-2 rounded-full border border-blue-100/50 dark:border-blue-800/30">
                 <Calendar size={14} className="mr-2" />
                 {post.published_at ? format(new Date(post.published_at), "MMMM d, yyyy") : "Draft"}
               </span>
-              <span className="flex items-center bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
+              <span className="flex items-center bg-gray-100/80 dark:bg-gray-800/50 px-4 py-2 rounded-full border border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300">
                 <User size={14} className="mr-2" />
                 {authorName}
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight">
               {post.title}
             </h1>
 
             {post.excerpt && (
-               <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed border-l-4 border-blue-500 pl-6 italic">
+               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed border-l-4 border-blue-500 pl-6 italic font-medium">
                    {post.excerpt}
                </p>
             )}
 
-            <div className="mt-8 flex items-center justify-between">
+            <div className="mt-10 flex items-center justify-between">
                 <button 
                   onClick={handleShare}
-                  className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500 transition-all font-medium shadow-sm"
+                  className="flex items-center space-x-2 px-5 py-2.5 bg-white dark:bg-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-2xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-500 transition-all font-bold shadow-sm"
                 >
                   <Share2 size={18} />
                   <span>Share Article</span>
@@ -202,11 +206,12 @@ export default function BlogPostDetail({ post }: { post: any }) {
             </div>
           </header>
 
-          <article className="prose prose-lg dark:prose-invert max-w-none 
-                prose-headings:font-bold prose-headings:tracking-tight 
+          <article className="relative z-10 prose prose-lg md:prose-xl dark:prose-invert max-w-none 
+                prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-white
                 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
                 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
-                prose-img:rounded-3xl prose-img:shadow-2xl mb-24"
+                prose-strong:text-gray-900 dark:prose-strong:text-white
+                prose-img:rounded-3xl prose-img:shadow-2xl mb-12"
              dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </div>
