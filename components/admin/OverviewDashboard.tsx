@@ -1,7 +1,9 @@
-import { TrendingUp, Car, Users, Briefcase, Activity, Flame, Download, Send, ShieldCheck, Zap, Eye } from "lucide-react";
+import { useState } from "react";
+import { TrendingUp, Car, Users, Briefcase, Activity, Flame, Download, Send, ShieldCheck, Zap, Eye, X } from "lucide-react";
 import { AdminStats, UserProfile, FavoriteStat, PageViewStat } from "@/hooks/useAdminData";
 import CarType from "@/types/car";
 import toast from "react-hot-toast";
+import Modal from "react-modal";
 
 interface OverviewDashboardProps {
   stats: AdminStats;
@@ -19,6 +21,19 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
     { label: "Marketing Leads", value: stats.marketingOptInCount, icon: Briefcase, color: "indigo" },
   ];
 
+  // Internal state for Newsletter Modal
+  const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [newsletterSubject, setNewsletterSubject] = useState("Troy Cars SARL - Exclusive New Arrivals & VIP Offers");
+  const [newsletterBody, setNewsletterBody] = useState(
+    "Hello!\n\n" +
+    "We have some exciting new luxury vehicles in our collection that we thought you'd love to see.\n\n" +
+    "Check out our latest inventory here: https://troysarl.com/cars\n\n" +
+    "If you're interested in a private viewing or have any questions about a specific model, feel free to contact us at info@troysarl.com.\n\n" +
+    "Best regards,\n" +
+    "Ufuk - Troy Cars SARL"
+  );
+
   // Action Handlers
   const handleSendNewsletter = () => {
     const optedInEmails = profiles
@@ -32,20 +47,39 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
       return;
     }
     
-    toast.success(`Preparing newsletter for ${validContacts.length} users...`);
-    
-    const subject = encodeURIComponent("Troy Cars SARL - Exclusive New Arrivals & VIP Offers");
-    const body = encodeURIComponent(
-      "Hello!\n\n" +
-      "We have some exciting new luxury vehicles in our collection that we thought you'd love to see.\n\n" +
-      "Check out our latest inventory here: https://troysarl.com/cars\n\n" +
-      "If you're interested in a private viewing or have any questions about a specific model, feel free to contact us at info@troysarl.com.\n\n" +
-      "Best regards,\n" +
-      "Ufuk - Troy Cars SARL"
-    );
-    
-    // Using from= as a hint for some mail clients, though not universal
-    window.location.href = `mailto:?bcc=${validContacts.join(",")}&subject=${subject}&body=${body}&from=info@troysarl.com`;
+    setIsNewsletterModalOpen(true);
+  };
+
+  const executeNewsletterDispatch = async () => {
+    setIsSending(true);
+    const toastId = toast.loading("Dispatching VIP Newsletter...");
+    try {
+      // In production, you might want to convert newline to <br/> for HTML body, or just put it in a <pre> tag.
+      const htmlBody = newsletterBody.replace(/\n/g, "<br/>");
+
+      const response = await fetch("/api/send-newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: newsletterSubject,
+          htmlBody: htmlBody,
+          testMode: false // Change to true to only send to the first user for safety during testing
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send newsletter.");
+      }
+
+      toast.success(data.message || "Newsletter successfully dispatched!", { id: toastId });
+      setIsNewsletterModalOpen(false);
+    } catch (error: any) {
+      toast.error(`Dispatch Failed: ${error.message}`, { id: toastId });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleExportData = () => {
@@ -264,11 +298,108 @@ export default function OverviewDashboard({ stats, profiles, cars, hotLeads, tre
             
             <div className="mt-8 p-4 bg-blue-600/5 border border-blue-500/10 rounded-2xl">
               <p className="text-xs text-blue-400 leading-relaxed">
-                <span className="font-bold">Pro Tip:</span> Newsletters are sent via BCC to protect user privacy. Exported reports are in universal JSON format compatible with Excel.
+                <span className="font-bold">Pro Tip:</span> Newsletters are sent via the Resend API. Exported reports are in universal JSON format compatible with Excel.
               </p>
             </div>
         </div>
       </div>
+
+      {/* Newsletter Dispatch Modal */}
+      <Modal
+        isOpen={isNewsletterModalOpen}
+        onRequestClose={() => !isSending && setIsNewsletterModalOpen(false)}
+        className="outline-none"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(4px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          },
+          content: {
+            position: "relative",
+            background: "transparent",
+            inset: "auto",
+            border: "none",
+            padding: 0,
+            width: "100%",
+            maxWidth: "600px"
+          }
+        }}
+      >
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30">
+            <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+              <Send className="mr-3 text-blue-500" size={24} />
+              Dispatch VIP Newsletter
+            </h2>
+            <button 
+              onClick={() => setIsNewsletterModalOpen(false)}
+              disabled={isSending}
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="p-6 space-y-5">
+            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 text-sm text-blue-700 dark:text-blue-300">
+              This email will be dispatched to <strong>{stats.marketingOptInCount}</strong> opted-in VIP users.
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Subject Line</label>
+              <input 
+                type="text" 
+                value={newsletterSubject}
+                onChange={(e) => setNewsletterSubject(e.target.value)}
+                disabled={isSending}
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all dark:text-white disabled:opacity-50 font-medium"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Body (HTML / Text)</label>
+              <textarea 
+                value={newsletterBody}
+                onChange={(e) => setNewsletterBody(e.target.value)}
+                disabled={isSending}
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all dark:text-white h-48 resize-y disabled:opacity-50"
+              />
+              <p className="text-xs text-gray-400 mt-2">Line breaks will be automatically converted to HTML &lt;br/&gt; tags.</p>
+            </div>
+          </div>
+          
+          <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 flex justify-end space-x-3">
+            <button 
+              onClick={() => setIsNewsletterModalOpen(false)}
+              disabled={isSending}
+              className="px-6 py-2.5 rounded-xl font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={executeNewsletterDispatch}
+              disabled={isSending || !newsletterSubject.trim() || !newsletterBody.trim()}
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md shadow-blue-500/30 flex items-center disabled:opacity-50 disabled:shadow-none"
+            >
+              {isSending ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                  Dispatching...
+                </>
+              ) : (
+                <>
+                  <Send size={18} className="mr-2" />
+                  Send Now
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

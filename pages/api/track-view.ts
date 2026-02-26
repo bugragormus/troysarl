@@ -23,6 +23,12 @@ export default async function handler(
       return res.status(400).json({ error: "carId is required" });
     }
 
+    // --- Prevent Admin Views from skewing analytics ---
+    if (req.cookies.admin_token) {
+      // User is logged into the Admin Panel, silently skip logging this view
+      return res.status(200).json({ success: true, message: "Ignored admin view" });
+    }
+
     // Session Management via HttpOnly Cookie to prevent rapid spamming per session
     let sessionId = req.cookies.troy_session_id;
 
