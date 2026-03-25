@@ -40,15 +40,27 @@ export default async function handler(
   try {
     console.log("Starting Internal AI SEO Generator...");
 
-    // 1. Generate Topic (European Luxury Car Market)
+    // 1. Generate Topic
+    const categories = [
+      "European luxury cars",
+      "High-end car rentals in Luxembourg",
+      "Premium supercar trends",
+      "Executive and business travel vehicles",
+      "Luxury SUV recommendations",
+      "Classic vs Modern luxury cars",
+      "Automotive investments",
+      "Exclusive automotive events in Europe"
+    ];
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+
     const topicResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini", // Cost-effective model
       messages: [
         { role: "system", content: "You are the SEO Director for Troy Cars SARL, a luxury car dealership in Luxembourg." },
-        { role: "user", content: "Suggest ONE engaging, SEO-optimized blog topic about European luxury cars, EV trends, or high-end car rentals. Return ONLY the title as plain text." }
+        { role: "user", content: `Suggest ONE engaging, SEO-optimized blog topic focused strictly on: ${randomCategory}. Return ONLY the title as plain text without quotation marks.` }
       ],
       max_tokens: 50,
-      temperature: 0.7,
+      temperature: 0.8,
     });
     
     const topic = topicResponse.choices[0].message.content?.trim() || "European Luxury Car Trends in 2026";
