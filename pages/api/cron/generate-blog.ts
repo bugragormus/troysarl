@@ -51,7 +51,15 @@ export default async function handler(
       "Top safety features to look for in modern cars",
       "How to prepare your car for winter driving in Europe",
       "City cars: The best compact vehicles for urban living",
-      "Understanding hybrid and eco-friendly car options"
+      "Understanding hybrid and eco-friendly car options",
+      "European luxury cars",
+      "High-end car rentals in Luxembourg",
+      "Premium supercar trends",
+      "Executive and business travel vehicles",
+      "Luxury SUV recommendations",
+      "Classic vs Modern luxury cars",
+      "Automotive investments",
+      "Exclusive automotive events in Europe"
     ];
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
 
