@@ -117,11 +117,15 @@ export default function CarsPage() {
       return matchesSearch && matchesFeatures;
     })
     .sort((a, b) => {
-      // 1. Önce exclusive araçları en üste al
-      if (a.is_exclusive && !b.is_exclusive) return -1;
-      if (!a.is_exclusive && b.is_exclusive) return 1;
+      // 1. Manuel Sıralama İndeksi (Küçük olan üstte)
+      const indexA = a.display_index ?? 999;
+      const indexB = b.display_index ?? 999;
+      
+      if (indexA !== indexB) {
+        return indexA - indexB; // Ascending order
+      }
 
-      // 2. Listing type sıralaması
+      // 2. Listing type sıralaması (Aynı index'e sahip araçlar kendi içinde durumlarına göre sıralanır)
       const listingOrder = {
         sale: 0,
         rental: 1,
@@ -130,14 +134,12 @@ export default function CarsPage() {
       };
 
       const typeComparison =
-        listingOrder[a.listing_type] - listingOrder[b.listing_type];
+        listingOrder[a.listing_type as keyof typeof listingOrder] - listingOrder[b.listing_type as keyof typeof listingOrder];
       if (typeComparison !== 0) return typeComparison;
 
-      // 3. Fiyat sıralaması (exclusive olmayanlar için)
-      if (!a.is_exclusive && !b.is_exclusive) {
-        return sortOrder === "desc" ? b.price - a.price : a.price - b.price;
-      }
-      return 0;
+      // 3. Fiyat veya Eklenme Tarihi sıralaması (Kullanıcının seçimine göre)
+      // Since created_at is optional, we fall back to price if not available, or just sortOrder for price.
+      return sortOrder === "desc" ? (b.price || 0) - (a.price || 0) : (a.price || 0) - (b.price || 0);
     });
 
   const resetFilters = () => {

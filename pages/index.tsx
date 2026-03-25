@@ -22,6 +22,7 @@ export default function Home() {
         .from("cars")
         .select("*")
         .eq("is_hidden", false)
+        .order("display_index", { ascending: true, nullsFirst: false })
         .order("created_at", { ascending: false })
         .limit(3);
       if (error) {

@@ -80,6 +80,9 @@ export default function CarList({
                   ⭐ Exclusive
                 </span>
               )}
+              <span className="bg-indigo-500/90 text-indigo-50 text-xs px-2 py-1 rounded backdrop-blur-sm font-bold block w-max shadow-sm">
+                 Sıra: {car.display_index ?? 999}
+              </span>
             </div>
 
             <div className="absolute top-2 right-2 z-10">

@@ -23,6 +23,7 @@ interface Car {
   description: string;
   is_hidden: boolean;
   is_exclusive: boolean;
+  display_index?: number;
   created_at?: string;
 }
 

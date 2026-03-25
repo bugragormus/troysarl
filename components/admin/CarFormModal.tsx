@@ -60,6 +60,7 @@ export default function CarFormModal({
   const [listingType, setListingType] = useState<"sale" | "rental" | "reserved" | "sold">("sale");
   const [description, setDescription] = useState("");
   const [isExclusive, setIsExclusive] = useState(false);
+  const [displayIndex, setDisplayIndex] = useState<number>(999);
   const [selectedFeatures, setSelectedFeatures] = useState<{ [key: string]: boolean }>({});
 
   // Photo Upload States
@@ -84,6 +85,7 @@ export default function CarFormModal({
         setListingType(carToEdit.listing_type);
         setDescription(carToEdit.description || "");
         setIsExclusive(carToEdit.is_exclusive || false);
+        setDisplayIndex(carToEdit.display_index ?? 999);
         setUploadedUrls(carToEdit.photos || []);
 
         const initialFeatures: { [key: string]: boolean } = {};
@@ -112,6 +114,7 @@ export default function CarFormModal({
         setListingType("sale");
         setDescription("");
         setIsExclusive(false);
+        setDisplayIndex(999);
         setUploadedUrls([]);
         setSelectedFeatures({});
       }
@@ -322,6 +325,7 @@ export default function CarFormModal({
           listing_type: listingType as any,
           description,
           is_exclusive: isExclusive,
+          display_index: displayIndex,
           photos: uploadedUrls,
           features: compiledFeatures as any,
         });
@@ -362,6 +366,7 @@ export default function CarFormModal({
           listing_type: listingType as any,
           description,
           is_exclusive: isExclusive,
+          display_index: displayIndex,
           photos: uploadedUrls,
           features: compiledFeatures as any,
         });
@@ -383,6 +388,7 @@ export default function CarFormModal({
           setListingType("sale");
           setDescription("");
           setIsExclusive(false);
+          setDisplayIndex(999);
           setUploadedUrls([]);
           setSelectedFeatures({});
           setSelectedFiles([]);
@@ -525,6 +531,19 @@ export default function CarFormModal({
                 <label htmlFor="exclusiveCar" className="text-gray-900 dark:text-gray-200 font-medium cursor-pointer">
                   Exclusive Car (Show "Contact Us", Hide Price)
                 </label>
+              </div>
+
+              <div className="flex flex-col space-y-1">
+                 <input
+                   type="number"
+                   placeholder="Sıra Numarası (Index)"
+                   value={displayIndex}
+                   onChange={(e) => setDisplayIndex(Number(e.target.value))}
+                   className="p-3 border border-gray-300 rounded text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                 />
+                 <span className="text-xs text-gray-500 dark:text-gray-400 pl-1">
+                    Ana sayfadaki sıralamayı belirler. (Küçük sayı = Üstte). Aynı sayı girilirse yeni eklenen üstte çıkar.
+                 </span>
               </div>
             </div>
 

@@ -21,7 +21,9 @@ export const carService = {
    * Fetch all cars, optionally filtering out hidden ones
    */
   async getCars(includeHidden = true): Promise<Car[]> {
-    let query = supabase.from("cars").select("*").order("created_at", { ascending: false });
+    let query = supabase.from("cars").select("*")
+      .order("display_index", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: false });
     
     if (!includeHidden) {
       query = query.eq("is_hidden", false);
