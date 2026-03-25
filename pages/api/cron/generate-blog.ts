@@ -42,21 +42,23 @@ export default async function handler(
 
     // 1. Generate Topic
     const categories = [
-      "European luxury cars",
-      "High-end car rentals in Luxembourg",
-      "Premium supercar trends",
-      "Executive and business travel vehicles",
-      "Luxury SUV recommendations",
-      "Classic vs Modern luxury cars",
-      "Automotive investments",
-      "Exclusive automotive events in Europe"
+      "Tips for buying a reliable used car",
+      "Best family cars for European road trips",
+      "Fuel-efficient vehicles for daily commuting",
+      "Car maintenance tips to extend vehicle lifespan",
+      "European luxury cars and premium vehicles",
+      "Advantages of financing vs buying a car outright",
+      "Top safety features to look for in modern cars",
+      "How to prepare your car for winter driving in Europe",
+      "City cars: The best compact vehicles for urban living",
+      "Understanding hybrid and eco-friendly car options"
     ];
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
 
     const topicResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini", // Cost-effective model
       messages: [
-        { role: "system", content: "You are the SEO Director for Troy Cars SARL, a luxury car dealership in Luxembourg." },
+        { role: "system", content: "You are the SEO Director for Troy Cars SARL, a trusted car dealership in Luxembourg offering both everyday reliable vehicles and premium cars." },
         { role: "user", content: `Suggest ONE engaging, SEO-optimized blog topic focused strictly on: ${randomCategory}. Return ONLY the title as plain text without quotation marks.` }
       ],
       max_tokens: 50,
