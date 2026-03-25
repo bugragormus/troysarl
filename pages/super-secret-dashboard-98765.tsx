@@ -28,7 +28,8 @@ export default function AdminPanel() {
     fetchCars, 
     removeCar, 
     toggleVisibility, 
-    updateListingType 
+    updateListingType,
+    updateDisplayIndex
   } = useCars(true);
 
   // Migration state
@@ -78,6 +79,7 @@ export default function AdminPanel() {
               }}
               onToggleVisibility={toggleVisibility}
               onUpdateListingType={updateListingType}
+              onUpdateDisplayIndex={updateDisplayIndex}
             />
           </div>
         );

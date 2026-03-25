@@ -9,6 +9,7 @@ type CarListProps = {
   onDelete: (id: string, photos?: string[]) => Promise<void>;
   onToggleVisibility: (id: string, current: boolean) => Promise<void>;
   onUpdateListingType: (id: string, newType: Car["listing_type"]) => Promise<void>;
+  onUpdateDisplayIndex?: (id: string, index: number) => Promise<void>;
 };
 
 export default function CarList({
@@ -17,6 +18,7 @@ export default function CarList({
   onDelete,
   onToggleVisibility,
   onUpdateListingType,
+  onUpdateDisplayIndex,
 }: CarListProps) {
   // Delete Car
   const handleDeleteCar = async (car: Car) => {
@@ -80,9 +82,33 @@ export default function CarList({
                   ⭐ Exclusive
                 </span>
               )}
-              <span className="bg-indigo-500/90 text-indigo-50 text-xs px-2 py-1 rounded backdrop-blur-sm font-bold block w-max shadow-sm">
-                 Sıra: {car.display_index ?? 999}
-              </span>
+              <div className="flex items-center space-x-1 bg-indigo-500/90 text-indigo-50 text-xs px-2 py-1 rounded backdrop-blur-sm font-bold w-max shadow-sm">
+                 <label htmlFor={`index-${car.id}`} className="cursor-pointer">Sıra:</label>
+                 <input
+                   id={`index-${car.id}`}
+                   type="number"
+                   key={`${car.id}-${car.display_index}`}
+                   className="w-10 bg-transparent text-center border-none focus:ring-0 outline-none p-0 text-white font-bold"
+                   defaultValue={car.display_index ?? 999}
+                   onBlur={(e) => {
+                     const val = Number(e.target.value);
+                     if (!isNaN(val) && val !== (car.display_index ?? 999) && onUpdateDisplayIndex) {
+                        toast.promise(onUpdateDisplayIndex(car.id, val), {
+                          loading: 'Sıra güncelleniyor...',
+                          success: 'Sıra güncellendi!',
+                          error: 'Güncelleme hatası!'
+                        });
+                     } else if (isNaN(val)) {
+                        e.target.value = String(car.display_index ?? 999);
+                     }
+                   }}
+                   onKeyDown={(e) => {
+                     if (e.key === 'Enter') {
+                       e.currentTarget.blur();
+                     }
+                   }}
+                 />
+              </div>
             </div>
 
             <div className="absolute top-2 right-2 z-10">

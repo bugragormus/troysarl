@@ -65,6 +65,17 @@ export function useCars(includeHidden = true) {
     }
   };
 
+  const updateDisplayIndex = async (id: string, displayIndex: number) => {
+    try {
+      await carService.updateCar(id, { display_index: displayIndex });
+      setCars((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, display_index: displayIndex } : c))
+      );
+    } catch (err: any) {
+      throw err;
+    }
+  };
+
   const updateListingType = async (id: string, newType: Car["listing_type"]) => {
     try {
       await carService.updateListingType(id, newType);
@@ -87,5 +98,6 @@ export function useCars(includeHidden = true) {
     removeCar,
     toggleVisibility,
     updateListingType,
+    updateDisplayIndex,
   };
 }
