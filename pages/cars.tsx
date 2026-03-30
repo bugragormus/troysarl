@@ -254,26 +254,26 @@ export default function CarsPage() {
                 "mainEntity": [
                   {
                     "@type": "Question",
-                    "name": "How often do you update the luxury cars inventory in Luxembourg?",
+                    "name": "Can I trade in my current vehicle?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Our vehicle catalog is updated regularly as new cars arrive at our dealership and are prepared for sale."
+                      "text": "Yes, we accept trade-ins! You can bring your current vehicle to our showroom for a quick evaluation, and we'll offer you a fair price to put towards your next purchase."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "Can I filter the listed vehicles by brand or transmission?",
+                    "name": "Are the listed cars ready for immediate delivery?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes, you can use the filtering controls above to narrow down your search by brand, year, transmission, and price."
+                      "text": "Absolutely. Once the payment process is complete and the paperwork is sorted, most of our vehicles are ready to be driven off the showroom floor."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "Do the prices listed include value-added tax (TVA)?",
+                    "name": "Can I test drive a vehicle before deciding to buy?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Most prices displayed include standard Luxembourg TVA. For export or business inquiries, please contact us."
+                      "text": "Yes, we highly encourage test drives. Please contact us to schedule an appointment so we can have the car prepared and ready for you."
                     }
                   }
                 ]
@@ -687,21 +687,21 @@ export default function CarsPage() {
             <h2 className="text-2xl font-bold mb-8 text-gray-800 dark:text-gray-100 text-center">Frequently Asked Questions</h2>
             <div className="grid gap-8 md:grid-cols-3">
               <article>
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">How often do you update the luxury cars inventory in Luxembourg?</h3>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I trade in my current vehicle?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Our vehicle catalog is updated regularly as new cars arrive at our dealership and are prepared for sale.
+                  Yes, we accept trade-ins! You can bring your current vehicle to our showroom for a quick evaluation, and we'll offer you a fair price to put towards your next purchase.
                 </p>
               </article>
               <article>
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I filter the listed vehicles by brand or transmission?</h3>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Are the listed cars ready for immediate delivery?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Yes, you can use the filtering controls above to narrow down your search by brand, year, transmission, and price.
+                  Absolutely. Once the payment process is complete and the paperwork is sorted, most of our vehicles are ready to be driven off the showroom floor.
                 </p>
               </article>
               <article>
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Do the prices listed include value-added tax (TVA)?</h3>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I test drive a vehicle before deciding to buy?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Most prices displayed include standard Luxembourg TVA. For export or business inquiries, please contact us.
+                  Yes, we highly encourage test drives. Please contact us to schedule an appointment so we can have the car prepared and ready for you.
                 </p>
               </article>
             </div>
