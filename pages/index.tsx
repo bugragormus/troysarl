@@ -70,9 +70,10 @@ export default function Home() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
               {
-                "@context": "https://schema.org",
                 "@type": "WebSite",
                 "name": "Troy Cars Lux SARL",
                 "url": canonicalUrl,
@@ -147,7 +148,7 @@ export default function Home() {
                     "name": "What should I check when buying a used car in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "When purchasing a used vehicle in Luxembourg, always verify the authentic service history book, the most recent technical inspection certificate (Contrôle Technique), and ensure the vehicle identification number perfectly matches the official registration documents to secure a safe transaction."
+                      "text": "When purchasing a used vehicle, it's generally good practice to check its condition and ensure the technical inspection (Contrôle Technique) and registration papers are available."
                     }
                   },
                   {
@@ -155,7 +156,7 @@ export default function Home() {
                     "name": "What documents are required to register a vehicle in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "To properly register your newly purchased car, you typically need a valid national identification card or passport, a proof of residence, a valid motor insurance certificate, and the original vehicle registration document (Carte Grise) provided by the seller or dealership."
+                      "text": "Basic requirements usually include a valid ID or passport, proof of residence, a motor insurance certificate, and the vehicle's registration document (Carte Grise)."
                     }
                   },
                   {
@@ -163,7 +164,7 @@ export default function Home() {
                     "name": "When does a car need a technical inspection (Contrôle Technique) in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "In Luxembourg, new passenger vehicles must undergo their first technical inspection after four years. Following this initial assessment, subsequent inspections are strictly required every single year to ensure the vehicle continues to meet critical national safety and environmental emission standards."
+                      "text": "New passenger vehicles generally need their first inspection after four years, followed by annual inspections to ensure ongoing compliance with safety and emissions standards."
                     }
                   }
                 ]
@@ -203,8 +204,9 @@ export default function Home() {
                   "name": "Troy Cars Lux SARL"
                 }
               }
-            ])
-          }}
+            ]
+          })
+        }}
         />
       </Head>
 
@@ -446,8 +448,8 @@ export default function Home() {
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Customer Satisfaction</h3>
             </div>
             <div className="p-6 border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
-              <p className="text-4xl font-extrabold text-green-500 mb-2">200-Pt</p>
-              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Quality Inspection</h3>
+              <p className="text-4xl font-extrabold text-green-500 mb-2">100%</p>
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Verified Quality</h3>
             </div>
             <div className="p-6 border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm">
               <p className="text-4xl font-extrabold text-green-500 mb-2">10+</p>
@@ -472,7 +474,7 @@ export default function Home() {
                 What should I check when buying a used car in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                When purchasing a used vehicle in Luxembourg, always verify the authentic service history book, the most recent technical inspection certificate (Contrôle Technique), and ensure the vehicle identification number perfectly matches the official registration documents to secure a safe transaction.
+                When purchasing a used vehicle, it's generally good practice to check its condition and ensure the technical inspection (Contrôle Technique) and registration papers are available.
               </p>
             </article>
             <article>
@@ -480,7 +482,7 @@ export default function Home() {
                 What documents are required to register a vehicle in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                To properly register your newly purchased car, you typically need a valid national identification card or passport, a proof of residence, a valid motor insurance certificate, and the original vehicle registration document (Carte Grise) provided by the seller or dealership.
+                Basic requirements usually include a valid ID or passport, proof of residence, a motor insurance certificate, and the vehicle's registration document (Carte Grise).
               </p>
             </article>
             <article>
@@ -488,7 +490,7 @@ export default function Home() {
                 When does a car need a technical inspection in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                In Luxembourg, new passenger vehicles must undergo their first technical inspection after four years. Following this initial assessment, subsequent inspections are strictly required every single year to ensure the vehicle continues to meet critical national safety and environmental emission standards.
+                New passenger vehicles generally need their first inspection after four years, followed by annual inspections to ensure ongoing compliance with safety and emissions standards.
               </p>
             </article>
           </div>
@@ -524,7 +526,7 @@ export default function Home() {
           <p className="mb-2 font-semibold">Sources & Attributions:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Customer satisfaction statistics based on independently verified feedback via Google Reviews (2023-2024).</li>
-            <li>In-house 200-point inspection criteria follow European Automotive Quality Standards.</li>
+            <li>Comprehensive quality checks before any vehicle is listed on our platform.</li>
             <li>Industry data references provided by the European Automobile Manufacturers' Association (ACEA).</li>
           </ul>
         </div>
