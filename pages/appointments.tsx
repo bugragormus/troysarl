@@ -130,6 +130,75 @@ export default function CareersPage() {
                 "description": metaDescription,
                 "url": canonicalUrl,
                 "image": ogImageUrl
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Book an Appointment at Troy Cars Lux SARL",
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Appointment Options at Troy Cars",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Vehicle Viewing & Test Drives",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Purchase Guidance & Documentation",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Financing & Next Steps Support",
+                    "url": "https://troysarl.com/contact"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "Do I need to schedule an appointment in advance?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes, it helps us prepare the right vehicle and ensure staff availability. Submit your request and we will confirm a time."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "How do you handle my appointment request?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We review your request and respond with confirmed availability during regular business hours."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Can I request a specific vehicle for viewing?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. Mention the vehicle you are interested in (or the car ID) in the message field so we can prepare it."
+                    }
+                  }
+                ]
               }
             ])
           }}

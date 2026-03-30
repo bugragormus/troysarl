@@ -108,6 +108,79 @@ export default function Contact() {
                 "description": metaDescription,
                 "url": canonicalUrl,
                 "image": ogImageUrl
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Contact Troy Cars SARL - Premium Used Cars in Luxembourg",
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                },
+                "about": {
+                  "@type": "Thing",
+                  "name": "Used & Luxury Car Dealership"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Services Customers Contact Us About",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Vehicle Availability & Test Drives",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Financing & Purchase Guidance",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Appointments at Our Luxembourg Showroom",
+                    "url": "https://troysarl.com/appointments"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "How do I request a showroom appointment?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Use the contact form on this page and tell us which vehicle (or service) you are interested in. We will respond to confirm an appointment time."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "What response time should I expect?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We typically respond within regular business hours. If your request is urgent, mention it in your message."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Do you offer financing assistance?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. We provide financing guidance and can connect you with suitable options based on your needs."
+                    }
+                  }
+                ]
               }
             ])
           }}

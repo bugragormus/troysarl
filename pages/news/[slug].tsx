@@ -153,28 +153,103 @@ export default function BlogPostDetail({ post }: { post: any }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "BlogPosting",
-              "headline": post.title,
-              "description": post.meta_description || post.excerpt,
-              "image": post.cover_image || [],
-              "author": {
-                "@type": "Person",
-                "name": authorName
-              },
-              "datePublished": post.published_at,
-              "dateModified": post.updated_at,
-              "publisher": {
-                "@type": "Organization",
-                "name": "Troy Cars SARL",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://troysarl.com/logo.png" // Placeholder
+              "@type": "WebPage",
+              "@graph": [
+                {
+                  "@context": "https://schema.org",
+                  "@type": "BlogPosting",
+                  "headline": post.title,
+                  "description": post.meta_description || post.excerpt,
+                  "image": post.cover_image || [],
+                  "author": {
+                    "@type": "Person",
+                    "name": authorName
+                  },
+                  "datePublished": post.published_at,
+                  "dateModified": post.updated_at,
+                  "publisher": {
+                    "@type": "Organization",
+                    "name": "Troy Cars SARL",
+                    "logo": {
+                      "@type": "ImageObject",
+                      "url": "https://troysarl.com/logo.png" // Placeholder
+                    }
+                  },
+                  "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": canonicalUrl
+                  }
+                },
+                {
+                  "@context": "https://schema.org",
+                  "@type": "Article",
+                  "headline": post.title,
+                  "description": post.meta_description || post.excerpt,
+                  "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": canonicalUrl
+                  },
+                  "publisher": {
+                    "@type": "Organization",
+                    "name": "Troy Cars SARL"
+                  }
+                },
+                {
+                  "@context": "https://schema.org",
+                  "@type": "ItemList",
+                  "name": "Recommended Articles by Troy Cars",
+                  "itemListElement": [
+                    {
+                      "@type": "ListItem",
+                      "position": 1,
+                      "name": "Vehicle Buying Tips",
+                      "url": "https://troysarl.com/news"
+                    },
+                    {
+                      "@type": "ListItem",
+                      "position": 2,
+                      "name": "Luxury & Premium Trends",
+                      "url": "https://troysarl.com/news"
+                    },
+                    {
+                      "@type": "ListItem",
+                      "position": 3,
+                      "name": "Maintenance & Care",
+                      "url": "https://troysarl.com/news"
+                    }
+                  ]
+                },
+                {
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "How can I contact Troy Cars after reading this article?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Use the Contact page on our website and mention the article you read. Our team will get back to you."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Can I schedule a showroom appointment for a vehicle?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. Submit an appointment request and we will confirm availability during regular business hours."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Do you help with financing options?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. We can guide you through financing options as part of your purchase process."
+                      }
+                    }
+                  ]
                 }
-              },
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": canonicalUrl
-              }
+              ]
             })
           }}
         />

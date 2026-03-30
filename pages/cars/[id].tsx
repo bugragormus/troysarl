@@ -164,6 +164,75 @@ export default function CarDetail({ car }: { car: Car }) {
                   "availability": car?.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
                   "url": canonicalUrl
                 }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": metaTitle,
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Vehicle Highlights in Luxembourg",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Certified Used & Luxury Vehicles",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Viewing & Test Drives",
+                    "url": "https://troysarl.com/appointments"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Contact & Purchase Guidance",
+                    "url": "https://troysarl.com/contact"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "Can I view this vehicle in person?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. Request an appointment and we will help you schedule a showroom visit for viewing and discussion."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Can I test drive it?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. After confirming availability, we will arrange a test drive during your appointment."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "What documents do I need to purchase?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We will guide you through the required steps in Luxembourg. Contact us with your situation so we can advise appropriately."
+                    }
+                  }
+                ]
               }
             ])
           }}

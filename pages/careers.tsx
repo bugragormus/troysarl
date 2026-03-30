@@ -134,6 +134,79 @@ export default function CareersPage() {
                 "description": metaDescription,
                 "url": canonicalUrl,
                 "image": ogImageUrl
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "Careers at Troy Cars Lux SARL",
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                },
+                "about": {
+                  "@type": "Thing",
+                  "name": "Employment Opportunities in Luxembourg"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Careers at Troy Cars - Roles",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Sales & Customer Support",
+                    "url": "https://troysarl.com/careers"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Marketing & Content",
+                    "url": "https://troysarl.com/careers"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Operations & Logistics",
+                    "url": "https://troysarl.com/careers"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "How do I apply for a job at Troy Cars?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Use the careers form on this page and share your details. We review applications regularly and get back to suitable candidates."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Do you hire for positions in Luxembourg only?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Troy Cars is based in Luxembourg. Most roles are aligned with local operations and customer-facing availability."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "How long does the hiring process take?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "The timeline depends on the role and candidate fit. After submission, we typically respond within normal business hours."
+                    }
+                  }
+                ]
               }
             ])
           }}

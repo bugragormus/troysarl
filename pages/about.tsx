@@ -71,6 +71,83 @@ export default function AboutPage() {
                 "description": metaDescription,
                 "url": canonicalUrl,
                 "image": ogImageUrl
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "About Troy Cars SARL - Premium Used & Luxury Vehicles in Luxembourg",
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "author": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                },
+                "about": {
+                  "@type": "Thing",
+                  "name": "Used and Luxury Cars in Luxembourg"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Why Customers Choose Troy Cars",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Quality Assurance & Inspections",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Transparent Pricing",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Personalized Support",
+                    "url": "https://troysarl.com/contact"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "Do you inspect vehicles before listing them?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. Every vehicle we list goes through a careful quality check before it is offered for sale in Luxembourg."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Can I schedule a showroom visit?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Absolutely. Use the contact form to request an appointment, and we will confirm a suitable time for your visit."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Do you offer financing options?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We provide flexible financing options. Contact us and our team will help you find a solution that fits your needs."
+                    }
+                  }
+                ]
               }
             ])
           }}

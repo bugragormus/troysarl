@@ -247,10 +247,10 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
         <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div className="flex items-center justify-between mb-6">
-                   <h3 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+                   <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
                        <Flame size={20} className="text-orange-500 mr-3" />
                        Hot Leads: Most Favorited
-                   </h3>
+                   </h2>
                    <button 
                      onClick={() => { setAnalyticsTab('favorites'); setIsAnalyticsModalOpen(true); }}
                      className="text-sm font-semibold text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
@@ -299,10 +299,10 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
             <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div className="flex items-center justify-between mb-6">
-                   <h3 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
+                   <h2 className="text-xl font-bold flex items-center text-gray-900 dark:text-white">
                        <Eye size={20} className="text-blue-500 mr-3" />
                        Trending Traffic
-                   </h3>
+                   </h2>
                    <button 
                      onClick={() => { setAnalyticsTab('views'); setIsAnalyticsModalOpen(true); }}
                      className="text-sm font-semibold text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -351,10 +351,10 @@ export default function OverviewDashboard({ stats, profiles, cars, transactions,
         {/* Action Hub - Moved Below Analytics */}
         <div className="p-8 bg-white/40 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800 rounded-4xl backdrop-blur-md relative overflow-hidden group shadow-lg">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-            <h3 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-white">
                 <Zap size={20} className="text-emerald-500 mr-3" />
                 Quick Actions Hub
-            </h3>
+            </h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <button 
                   onClick={handleSendNewsletter}

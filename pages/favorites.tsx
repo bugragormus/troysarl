@@ -129,6 +129,79 @@ export default function FavoritesPage() {
                 "description": metaDescription,
                 "url": canonicalUrl,
                 "image": ogImageUrl
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": "My Favourite Cars - Troy Cars Lux SARL",
+                "description": metaDescription,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": canonicalUrl
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Troy Cars Lux SARL"
+                },
+                "about": {
+                  "@type": "Thing",
+                  "name": "Favourite / Saved Vehicles"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Saved Vehicles at Troy Cars",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Luxury Vehicles",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Certified Used Cars",
+                    "url": "https://troysarl.com/cars"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Flexible Financing Options",
+                    "url": "https://troysarl.com/cars"
+                  }
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "How do I add a car to my favorites?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Open the cars catalog and click the heart icon on any vehicle you want to save. Your favorites will be synced based on your preferences."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Can I clear my favorites list?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. Use the “Clear All Favorites” action on this page (when enabled) or remove items individually to manage your saved list."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "How can I request more information about a saved car?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Use the Contact or Appointments page to send your request. Mention the vehicle you saved so our team can respond faster."
+                    }
+                  }
+                ]
               }
             ])
           }}
