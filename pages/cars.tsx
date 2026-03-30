@@ -162,14 +162,14 @@ export default function CarsPage() {
 
   // SEO Meta Verileri
   const metaTitles = {
-    en: "Quality Used Cars & Luxury Vehicles in Luxembourg | Troy Cars Lux SARL",
-    fr: "Voitures d'Occasion et Luxe au Luxembourg | Troy Cars Lux SARL | Vente Automobile",
-    de: "Gebrauchtwagen & Luxusautos in Luxemburg kaufen | Troy Cars Lux SARL",
+    en: "Luxury Cars LUX",
+    fr: "Voitures de Luxe",
+    de: "Luxusautos",
   };
   const metaDescriptions = {
-    en: "Find your next car at Troy Cars Lux SARL! Browse affordable used cars and luxury vehicles in Luxembourg. Financing options available. Visit us today!",
-    fr: "Trouvez votre prochaine voiture chez Troy Cars Lux SARL! Découvrez des voitures d'occasion de qualité et de luxe au Luxembourg. Options de financement disponibles.",
-    de: "Finden Sie Ihr nächstes Auto bei Troy Cars Lux SARL! Entdecken Sie hochwertige Gebrauchtwagen und Luxusautos in Luxemburg. Finanzierungsoptionen verfügbar.",
+    en: "Find premium used cars and luxury vehicles in Luxembourg at Troy Cars SARL. Explore our certified collection with flexible financing tailored to you.",
+    fr: "Découvrez des voitures d'occasion de qualité et de luxe au Luxembourg. Options de financement disponibles chez Troy.",
+    de: "Entdecken Sie hochwertige Gebrauchtwagen und Luxusautos in Luxemburg. Finanzierungsoptionen verfügbar.",
   };
   const canonicalUrl = "https://troysarl.com/cars";
   const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
@@ -180,13 +180,14 @@ export default function CarsPage() {
       aria-label="Vehicle Catalog"
     >
       <Head>
-        <title>{`${metaTitles.en} | ${metaTitles.fr}`}</title>
+        <title>{`${metaTitles.en} | ${metaTitles.fr} | Troy Cars`}</title>
         <meta name="description" content={`${metaDescriptions.en} ${metaDescriptions.fr}`} />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="alternate" href={canonicalUrl} hrefLang="en-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
+        <meta name="author" content="Troy Cars SARL" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={metaTitles.en} />
@@ -528,6 +529,7 @@ export default function CarsPage() {
         </div>
 
         {/* Araç Listesi */}
+        <h2 className="sr-only">Available Vehicles</h2>
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (

@@ -44,9 +44,8 @@ export default function Contact() {
   };
 
   // SEO Meta Verileri - Contact Us
-  const metaTitle = "Contact Troy Cars Lux SARL | Luxembourg Premium Car Showroom | Contactez-nous | Kontakt";
-
-  const metaDescription = "Get in touch with Troy Cars Lux SARL in Luxembourg. Visit our showroom, call us, or send an inquiry. Premium used car dealer. Contactez notre équipe au Luxembourg. Kontaktieren Sie uns in Luxemburg.";
+  const metaTitle = "Contact Troy Cars SARL | Luxembourg Car Showroom";
+  const metaDescription = "Get in touch with Troy Cars SARL in Luxembourg. Visit our premium used car showroom, call us, or send an inquiry today.";
 
   const canonicalUrl = "https://troysarl.com/contact";
   const ogImageUrl = "https://troysarl.com/troysarl-logo.png";
@@ -64,6 +63,7 @@ export default function Contact() {
         <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
+        <meta name="author" content="Troy Cars SARL" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />

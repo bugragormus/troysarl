@@ -524,9 +524,9 @@ export default function CarDetail({ car }: { car: Car }) {
           <div className="p-6 bg-white/90 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
             {car.description && car.description.length > 0 && (
               <>
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                <h2 className="text-2xl font-bold mb-4 dark:text-white">
                   Detailed Information
-                </h3>
+                </h2>
                 <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
                   {car.description}
                 </p>
@@ -539,9 +539,9 @@ export default function CarDetail({ car }: { car: Car }) {
             {/* Safety Features */}
             {car.features.safety && car.features.safety.length > 0 && (
               <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                <h2 className="text-2xl font-bold mb-4 dark:text-white">
                   Safety Features
-                </h3>
+                </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {car.features.safety.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2">
@@ -558,9 +558,9 @@ export default function CarDetail({ car }: { car: Car }) {
             {/* Comfort & Convenience Features */}
             {car.features.comfort && car.features.comfort.length > 0 && (
               <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                <h2 className="text-2xl font-bold mb-4 dark:text-white">
                   Comfort &amp; Convenience
-                </h3>
+                </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {car.features.comfort.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2">
@@ -578,9 +578,9 @@ export default function CarDetail({ car }: { car: Car }) {
             {car.features.entertainment &&
               car.features.entertainment.length > 0 && (
                 <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                  <h3 className="text-2xl font-bold mb-4 dark:text-white">
+                  <h2 className="text-2xl font-bold mb-4 dark:text-white">
                     Entertainment Features
-                  </h3>
+                  </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {car.features.entertainment.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-2">

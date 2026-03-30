@@ -5,9 +5,8 @@ import { UserGroupIcon } from "@heroicons/react/24/outline";
 import Script from "next/script";
 
   // SEO Meta Verileri
-  const metaTitle = "About Troy Cars Lux SARL | Premium Car Dealer Luxembourg | Notre Histoire | Über uns";
-
-  const metaDescription = "Get in touch with Troy Cars Lux SARL in Luxembourg. Visit our showroom, call us, or send an inquiry. Premium used car dealer. Contactez notre équipe de vente. Kontaktieren Sie unser Verkaufsteam in Luxemburg.";
+  const metaTitle = "About Troy Cars SARL | Premium Car Dealer Luxembourg";
+  const metaDescription = "Learn about Troy Cars Lux SARL. We are a premium used car dealer in Luxembourg committed to quality, transparency, and superior customer service.";
 
 const canonicalUrl = "https://troysarl.com/about";
 const ogImageUrl = "https://troysarl.com/about-bg.jpg"; 
@@ -27,6 +26,7 @@ export default function AboutPage() {
         <link rel="alternate" href={canonicalUrl} hrefLang="fr-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="de-LU" />
         <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
+        <meta name="author" content="Troy Cars SARL" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
