@@ -707,16 +707,6 @@ export default function CarsPage() {
             </div>
           </section>
 
-          {/* References */}
-          <section aria-label="References" className="pt-8 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 dark:text-gray-500">
-            <h2 className="sr-only">Catalog References and Sources</h2>
-            <p className="mb-1 font-semibold">Sources & Methodologies:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Dynamic filtering logic built following WCAG 2.1 accessibility navigation guidelines.</li>
-              <li>All pricing aligns natively with European Central Bank (ECB) current daily exchange rates.</li>
-              <li>Emission standards cited correspond directly to official EU regulatory emissions targets.</li>
-            </ul>
-          </section>
           </div>
         </details>
       </div>

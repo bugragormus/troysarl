@@ -519,18 +519,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* References & Bibliography */}
-      <section aria-label="References and Sources" className="py-8 bg-gray-50 dark:bg-gray-950 text-xs text-gray-400 dark:text-gray-600">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="sr-only">References and External Data</h2>
-          <p className="mb-2 font-semibold">Sources & Attributions:</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Customer satisfaction statistics based on independently verified feedback via Google Reviews (2023-2024).</li>
-            <li>Comprehensive quality checks before any vehicle is listed on our platform.</li>
-            <li>Industry data references provided by the European Automobile Manufacturers' Association (ACEA).</li>
-          </ul>
-        </div>
-      </section>
     </div>
   );
 }
