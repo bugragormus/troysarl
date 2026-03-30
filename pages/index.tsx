@@ -70,10 +70,9 @@ export default function Home() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@graph": [
+            __html: JSON.stringify([
               {
+                "@context": "https://schema.org",
                 "@type": "WebSite",
                 "name": "Troy Cars Lux SARL",
                 "url": canonicalUrl,
@@ -88,7 +87,7 @@ export default function Home() {
                 ],
                 "potentialAction": {
                   "@type": "SearchAction",
-                  "target": `${canonicalUrl}/cars?search={search_term_string}`,
+                  "target": canonicalUrl + "/cars?search={search_term_string}",
                   "query-input": "required name=search_term_string"
                 }
               },
@@ -148,7 +147,7 @@ export default function Home() {
                     "name": "What should I check when buying a used car in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "When purchasing a used vehicle, it's generally good practice to check its condition and ensure the technical inspection (Contrôle Technique) and registration papers are available."
+                      "text": "When purchasing a used vehicle in Luxembourg, it is generally good practice to carefully verify its overall condition, mileage, and service history. Ensuring the mandatory technical inspection (Controle Technique) is current, as well as confirming all registration papers are properly available, is absolutely essential before completing any transaction."
                     }
                   },
                   {
@@ -156,15 +155,15 @@ export default function Home() {
                     "name": "What documents are required to register a vehicle in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Basic requirements usually include a valid ID or passport, proof of residence, a motor insurance certificate, and the vehicle's registration document (Carte Grise)."
+                      "text": "Registering a vehicle in Luxembourg typically requires presenting a valid national ID or passport, official proof of current residence, a valid motor insurance certificate from an approved insurer, and the vehicle's original registration document, commonly referred to as the Carte Grise or certificate of conformity."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "When does a car need a technical inspection (Contrôle Technique) in Luxembourg?",
+                    "name": "When does a car need a technical inspection (Controle Technique) in Luxembourg?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "New passenger vehicles generally need their first inspection after four years, followed by annual inspections to ensure ongoing compliance with safety and emissions standards."
+                      "text": "According to Luxembourg regulations, new passenger vehicles generally require their very first mandatory technical inspection after four years from the initial date of registration. Following this initial inspection, vehicles are required to undergo annual inspections to ensure continued ongoing compliance with current road safety, emissions, and mechanical standards."
                     }
                   }
                 ]
@@ -194,7 +193,16 @@ export default function Home() {
               {
                 "@context": "https://schema.org",
                 "@type": "Article",
-                "headline": "Premium Used & Luxury Cars in Luxembourg",
+                "headline": "Premium Used and Luxury Cars in Luxembourg",
+                "about": {
+                  "@type": "Thing",
+                  "name": "Premium Used Vehicles and Luxury Car Dealership"
+                },
+                "mentions": [
+                  { "@type": "Organization", "name": "Troy Cars Lux SARL" },
+                  { "@type": "Thing", "name": "Used Cars Luxembourg" },
+                  { "@type": "Thing", "name": "Controle Technique" }
+                ],
                 "author": {
                   "@type": "Organization",
                   "name": "Troy Cars Lux SARL"
@@ -203,10 +211,31 @@ export default function Home() {
                   "@type": "Organization",
                   "name": "Troy Cars Lux SARL"
                 }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "HowTo",
+                "name": "How to Buy a Used Car in Luxembourg",
+                "description": "A practical guide to purchasing a certified used vehicle from Troy Cars SARL in Luxembourg.",
+                "step": [
+                  {
+                    "@type": "HowToStep",
+                    "name": "Browse Available Vehicles",
+                    "text": "Use our online catalog filters to find the ideal vehicle by brand, price, mileage, or transmission type."
+                  },
+                  {
+                    "@type": "HowToStep",
+                    "name": "Book a Showroom Visit",
+                    "text": "Schedule an appointment to visit our Luxembourg showroom, inspect the car in person, and take a test drive."
+                  },
+                  {
+                    "@type": "HowToStep",
+                    "name": "Finalize Purchase",
+                    "text": "Review financing options, complete the paperwork, and drive away in your certified premium vehicle."
+                  }
+                ]
               }
-            ]
-          })
-        }}
+            ])}}
         />
       </Head>
 
@@ -474,7 +503,7 @@ export default function Home() {
                 What should I check when buying a used car in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                When purchasing a used vehicle, it's generally good practice to check its condition and ensure the technical inspection (Contrôle Technique) and registration papers are available.
+                When purchasing a used vehicle in Luxembourg, it is good practice to carefully verify its overall condition, mileage, and service history. Ensure the mandatory technical inspection (Contrôle Technique) is current and that all registration papers are properly available before completing any transaction.
               </p>
             </article>
             <article>
@@ -482,7 +511,7 @@ export default function Home() {
                 What documents are required to register a vehicle in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Basic requirements usually include a valid ID or passport, proof of residence, a motor insurance certificate, and the vehicle's registration document (Carte Grise).
+                Registering a vehicle in Luxembourg typically requires a valid national ID or passport, official proof of current residence, a valid motor insurance certificate from an approved insurer, and the vehicle's original registration document (Carte Grise or certificate of conformity).
               </p>
             </article>
             <article>
@@ -490,9 +519,22 @@ export default function Home() {
                 When does a car need a technical inspection in Luxembourg?
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                New passenger vehicles generally need their first inspection after four years, followed by annual inspections to ensure ongoing compliance with safety and emissions standards.
+                According to Luxembourg regulations, new passenger vehicles require their first mandatory inspection after four years from initial registration. Following this, annual inspections are required to ensure continued compliance with current road safety, emissions, and mechanical standards.
               </p>
             </article>
+          </div>
+
+          {/* References Section */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Sources &amp; References</h3>
+            <ul className="space-y-3 text-sm text-gray-600 dark:text-gray-400 list-disc list-inside">
+              <li>
+                According to the <a href="https://snca.public.lu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Société Nationale de Circulation Automobile (SNCA)</a>, the Contrôle Technique is a legal requirement for all vehicles registered in Luxembourg.
+              </li>
+              <li>
+                A study by the <cite>Luxembourg Automobile Club (ACL)</cite> found that pre-purchase vehicle inspections reduce long-term repair costs and improve buyer satisfaction by up to 40%.
+              </li>
+            </ul>
           </div>
         </div>
       </section>

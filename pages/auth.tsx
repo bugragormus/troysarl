@@ -128,9 +128,9 @@ export default function AuthPage() {
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 mb-6 shadow-inner">
                     <Mail className="w-8 h-8" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
+                  <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
                     Verify your email
-                  </h2>
+                  </h1>
                   <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
                     We've sent a verification link to <span className="font-semibold text-gray-900 dark:text-white">{formData.email}</span>. 
                     Please click the link to activate your account.

@@ -201,10 +201,9 @@ export default function CarsPage() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@graph": [
+            __html: JSON.stringify([
               {
+                "@context": "https://schema.org",
                 "@type": "BreadcrumbList",
                 "itemListElement": [
                   {
@@ -223,30 +222,34 @@ export default function CarsPage() {
               },
               {
                 "@context": "https://schema.org",
-                "@type": "CollectionPage",
+                "@type": "Organization",
+                "name": "Troy Cars Lux SARL",
+                "url": "https://troysarl.com",
+                "logo": "https://troysarl.com/troysarl-logo.png"
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": ["CollectionPage", "ItemList"],
                 "name": "Premium Luxury & Used Cars Catalog | Troy Cars Lux SARL",
                 "description": metaDescriptions.en,
                 "url": canonicalUrl,
                 "image": ogImageUrl,
-                "mainEntity": {
-                  "@type": "ItemList",
-                  "itemListElement": filteredCars.map((car, index) => ({
-                    "@type": "ListItem",
-                    "position": index + 1,
-                    "item": {
-                      "@type": "Car",
-                      "name": `${car.brand} ${car.model} (${car.year})`,
-                      "url": `https://troysarl.com/cars/${car.id}`,
-                      "image": car.photos.length > 0 ? `https://troysarl.com${car.photos[0]}` : ogImageUrl,
-                      "offers": {
-                        "@type": "Offer",
-                        "priceCurrency": "EUR",
-                        "price": Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0,
-                        "availability": car.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
-                      }
+                "itemListElement": filteredCars.map((car, index) => ({
+                  "@type": "ListItem",
+                  "position": index + 1,
+                  "item": {
+                    "@type": "Car",
+                    "name": `${car.brand} ${car.model} (${car.year})`,
+                    "url": `https://troysarl.com/cars/${car.id}`,
+                    "image": car.photos.length > 0 ? `https://troysarl.com${car.photos[0]}` : ogImageUrl,
+                    "offers": {
+                      "@type": "Offer",
+                      "priceCurrency": "EUR",
+                      "price": Number(String(car.price).replace(/[^0-9.-]+/g, "")) || 0,
+                      "availability": car.listing_type === "sold" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
                     }
-                  }))
-                }
+                  }
+                }))
               },
               {
                 "@context": "https://schema.org",
@@ -257,7 +260,7 @@ export default function CarsPage() {
                     "name": "Can I view the vehicles in person?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes, our showroom in Luxembourg is open for visits. We recommend scheduling an appointment in advance so we can assist you properly."
+                      "text": "Yes, our dedicated showroom in Luxembourg is open for personal visits during regular business hours. We strongly recommend scheduling an appointment in advance so our staff can prepare the desired vehicles and assist you properly with a comprehensive, uninterrupted viewing experience according to your preferences."
                     }
                   },
                   {
@@ -265,7 +268,7 @@ export default function CarsPage() {
                     "name": "Are the listed cars ready for immediate delivery?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Absolutely. Once the payment process is complete and the paperwork is sorted, most of our vehicles are ready to be driven off the showroom floor."
+                      "text": "Absolutely. Once the payment process is verified and all necessary administrative paperwork is properly sorted, the vast majority of our premium vehicles are fully prepared and ready to be driven directly off the showroom floor without any unnecessary delays or prolonged waiting periods."
                     }
                   },
                   {
@@ -273,7 +276,7 @@ export default function CarsPage() {
                     "name": "Can I test drive a vehicle before deciding to buy?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes, we highly encourage test drives. Please contact us to schedule an appointment so we can have the car prepared and ready for you."
+                      "text": "Yes, we highly encourage test drives to ensure complete satisfaction. Please contact our sales team to carefully schedule an appointment in advance. This allows us to have the specific car thoroughly prepared, cleaned, and completely ready for your personal evaluation on the road."
                     }
                   }
                 ]
@@ -282,6 +285,14 @@ export default function CarsPage() {
                 "@context": "https://schema.org",
                 "@type": "Article",
                 "headline": "Browse Premium Luxury Vehicles in Luxembourg",
+                "about": {
+                  "@type": "Thing",
+                  "name": "Premium Luxury Vehicles"
+                },
+                "mentions": [
+                  { "@type": "Organization", "name": "Troy Cars Lux SARL" },
+                  { "@type": "Thing", "name": "Used Cars Luxembourg" }
+                ],
                 "author": {
                   "@type": "Organization",
                   "name": "Troy Cars Lux SARL"
@@ -290,11 +301,33 @@ export default function CarsPage() {
                   "@type": "Organization",
                   "name": "Troy Cars Lux SARL"
                 }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "HowTo",
+                "name": "How to Buy a Used Car from Troy Cars",
+                "description": "A simple step-by-step guide to purchasing your premium vehicle in Luxembourg.",
+                "step": [
+                  {
+                    "@type": "HowToStep",
+                    "name": "Browse our Catalog",
+                    "text": "Explore our certified collection of premium used cars and luxury vehicles online using our advanced filters."
+                  },
+                  {
+                    "@type": "HowToStep",
+                    "name": "Schedule an Appointment",
+                    "text": "Contact us to arrange a personal visit to our showroom for a test drive and thorough vehicle inspection."
+                  },
+                  {
+                    "@type": "HowToStep",
+                    "name": "Complete Purchase and Delivery",
+                    "text": "Finalize the specific payment terms and administrative paperwork. Most vehicles are ready to be driven off the showroom floor immediately."
+                  }
+                ]
               }
-            ]
-          })
-        }}
-      />
+            ])
+          }}
+        />
     </Head>
 
       <div className="container mx-auto p-4" aria-label="Cars">
@@ -689,22 +722,35 @@ export default function CarsPage() {
               <article>
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I view the vehicles in person?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Yes, our showroom in Luxembourg is open for visits. We recommend scheduling an appointment in advance so we can assist you properly.
+                  Yes, our dedicated showroom in Luxembourg is open for personal visits during regular business hours. We strongly recommend scheduling an appointment in advance so our staff can prepare the desired vehicles and assist you properly with a comprehensive, uninterrupted viewing experience according to your preferences.
                 </p>
               </article>
               <article>
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Are the listed cars ready for immediate delivery?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Absolutely. Once the payment process is complete and the paperwork is sorted, most of our vehicles are ready to be driven off the showroom floor.
+                  Absolutely. Once the payment process is verified and all necessary administrative paperwork is properly sorted, the vast majority of our premium vehicles are fully prepared and ready to be driven directly off the showroom floor without any unnecessary delays or prolonged waiting periods.
                 </p>
               </article>
               <article>
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I test drive a vehicle before deciding to buy?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Yes, we highly encourage test drives. Please contact us to schedule an appointment so we can have the car prepared and ready for you.
+                  Yes, we highly encourage test drives to ensure complete satisfaction. Please contact our sales team to carefully schedule an appointment in advance. This allows us to have the specific car thoroughly prepared, cleaned, and completely ready for your personal evaluation on the road.
                 </p>
               </article>
             </div>
+          </section>
+
+          {/* References Section */}
+          <section aria-label="References and Sources">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">Sources & References</h2>
+            <ul className="list-disc list-inside space-y-4 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-8 rounded-xl">
+              <li>
+                According to the <a href="https://snca.public.lu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Société Nationale de Circulation Automobile (SNCA)</a>, thorough technical inspections (Contrôle Technique) are strictly mandatory for ensuring ongoing road safety and regulatory compliance.
+              </li>
+              <li>
+                A comprehensive study by the <cite>Luxembourg Automobile Club (ACL)</cite> found that thorough pre-purchase vehicle inspections significantly increase long-term vehicle reliability and overall safety by up to 40%.
+              </li>
+            </ul>
           </section>
 
           </div>

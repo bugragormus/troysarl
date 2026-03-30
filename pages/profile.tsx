@@ -134,12 +134,12 @@ export default function ProfilePage() {
             {/* Sidebar Stats */}
             <div className="lg:col-span-1 space-y-6">
               <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-6 flex items-center">
+                <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-6 flex items-center">
                   <div className="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-lg mr-3">
                     <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   Quick Actions
-                </h3>
+                </h2>
                 <div className="space-y-3">
                   <button onClick={() => router.push("/favorites")} className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all group">
                     <div className="flex items-center">
@@ -163,7 +163,7 @@ export default function ProfilePage() {
             <div className="lg:col-span-2">
               <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 h-full">
                 <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white">Profile Settings</h3>
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-white">Profile Settings</h2>
                   {!editing && (
                     <button
                       onClick={() => setEditing(true)}
@@ -199,7 +199,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="pt-6 border-t border-gray-100 dark:border-gray-700">
-                    <h4 className="text-sm font-bold text-gray-800 dark:text-white mb-4 uppercase tracking-wider">Communication Preferences</h4>
+                    <h3 className="text-sm font-bold text-gray-800 dark:text-white mb-4 uppercase tracking-wider">Communication Preferences</h3>
                     <div className="space-y-4">
                       <label className="flex items-center p-4 bg-gray-50 dark:bg-gray-900/30 rounded-2xl border border-gray-100 dark:border-gray-700/50 cursor-pointer group transition-all hover:bg-white dark:hover:bg-gray-800">
                         <input
@@ -276,7 +276,7 @@ export default function ProfilePage() {
                 </form>
 
                 <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-700">
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6">Security Settings</h3>
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">Security Settings</h2>
                   <form onSubmit={handleChangePassword} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="relative group">
