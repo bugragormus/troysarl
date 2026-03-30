@@ -4,10 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["react-responsive-carousel"],
   eslint: {
-    // ESLint bazı Node/ESM modül kombinasyonlarında runtime hatası üretebiliyor.
-    // Build sırasında kırmasın diye devre dışı bırakıyoruz.
     ignoreDuringBuilds: true,
   },
+
   images: {
     remotePatterns: [
       {
