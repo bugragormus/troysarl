@@ -254,10 +254,10 @@ export default function CarsPage() {
                 "mainEntity": [
                   {
                     "@type": "Question",
-                    "name": "Can I trade in my current vehicle?",
+                    "name": "Can I view the vehicles in person?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes, we accept trade-ins! You can bring your current vehicle to our showroom for a quick evaluation, and we'll offer you a fair price to put towards your next purchase."
+                      "text": "Yes, our showroom in Luxembourg is open for visits. We recommend scheduling an appointment in advance so we can assist you properly."
                     }
                   },
                   {
@@ -687,9 +687,9 @@ export default function CarsPage() {
             <h2 className="text-2xl font-bold mb-8 text-gray-800 dark:text-gray-100 text-center">Frequently Asked Questions</h2>
             <div className="grid gap-8 md:grid-cols-3">
               <article>
-                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I trade in my current vehicle?</h3>
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Can I view the vehicles in person?</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Yes, we accept trade-ins! You can bring your current vehicle to our showroom for a quick evaluation, and we'll offer you a fair price to put towards your next purchase.
+                  Yes, our showroom in Luxembourg is open for visits. We recommend scheduling an appointment in advance so we can assist you properly.
                 </p>
               </article>
               <article>
